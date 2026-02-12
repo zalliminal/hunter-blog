@@ -1,3 +1,42 @@
+## Hunter Blog
+
+Hunter Blog is an **open‑source personal blog** built with Next.js, React, and MDX. It is designed as a fast, modern place to publish articles, notes, and other content with support for tagging, syntax highlighting, and a clean reading experience.
+
+## Features
+
+- **Modern stack**: Next.js 16, React 19, Tailwind CSS, MDX content.
+- **Content-focused**: Optimized for reading blog posts and personal notes.
+- **Tagging system**: Organize posts by tags to help readers discover related content.
+- **Syntax highlighting**: Great for technical and code-heavy posts.
+- **Dark/light themes**: Pleasant reading experience in different environments.
+
+## Authors
+
+This project is built and maintained by:
+
+- **Parham Forati** ([`parhamf6` on GitHub](https://github.com/parhamf6))
+- **zalliminal** ([GitHub profile](https://github.com/zalliminal))
+
+## Getting Started
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run the development server:
+
+```bash
+pnpm dev
+```
+
+Then open `http://localhost:3000` in your browser.
+
+## License
+
+This is an **open‑source personal blog**. You are welcome to fork it, customize it for your own personal site, and contribute improvements via pull requests.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

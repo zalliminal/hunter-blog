@@ -1,0 +1,33 @@
+---
+title: "First steps into bug bounty"
+description: "A tiny checklist for starting real-world web security testing."
+date: "2025-02-01"
+slug: "first-steps-bugbounty"
+thumbnail: "/blog/thumbnails/ctf-thumbnail.png"
+tags: ["bug bounty", "getting started", "methodology"]
+lang: "en"
+published: true
+---
+
+## Start from the surface
+
+Before touching any fancy tooling, understand the target like a human.
+
+- Read the docs
+- Click through the app like a normal user
+- Note every place that accepts input
+
+```bash
+httpx -l scope.txt -silent | tee alive.txt
+```
+
+This is not magic, just a very boring, very repeatable process.
+
+## Keep a sharp log
+
+Use whatever note system you like, but keep it **consistent**:
+
+- What you tried
+- What you saw
+- Why you think it behaved that way
+

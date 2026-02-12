@@ -1,0 +1,25 @@
+---
+title: "اولین قدم‌ها در باگ باونتی"
+description: "چک‌لیست خیلی کوچک برای شروع تست امنیت وب در دنیای واقعی."
+date: "2025-01-01"
+slug: "first-steps-bugbounty"
+thumbnail: "/blog/thumbnails/ctf-thumbnail.png"
+tags: ["bug bounty", "شروع کار", "متدولوژی"]
+lang: "fa"
+published: true
+---
+
+## از سطح شروع کن
+
+قبل از این‌که سراغ ابزارهای پیچیده بروی، هدف را مثل یک کاربر عادی بفهم.
+
+- مستندات را بخوان
+- مثل یک کاربر معمولی داخل اپلیکیشن کلیک کن
+- هر جایی که ورودی می‌گیرد را یادداشت کن
+
+```bash
+httpx -l scope.txt -silent | tee alive.txt
+```
+
+برای کلمات انگلیسی مثل <span dir="ltr">scope</span> یا <span dir="ltr">alive</span> همیشه از <span dir="ltr">dir=\"ltr\"</span> استفاده کن تا متن تمیز بماند.
+

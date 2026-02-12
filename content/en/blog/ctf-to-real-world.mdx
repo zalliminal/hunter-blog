@@ -1,0 +1,27 @@
+---
+title: "From CTF to real-world bugs"
+description: "Bridging the gap between challenge writeups and production systems."
+date: "2026-01-05"
+slug: "ctf-to-real-world"
+thumbnail: "/blog/thumbnails/ctf-thumbnail.png"
+tags: ["ctf", "real world", "web security"]
+lang: "en"
+published: true
+---
+
+## Challenges vs real systems
+
+CTF challenges are designed to be solved. Production systems are designed to **survive**.
+
+The trick is to reuse the mindset, not the exact payloads.
+
+```javascript
+const payload = `<img src=x onerror=alert(1)>`;
+```
+
+Instead of hunting for the one magical gadget, map out:
+
+1. Where user-controlled data lands
+2. How it is stored, transformed, rendered
+3. What protections are actually enforced
+
