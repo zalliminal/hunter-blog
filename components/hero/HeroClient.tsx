@@ -90,12 +90,11 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
           <p className="max-w-xl text-sm text-muted-foreground leading-relaxed">
             {isFa ? (
               <>
-                این‌جا جایی است برای ایده‌ها، چیزهایی که یاد می‌گیرم و write-up‌های میدانی — مینیمال،
-                مستقیم سر اصل مطلب.
+               میتونی منو زال صدام کنی.این‌جا جایی است برای ایده‌ها، چیزهایی که یاد می‌گیرم و write-up‌های میدانی و مینیمال،مستقیم سر اصل مطلب.
               </>
             ) : (
               <>
-                A quiet place for ideas, notes, field write-ups and short technical essays. Minimal and focused —
+                You can Call me Zal. This is a quiet place for ideas, notes, field write-ups and short technical essays. Minimal and focused —
                 with one foot in myth and the other in the in-between.
               </>
             )}

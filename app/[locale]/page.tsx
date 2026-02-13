@@ -6,6 +6,7 @@ import { getLatestPosts } from "@/lib/blog";
 
 // Client components (must contain "use client" inside their files)
 import HeroClient from "@/components/hero/HeroClient";
+import AboutSectionClient from "@/components/hero/AboutSectionClient";
 import LatestPostsClient from "@/components/hero/LatestPostClient";
 
 type PageParams = { locale: Locale };
@@ -28,8 +29,7 @@ export default async function LocaleHomePage({
     <div className="space-y-10">
       {/* HeroClient is a client component (framer-motion, AnimatedGradient).
           Keep it as a small client component so the page can remain async/server. */}
-      <HeroClient locale={locale} isFa={isFa} dict={dict} />
-
+      <HeroClient locale={locale} isFa={isFa} dict={dict.nav} />
       <section className="space-y-4">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
@@ -46,6 +46,14 @@ export default async function LocaleHomePage({
         {/* LatestPostsClient is a client component that receives serializable posts
             and applies staggered entrance animations. */}
         <LatestPostsClient posts={latestPosts} locale={locale} />
+      </section>
+      <section className="space-y-4">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            {isFa ? "درباره شکار و کد" : "About the hunt & code"}
+          </h2>
+        </div>
+        <AboutSectionClient locale={locale} isFa={isFa} />
       </section>
     </div>
   );

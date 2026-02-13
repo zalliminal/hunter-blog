@@ -62,7 +62,7 @@ export function BlogCard({ post, locale }: BlogCardProps) {
       </div>
 
       {/* Title – always exactly one line */}
-      <h3 className="line-clamp-1 min-h-[2rem] leading-6 text-base font-medium tracking-tight group-hover:text-primary transition-colors duration-200 mb-3">
+      <h3 className="line-clamp-1 min-h-[1.5rem] leading-6 text-base font-medium tracking-tight group-hover:text-primary transition-colors duration-200 mb-3">
         {post.title}
       </h3>
 
