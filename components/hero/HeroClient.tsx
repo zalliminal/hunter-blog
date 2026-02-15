@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Mail } from "lucide-react";
 import type { Locale, NavDictionary } from "@/lib/i18n";
 import ZalliminalCard from "./ZalliminalCard";
 
@@ -12,7 +13,7 @@ type Props = {
   dict: NavDictionary;
 };
 
-// ── Typing animation component ─────────────────────────────────────
+// ── Typing animation component ────────────────────────────────────────────────
 function TypingText({ text, isRTL }: { text: string; isRTL: boolean }) {
   const [displayed, setDisplayed] = useState("");
   const prefersReduced = useReducedMotion();
@@ -22,25 +23,19 @@ function TypingText({ text, isRTL }: { text: string; isRTL: boolean }) {
       setDisplayed(text);
       return;
     }
-
-    setDisplayed(""); // reset when text changes (e.g., locale switch)
+    setDisplayed("");
     let i = 0;
     const interval = setInterval(() => {
       i++;
       setDisplayed(text.slice(0, i));
       if (i === text.length) clearInterval(interval);
-    }, 90); // typing speed – adjust as needed
-
+    }, 90);
     return () => clearInterval(interval);
   }, [text, prefersReduced]);
 
   return (
-    <span
-      className="inline-block"
-      dir={isRTL ? "rtl" : "ltr"}
-    >
+    <span className="inline-block" dir={isRTL ? "rtl" : "ltr"}>
       {displayed}
-      {/* blinking cursor */}
       {displayed.length < text.length && (
         <motion.span
           initial={{ opacity: 0 }}
@@ -68,6 +63,14 @@ const item = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
 };
 
+// ── Contact click: plain smooth scroll ───────────────────────────────────────
+function handleContactClick(e: React.MouseEvent<HTMLButtonElement>) {
+  e.preventDefault();
+  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  // Dispatch custom event to trigger ring animation on social cards
+  window.dispatchEvent(new CustomEvent("contactClicked"));
+}
+
 export default function HeroClient({ locale, isFa, dict }: Props) {
   const isRTL = locale === "fa";
   const headline = isFa
@@ -90,29 +93,45 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
           <p className="max-w-xl text-sm text-muted-foreground leading-relaxed">
             {isFa ? (
               <>
-               میتونی منو زال صدام کنی.این‌جا جایی است برای ایده‌ها، چیزهایی که یاد می‌گیرم و write-up‌های میدانی و مینیمال،مستقیم سر اصل مطلب.
+                میتونی منو زال صدام کنی.این‌جا جایی است برای ایده‌ها، چیزهایی که یاد
+                می‌گیرم و write-up‌های میدانی و مینیمال،مستقیم سر اصل مطلب.
               </>
             ) : (
               <>
-                You can Call me Zal. This is a quiet place for ideas, notes, field write-ups and short technical essays. Minimal and focused —
-                with one foot in myth and the other in the in-between.
+                You can Call me Zal. This is a quiet place for ideas, notes, field
+                write-ups and short technical essays. Minimal and focused — with one foot
+                in myth and the other in the in-between.
               </>
             )}
           </p>
 
-          <motion.div variants={item} className="flex gap-4 pt-4">
+          <motion.div variants={item} className="flex flex-wrap gap-3 pt-4">
+            {/* Latest posts */}
             <Link
               href={`/${locale}/blog`}
               className="inline-flex items-center gap-2 rounded-md bg-primary/80 px-4 py-2 text-sm font-medium text-white shadow-sm hover:brightness-110"
             >
               {isFa ? "جدیدترین مطالب" : "Latest posts"}
             </Link>
-            <Link
-              href="https://github.com/zalliminal"
-              className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted"
+
+
+            {/* ── Contact us ──────────────────────────────────────────── */}
+            <motion.button
+              type="button"
+              onClick={handleContactClick}
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              className={[
+                "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium",
+                "border border-primary/60 text-primary",
+                "ring-1 ring-primary/40 ring-offset-1 ring-offset-background",
+                "hover:bg-primary/8 hover:ring-primary/70 hover:ring-2",
+                "transition-all duration-200",
+              ].join(" ")}
             >
-              {isFa ? "گیت‌هاب" : "Github"}
-            </Link>
+              <Mail size={14} strokeWidth={2} aria-hidden />
+              {isFa ? "تماس با ما" : "Contact us"}
+            </motion.button>
           </motion.div>
         </motion.div>
 
@@ -121,6 +140,7 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
         </motion.div>
       </motion.div>
 
+      {/* decorative orb */}
       <motion.div
         aria-hidden
         initial={{ opacity: 0 }}
