@@ -1,13 +1,10 @@
 // app/[locale]/search/page.tsx
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 import { getAllPosts, getTagSummaries } from "@/lib/blog";
 import { SearchPageClient } from "@/components/search/SearchPageClient";
-// ▼ Replace with your actual Persian font import.
-//   The font must be loaded via next/font and its .className forwarded into
-//   SearchPageClient so portals (Popover, Dropdown) also render in Persian font.
-// import { vazir } from "@/lib/fonts";
 
 export async function generateMetadata({
   params,
@@ -25,6 +22,20 @@ export async function generateMetadata({
   };
 }
 
+function SearchPageLoader() {
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-10">
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className="h-8 bg-muted animate-pulse rounded" />
+          <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
+        </div>
+        <div className="h-10 bg-muted animate-pulse rounded" />
+      </div>
+    </div>
+  );
+}
+
 export default async function SearchPage({
   params,
 }: {
@@ -38,13 +49,13 @@ export default async function SearchPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <SearchPageClient
-        posts={posts}
-        tags={tags}
-        locale={locale}
-        // Pass your Persian font className here so filter popovers use it too:
-        // fontClassName={locale === "fa" ? vazir.className : undefined}
-      />
+      <Suspense fallback={<SearchPageLoader />}>
+        <SearchPageClient
+          posts={posts}
+          tags={tags}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   );
 }

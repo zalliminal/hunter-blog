@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
 import type { Post, TagSummary } from "@/lib/blog";
@@ -60,18 +60,25 @@ export function SearchPageClient({ posts, tags, locale, fontClassName }: Props) 
   // Local controlled input value — debounced before committing to URL
   const [inputValue, setInputValue] = useState(filters.query);
   const debouncedQuery = useDebounce(inputValue, 200);
+  const lastUpdateRef = useRef<string>(filters.query);
 
   // Sync debounced value → URL
   useEffect(() => {
     if (debouncedQuery !== filters.query) {
+      lastUpdateRef.current = debouncedQuery;
       updateFilters({ query: debouncedQuery });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
   // Sync URL → local input (e.g. back/forward nav)
+  // Only sync if the change came from external navigation, not from our own debounce
   useEffect(() => {
-    setInputValue(filters.query);
+    if (filters.query !== lastUpdateRef.current) {
+      // This is an external change (back/forward nav), sync to input
+      setInputValue(filters.query);
+    }
+    lastUpdateRef.current = filters.query;
   }, [filters.query]);
 
   const results = useFilteredPosts(posts, {
