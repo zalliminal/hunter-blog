@@ -152,7 +152,7 @@ export default async function BlogIndexPage({
                     <a
                       key={year}
                       href={`#year-${year}`}
-                      className="inline-flex items-center gap-1 rounded-sm border border-border bg-muted/50 px-3 py-1 text-xs font-semibold text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-colors duration-150"
+                      className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/50 px-3 py-1 text-xs font-semibold text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-colors duration-150"
                     >
                       {fmtYear(parseInt(year))}
                       <span className="text-[10px] opacity-60">

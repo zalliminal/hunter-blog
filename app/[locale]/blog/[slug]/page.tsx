@@ -135,7 +135,7 @@ export default async function BlogPostPage({
                 const category = getCategory(post.category);
                 return (
                   <span
-                    className={`inline-flex rounded-sm px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
+                    className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
                   >
                     <Link href={`/${locale}/blog?category=${category.label[locale]}`}>{category.label[locale]}</Link>
                   </span>
@@ -144,7 +144,7 @@ export default async function BlogPostPage({
               {post.author && (() => {
                 const author = getPostAuthor(post.author);
                 return (
-                  <span className="inline-flex rounded-sm border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                  <span className="inline-flex rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
                     {author.name[locale]}
                   </span>
                 );
@@ -169,7 +169,7 @@ export default async function BlogPostPage({
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-sm border border-border bg-muted/60 px-2 py-0.5 text-[11px] text-muted-foreground"
+                  className="rounded-md border border-border bg-muted/60 px-2 py-0.5 text-[11px] text-muted-foreground"
                 >
                   {tag}
                 </span>

@@ -58,7 +58,7 @@ export function BlogCategoryFilter({ locale }: BlogCategoryFilterProps) {
               onClick={() =>
                 handleCategorySelect(isSelected ? null : category.slug)
               }
-              className={`relative group px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${
+              className={`relative group px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isSelected
                   ? `${category.color.bg} ${category.color.text} border border-${category.color.bg}`
                   : `border border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground`
@@ -67,7 +67,7 @@ export function BlogCategoryFilter({ locale }: BlogCategoryFilterProps) {
               {category.label[locale]}
               {isSelected && (
                 <span
-                  className="absolute bottom-0 left-0 h-0.5 w-full rounded-sm transition-all duration-200"
+                  className="absolute bottom-0 left-0 h-0.5 w-full rounded-md transition-all duration-200"
                   style={{
                     backgroundColor: category.color.oklch,
                   }}
