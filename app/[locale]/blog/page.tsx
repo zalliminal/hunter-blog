@@ -1,6 +1,8 @@
 // app/[locale]/blog/page.tsx
 import { BlogYearSection } from "@/components/blog-year-section";
-import { getAllPosts } from "@/lib/blog";
+import { BlogCategoryFilter } from "@/components/blog-category-filter";
+import { getAllPosts, getPostsByCategory } from "@/lib/blog";
+import { getCategory, isCategoryId } from "@/lib/categories_and_authors";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale, getDictionary } from "@/lib/i18n";
 import { FileText, Layers, Clock, Calendar } from "lucide-react";
@@ -22,13 +24,27 @@ function groupPostsByYear(posts: ReturnType<typeof getAllPosts>, locale: Locale)
 
 export default async function BlogIndexPage({
   params,
+  searchParams,
 }: {
   params: Promise<PageParams>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { locale: rawLocale } = await params;
   const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const dict = await getDictionary(locale);
-  const posts = getAllPosts(locale);
+  
+  const rawSearchParams = await searchParams;
+  const categoryParam = rawSearchParams.category as string | undefined;
+  const categoryId = isCategoryId(categoryParam) ? categoryParam : null;
+
+  // Get posts — filtered by category if specified
+  let posts = getAllPosts(locale);
+  let selectedCategory = null;
+  
+  if (categoryId) {
+    posts = getPostsByCategory(locale, categoryId);
+    selectedCategory = getCategory(categoryId);
+  }
 
   const groupedPosts = groupPostsByYear(posts, locale);
   const sortedYears = Object.keys(groupedPosts).sort(
@@ -57,6 +73,7 @@ export default async function BlogIndexPage({
     minRead: locale === "fa" ? "دقیقه خواندنی" : "min of reading",
     since: locale === "fa" ? "از سال" : "since",
     jumpTo: locale === "fa" ? "برو به سال" : "Jump to year",
+    noPosts: locale === "fa" ? "هنوز پستی برای این دسته نیست" : "No posts in this category yet",
   };
 
   return (
@@ -76,13 +93,20 @@ export default async function BlogIndexPage({
             </div>
             <div className="space-y-1">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                {dict.nav.blogIndexTitle}
+                {selectedCategory
+                  ? selectedCategory.label[locale]
+                  : dict.nav.blogIndexTitle}
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed max-w-xl">
-                {dict.nav.blogIndexDescription}
+                {selectedCategory
+                  ? selectedCategory.description[locale]
+                  : dict.nav.blogIndexDescription}
               </p>
             </div>
           </div>
+
+          {/* Category Filter */}
+          <BlogCategoryFilter locale={locale} />
 
           {/* Stats row — readingTime is always present after the blog.ts update */}
           <div className="grid grid-cols-3 gap-px rounded-xl overflow-hidden border border-border bg-border">
@@ -128,7 +152,7 @@ export default async function BlogIndexPage({
                     <a
                       key={year}
                       href={`#year-${year}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-semibold text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-colors duration-150"
+                      className="inline-flex items-center gap-1 rounded-sm border border-border bg-muted/50 px-3 py-1 text-xs font-semibold text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-colors duration-150"
                     >
                       {fmtYear(parseInt(year))}
                       <span className="text-[10px] opacity-60">
@@ -145,18 +169,27 @@ export default async function BlogIndexPage({
           <div className="border-t border-border" />
         </header>
 
+        {/* ── NO POSTS MESSAGE ───────────────────────────────────── */}
+        {posts.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">{t.noPosts}</p>
+          </div>
+        )}
+
         {/* ── YEAR SECTIONS ──────────────────────────────────────── */}
-        <div className="space-y-16">
-          {sortedYears.map((year, i) => (
-            <BlogYearSection
-              key={year}
-              year={year}
-              months={groupedPosts[year]}
-              locale={locale}
-              isFirst={i === 0}
-            />
-          ))}
-        </div>
+        {posts.length > 0 && (
+          <div className="space-y-16">
+            {sortedYears.map((year, i) => (
+              <BlogYearSection
+                key={year}
+                year={year}
+                months={groupedPosts[year]}
+                locale={locale}
+                isFirst={i === 0}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

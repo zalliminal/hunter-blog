@@ -5,14 +5,18 @@ import matter from "gray-matter";
 import { z } from "zod";
 import type { Locale } from "./i18n";
 import { estimateReadingTime } from "./reading-time";
+import { type CategoryId, type AuthorId, CATEGORY_IDS, AUTHOR_IDS, getCategory, getAuthor } from "./categories_and_authors";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
+// Dynamically create enums from categories_and_authors.ts
 const PostFrontmatterSchema = z.object({
   title: z.string(),
   description: z.string(),
   date: z.string(),
   slug: z.string(),
+  category: z.enum(CATEGORY_IDS),
+  author: z.enum(AUTHOR_IDS),
   thumbnail: z.string().optional(),
   tags: z.array(z.string()).default([]),
   lang: z.string(),
@@ -156,4 +160,41 @@ export function getRelatedPosts(post: Post, locale: Locale, limit = 3): Post[] {
   return related
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, limit);
+}
+
+export function getPostsByCategory(locale: Locale, categoryId: CategoryId): Post[] {
+  const posts = getAllPosts(locale);
+  return posts.filter((post) => post.category === categoryId);
+}
+
+/**
+ * Get localized category label/info for a post
+ * @example getCategoryLabel(post.category, 'fa') // "تکنیک‌های حمله"
+ */
+export function getPostCategoryLabel(categoryId: CategoryId, locale: Locale): string {
+  return getCategory(categoryId).label[locale];
+}
+
+/**
+ * Get author info for a post
+ * @example const author = getPostAuthor(post.author); author.name["en"] // "Zal"
+ */
+export function getPostAuthor(authorId: AuthorId) {
+  return getAuthor(authorId);
+}
+
+/**
+ * Get localized author name
+ * @example getPostAuthorName(post.author, 'fa') // "زال"
+ */
+export function getPostAuthorName(authorId: AuthorId, locale: Locale): string {
+  return getAuthor(authorId).name[locale];
+}
+
+/**
+ * Get localized author role
+ * @example getPostAuthorRole(post.author, 'fa') // "محقق امنیت بلاکچین · باگ باونتی هانتر"
+ */
+export function getPostAuthorRole(authorId: AuthorId, locale: Locale): string {
+  return getAuthor(authorId).role[locale];
 }

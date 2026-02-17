@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Post } from "@/lib/blog";
 import type { Locale } from "@/lib/i18n";
+import { getCategory, getAuthor } from "@/lib/categories_and_authors";
 
 type BlogCardProps = {
   post: Post;
@@ -41,7 +42,7 @@ export function BlogCard({ post, locale }: BlogCardProps) {
       className={`group flex flex-col h-full rounded-2xl border border-border bg-card/60 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md ${textAlign}`}
       dir={dir}
     >
-      {/* Top row: date (with bug) + first tag + NEW badge */}
+      {/* Top row: date (with bug) + category badge + NEW badge */}
       <div className={`flex items-center justify-between gap-2 text-xs text-muted-foreground mb-2 ${rowReverse}`}>
         <div className="flex items-center gap-1.5">
           <time dateTime={post.date} className="font-medium">
@@ -53,12 +54,14 @@ export function BlogCard({ post, locale }: BlogCardProps) {
             </span>
           )}
         </div>
-        {post.tags && post.tags.length > 0 && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
-            {post.tags[0]}
-            {post.tags.length > 1 && ` +${post.tags.length - 1}`}
-          </span>
-        )}
+        {post.category && (() => {
+          const category = getCategory(post.category);
+          return (
+            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${category.color.bg} ${category.color.text}`}>
+              {category.label[locale]}
+            </span>
+          );
+        })()}
       </div>
 
       {/* Title – always exactly one line */}
@@ -74,7 +77,15 @@ export function BlogCard({ post, locale }: BlogCardProps) {
       </div>
 
       {/* Read more – fades in on hover, respects RTL */}
-      <div className={`mt-3 flex ${isRTL ? "justify-start" : "justify-end"}`}>
+      <div className={`mt-3 flex items-center justify-between gap-2 ${rowReverse}`}>
+        {post.author && (() => {
+          const author = getAuthor(post.author);
+          return (
+            <span className="text-xs text-muted-foreground">
+              {author.name[locale]}
+            </span>
+          );
+        })()}
         <span className="text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           {readMoreText}
         </span>

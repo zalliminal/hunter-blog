@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import type { Post } from "@/lib/blog";
 import type { Locale } from "@/lib/i18n";
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight } from "lucide-react";
+import { getCategory, getAuthor } from "@/lib/categories_and_authors";
 
 type EnhancedBlogCardProps = {
   post: Post;
@@ -104,7 +105,7 @@ export function EnhancedBlogCard({ post, locale, index = 0 }: EnhancedBlogCardPr
 
         {/* ── CONTENT – flex column with spacer to push footer down ── */}
         <div className={`flex flex-1 flex-col p-4 sm:p-5 ${textAlign}`}>
-          {/* Meta row */}
+          {/* Meta row + Category + Author */}
           <div
             className={`
               flex flex-wrap items-center gap-x-3 gap-y-1
@@ -127,21 +128,49 @@ export function EnhancedBlogCard({ post, locale, index = 0 }: EnhancedBlogCardPr
               </>
             )}
 
-            {post.tags && post.tags.length > 0 && (
-              <span
-                className={`
-                  inline-flex items-center gap-1 rounded-full
-                  bg-muted px-2 py-0.5 text-[11px] font-medium
-                  ${isRTL ? "mr-auto" : "ml-auto"}
-                `}
-              >
-                <Tag className="h-2.5 w-2.5 shrink-0 opacity-60" aria-hidden />
-                {post.tags[0]}
-                {post.tags.length > 1 && (
-                  <span className="text-muted-foreground/70">+{post.tags.length - 1}</span>
-                )}
-              </span>
-            )}
+            {/* Category badge */}
+            {post.category && (() => {
+              const category = getCategory(post.category);
+              return (
+                <>
+                  <span className="text-border" aria-hidden>·</span>
+                  <span
+                    className={`
+                      inline-flex items-center rounded-full
+                      px-2 py-0.5 text-[11px] font-semibold
+                      ${category.color.bg} ${category.color.text}
+                    `}
+                  >
+                    {category.label[locale]}
+                  </span>
+                </>
+              );
+            })()}
+
+            {/* Author avatar/badge */}
+            {post.author && (() => {
+              const author = getAuthor(post.author);
+              return (
+                <>
+                  <span className="text-border" aria-hidden>·</span>
+                  <div className="flex items-center gap-1.5">
+                    {author.avatar && (
+                      <Image
+                        src={author.avatar}
+                        alt={author.name[locale]}
+                        width={20}
+                        height={20}
+                        className="rounded-full object-cover border border-border"
+                        title={author.name[locale]}
+                      />
+                    )}
+                    <span className="font-medium text-muted-foreground">
+                      {author.name[locale]}
+                    </span>
+                  </div>
+                </>
+              );
+            })()}
           </div>
 
           {/* Title */}
@@ -159,31 +188,32 @@ export function EnhancedBlogCard({ post, locale, index = 0 }: EnhancedBlogCardPr
           {/* SPACER – pushes footer to the bottom */}
           <div className="flex-1 min-h-2" />
 
-          {/* Footer: extra tags + read‑more arrow */}
+          {/* Footer: tags + read‑more arrow */}
           <div
             className={`
-              flex items-center justify-between gap-2 pt-3 mt-1 border-t
+              flex items-center justify-between gap-2 pt-3 mt-auto border-t
               ${isRTL ? "flex-row-reverse" : "flex-row"}
             `}
           >
-            {/* Overflow tags */}
+            {/* Tags */}
             <div
               className={`
                 flex flex-wrap items-center gap-1
                 ${isRTL ? "flex-row-reverse" : "flex-row"}
               `}
             >
-              {post.tags && post.tags.slice(1, 3).map((tag) => (
+              {post.tags && post.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center rounded-full bg-muted/70 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                  className="inline-flex items-center gap-1 rounded-full bg-muted/70 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
                 >
+                  <Tag className="h-2 w-2 shrink-0 opacity-60" aria-hidden />
                   {tag}
                 </span>
               ))}
-              {post.tags && post.tags.length > 3 && (
+              {post.tags && post.tags.length > 2 && (
                 <span className="text-[11px] text-muted-foreground/60">
-                  +{post.tags.length - 3}
+                  +{post.tags.length - 2}
                 </span>
               )}
             </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
-import { getPostBySlug, getAllPosts } from "@/lib/blog";
+import { getPostBySlug, getAllPosts, getRelatedPosts, getPostAuthor } from "@/lib/blog";
 import { generateTocFromContent } from "@/lib/toc";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { PostToc } from "@/components/post-toc";
@@ -13,9 +13,10 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import type { PostFrontmatter } from "@/lib/blog";
-import { getRelatedPosts } from "@/lib/blog";
 import { EnhancedBlogCard } from "@/components/index-page-blog-card";
 import { getSiteUrl } from "@/lib/site";
+import { getCategory } from "@/lib/categories_and_authors";
+import Link from "next/link";
 
 type PageParams = {
   locale: Locale;
@@ -128,6 +129,27 @@ export default async function BlogPostPage({
             <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               {post.title}
             </h1>
+            {/* Category & Author Badges */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {post.category && (() => {
+                const category = getCategory(post.category);
+                return (
+                  <span
+                    className={`inline-flex rounded-sm px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
+                  >
+                    <Link href={`/${locale}/blog?category=${category.label[locale]}`}>{category.label[locale]}</Link>
+                  </span>
+                );
+              })()}
+              {post.author && (() => {
+                const author = getPostAuthor(post.author);
+                return (
+                  <span className="inline-flex rounded-sm border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                    {author.name[locale]}
+                  </span>
+                );
+              })()}
+            </div>
             {post.description ? (
               <p className="max-w-2xl text-sm text-muted-foreground">
                 {post.description}
@@ -147,7 +169,7 @@ export default async function BlogPostPage({
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border bg-muted/60 px-2 py-0.5 text-[11px] text-muted-foreground"
+                  className="rounded-sm border border-border bg-muted/60 px-2 py-0.5 text-[11px] text-muted-foreground"
                 >
                   {tag}
                 </span>

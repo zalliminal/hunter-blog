@@ -194,24 +194,17 @@ export function SiteFooter({ locale }: SiteFooterProps) {
           {/* credits – use Farsi font for Persian text */}
           <p className={`${defaultFont} text-[10px] text-muted-foreground flex items-center gap-1.5`}>
             <Heart className="h-3 w-3 text-red-400/70" aria-hidden />
-            <span>{copy.madeWith}</span>
-            <a
-              href="https://github.com/parhamf6"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-foreground underline decoration-border underline-offset-2 transition-colors"
-            >
-              Parham Forati
-            </a>
-            <span>{copy.and}</span>
-            <a
-              href="https://github.com/zalliminal"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-foreground underline decoration-border underline-offset-2 transition-colors"
-            >
-              Zalliminal
-            </a>
+            <div>
+              <span>{copy.madeWith} </span>
+              <a
+                href="https://github.com/parhamf6"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-foreground underline decoration-border underline-offset-2 transition-colors"
+              >
+                Parham Forati
+              </a>
+            </div>
           </p>
         </motion.div>
       </div>
