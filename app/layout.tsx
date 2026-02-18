@@ -47,7 +47,25 @@ export const metadata: Metadata = {
     description:
       "Zalliminal security researcher. Real-world writeups, notes and ideas in English and Farsi.",
   },
+  verification: {
+    google: "DFB-Ev3KX6Ofu24zMPweEXoHSwKcw195ZJ1SCZTbKyc",
+  },
+  authors: [
+    { name: "Zal", url: siteUrl },
+    { name: "ParhamF", url: siteUrl },
+  ],
+
+  keywords: [
+    "bug bounty",
+    "security research",
+    "writeups",
+    "penetration testing",
+    "ethical hacking",
+    "CTF",
+    "web security",
+  ],
 };
+
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
