@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
-import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
-import { getPostBySlug, getAllPosts, getRelatedPosts, getPostAuthor } from "@/lib/blog";
+import { DEFAULT_LOCALE, isLocale, LOCALES } from "@/lib/i18n";
+import {
+  getPostBySlug,
+  getAllPosts,
+  getAllPostSlugs,
+  getRelatedPosts,
+  getPostAuthor,
+} from "@/lib/blog";
 import { generateTocFromContent } from "@/lib/toc";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { PostToc } from "@/components/post-toc";
@@ -16,12 +24,18 @@ import type { PostFrontmatter } from "@/lib/blog";
 import { EnhancedBlogCard } from "@/components/index-page-blog-card";
 import { getSiteUrl } from "@/lib/site";
 import { getCategory } from "@/lib/categories_and_authors";
-import Link from "next/link";
 
 type PageParams = {
   locale: Locale;
   slug: string;
 };
+
+// This turns every post page from SSR → SSG, making clicks feel instant.
+export function generateStaticParams(): PageParams[] {
+  return LOCALES.flatMap((locale) =>
+    getAllPostSlugs(locale).map((slug) => ({ locale, slug }))
+  );
+}
 
 export async function generateMetadata({
   params,
@@ -32,9 +46,7 @@ export async function generateMetadata({
   const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const post = getPostBySlug(locale, slug);
 
-  if (!post) {
-    return {};
-  }
+  if (!post) return {};
 
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}${post.url}`;
@@ -51,14 +63,7 @@ export async function generateMetadata({
       siteName: "Hunter Notes",
       publishedTime: post.date,
       tags: post.tags,
-      images: imageUrl
-        ? [
-            {
-              url: imageUrl,
-              alt: post.title,
-            },
-          ]
-        : undefined,
+      images: imageUrl ? [{ url: imageUrl, alt: post.title }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -78,9 +83,7 @@ export default async function BlogPostPage({
   const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const post = getPostBySlug(locale, slug);
 
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   const toc = generateTocFromContent(post.content);
 
@@ -101,6 +104,9 @@ export default async function BlogPostPage({
   const index = allPosts.findIndex((p) => p.slug === post.slug);
   const previous = index > 0 ? allPosts[index - 1] : null;
   const next = index < allPosts.length - 1 ? allPosts[index + 1] : null;
+
+  const category = post.category ? getCategory(post.category) : null;
+  const author = post.author ? getPostAuthor(post.author) : null;
 
   return (
     <article className="relative">
@@ -126,45 +132,47 @@ export default async function BlogPostPage({
                   : `${post.readingTime} min read`}
               </span>
             </div>
+
             <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               {post.title}
             </h1>
-            {/* Category & Author Badges */}
+
             <div className="flex flex-wrap items-center gap-2 pt-1">
-              {post.category && (() => {
-                const category = getCategory(post.category);
-                return (
-                  <span
-                    className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
-                  >
-                    <Link href={`/${locale}/blog?category=${category.label[locale]}`}>{category.label[locale]}</Link>
-                  </span>
-                );
-              })()}
-              {post.author && (() => {
-                const author = getPostAuthor(post.author);
-                return (
-                  <span className="inline-flex rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-                    {author.name[locale]}
-                  </span>
-                );
-              })()}
+              {category && (
+                <span
+                  className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
+                >
+                  <Link href={`/${locale}/blog?category=${post.category}`}>
+                    {category.label[locale]}
+                  </Link>
+                </span>
+              )}
+              {author && (
+                <span className="inline-flex rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                  {author.name[locale]}
+                </span>
+              )}
             </div>
-            {post.description ? (
+
+            {post.description && (
               <p className="max-w-2xl text-sm text-muted-foreground">
                 {post.description}
               </p>
-            ) : null}
-            {post.thumbnail ? (
-  <div className="mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-border">
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img
-      src={post.thumbnail}
-      alt=""
-      className="h-full w-full object-cover object-center"
-    />
-  </div>
-) : null}
+            )}
+
+            {post.thumbnail && (
+              <div className="mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-border relative">
+                <Image
+                  src={post.thumbnail}
+                  alt={post.title}
+                  fill
+                  priority
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 720px"
+                />
+              </div>
+            )}
+
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {post.tags.map((tag) => (
                 <span
@@ -178,13 +186,18 @@ export default async function BlogPostPage({
           </header>
 
           <div className="space-y-6">
-            <div className="prose max-w-none">
-              {content}
-            </div>
+            <div className="prose max-w-none">{content}</div>
+
             <div className="mt-6 flex items-center justify-between gap-3">
               <PostShare title={post.title} locale={locale} />
             </div>
-            <PostNav locale={locale} previous={previous ?? undefined} next={next ?? undefined} />
+
+            <PostNav
+              locale={locale}
+              previous={previous ?? undefined}
+              next={next ?? undefined}
+            />
+
             {relatedPosts.length > 0 && (
               <section className="mt-12 border-t border-border pt-8">
                 <h2 className="mb-4 text-lg font-semibold">
@@ -210,4 +223,3 @@ export default async function BlogPostPage({
     </article>
   );
 }
-

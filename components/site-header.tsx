@@ -138,7 +138,7 @@ function PrimaryNav({
 
               <NavigationMenuContent>
                 {/* wrapper enforces dir for RTL languages */}
-                <div dir={getDirection(locale)} className="w-72 ">
+                <div dir={getDirection(locale)} className="w-54 ">
                   {/* top: compact list (tags + categories + search) */}
                   <ul className="grid gap-4">
                     <li>

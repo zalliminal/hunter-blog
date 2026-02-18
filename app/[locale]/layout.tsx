@@ -12,6 +12,7 @@ import {
 import "../globals.css";
 import { SiteFooter } from "@/components/footer";
 import { BackToTop } from "@/components/back-to-top";
+import { NavigationProgress } from "@/components/NavigationProgress";
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -34,6 +35,7 @@ export default async function LocaleLayout(props: {
       className="flex min-h-screen flex-col bg-background text-foreground"
     >
       <SiteHeader locale={locale} dict={dict.nav} />
+      <NavigationProgress />
       <LocaleTransition locale={locale}>
         <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
           {children}

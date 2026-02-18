@@ -1,15 +1,15 @@
 export function getSiteUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  if (envUrl && envUrl.trim().length > 0) {
-    return envUrl.replace(/\/+$/, "");
+  // Custom env var you set manually in Vercel dashboard (most reliable)
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
   }
 
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl && vercelUrl.trim().length > 0) {
-    return `https://${vercelUrl}`.replace(/\/+$/, "");
+  // Vercel's production URL env var (no protocol, so we add https)
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   }
 
-  // Fallback for local development
+  // Fallback for local dev
   return "http://localhost:3000";
 }
 
