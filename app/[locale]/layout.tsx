@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { LocaleTransition } from "@/components/locale-transition";
 import {
@@ -35,7 +36,9 @@ export default async function LocaleLayout(props: {
       className="flex min-h-screen flex-col bg-background text-foreground"
     >
       <SiteHeader locale={locale} dict={dict.nav} />
-      <NavigationProgress />
+      <Suspense fallback={null}>
+        <NavigationProgress />
+      </Suspense>
       <LocaleTransition locale={locale}>
         <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
           {children}
