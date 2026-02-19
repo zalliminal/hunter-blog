@@ -23,7 +23,7 @@ export type CategoryId =
   | "attack-techniques"
   | "lab-writeups";
 
-export type AuthorId = "zal" | "parham";
+export type AuthorId = "zal" | "parhamf";
 
 export type Category = {
   id: CategoryId;
@@ -107,7 +107,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
       oklch: "oklch(0.6959 0.1491 162.48)",
       oklchDark: "oklch(0.7342 0.2341 144.54)",
     },
-    primaryAuthor: "parham",
+    primaryAuthor: "parhamf",
   },
 
   "security-fundamentals": {
@@ -127,7 +127,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
       oklch: "oklch(0.5638 0.1872 143.25)",
       oklchDark: "oklch(0.8686 0.2776 144.47)",
     },
-    primaryAuthor: "parham",
+    primaryAuthor: "parhamf",
   },
 
   "attack-techniques": {
@@ -223,10 +223,10 @@ export const AUTHORS: Record<AuthorId, Author> = {
     },
   },
 
-  parham: {
-    id: "parham",
+  parhamf: {
+    id: "parhamf",
     name: {
-      en: "Parham",
+      en: "ParhamF",
       fa: "پرهام",
     },
     handle: "@parham",
@@ -282,7 +282,7 @@ export const CATEGORY_IDS: CategoryId[] = [
   "lab-writeups",
 ];
 
-export const AUTHOR_IDS: AuthorId[] = ["zal", "parham"];
+export const AUTHOR_IDS: AuthorId[] = ["zal", "parhamf"];
 
 // ─────────────────────────────────────────────────────────────
 //  HELPERS (i18n-friendly helpers added)

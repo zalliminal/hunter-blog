@@ -198,3 +198,21 @@ export function getPostAuthorName(authorId: AuthorId, locale: Locale): string {
 export function getPostAuthorRole(authorId: AuthorId, locale: Locale): string {
   return getAuthor(authorId).role[locale];
 }
+
+
+/**
+ * Get posts filtered by author
+ * @example getPostsByAuthor(locale, 'parham')
+ */
+export function getPostsByAuthor(locale: Locale, authorId: AuthorId): Post[] {
+  const posts = getAllPosts(locale);
+  return posts.filter((post) => post.author === authorId);
+}
+
+/**
+ * Get latest posts by author
+ * @example getLatestPostsByAuthor(locale, 'parham', 6)
+ */
+export function getLatestPostsByAuthor(locale: Locale, authorId: AuthorId, limit = 6): Post[] {
+  return getPostsByAuthor(locale, authorId).slice(0, limit);
+}

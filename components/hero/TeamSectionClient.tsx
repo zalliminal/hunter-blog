@@ -53,7 +53,7 @@ function TeamBackgroundOrbs({
           y: -4,
           x: [-4, 4, -4],
         }}
-        transition={{ duration: 8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+        transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
       />
       {/* Secondary Orb */}
       <motion.div
@@ -226,7 +226,7 @@ function TeamCard({
 
           {/* ── CTA Button (View Profile) - Last Row ───────────────────────── */}
           <Link
-            href={isFa ? `/fa/authors/${authorId}` : `/authors/${authorId}`}
+            href={isFa ? `/fa/authors/${authorId}` : `en/authors/${authorId}`}
             className="group/btn inline-flex items-center justify-center gap-1.5 rounded-full border border-border/70 bg-background/60 px-4 py-2 text-[11px] font-medium text-foreground shadow-sm transition-all duration-200 hover:border-primary/60 hover:bg-primary/10 hover:text-primary hover:shadow-md"
             style={{
               borderColor: hovered ? `${primaryColor}60` : undefined,
@@ -286,7 +286,7 @@ export default function TeamSectionClient({ locale, isFa }: Props) {
           className="grid gap-6 md:grid-cols-2"
         >
           {/* Parham Card */}
-          <TeamCard authorId="parham" locale={locale} isFa={isFa} />
+          <TeamCard authorId="parhamf" locale={locale} isFa={isFa} />
           
           {/* Zal Card */}
           <TeamCard authorId="zal" locale={locale} isFa={isFa} />
