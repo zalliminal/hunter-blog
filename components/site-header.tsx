@@ -41,7 +41,7 @@ export function SiteHeader({ locale, dict }: SiteHeaderProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 22 }}
           >
-            Zalliminal
+            KavLabs
           </motion.span>
         </Link>
 
@@ -301,7 +301,7 @@ function MobileMenu({
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold uppercase tracking-[0.2em]">
-                Zalliminal
+                KavLabs
               </span>
               <button
                 type="button"

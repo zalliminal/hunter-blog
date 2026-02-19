@@ -26,7 +26,7 @@ const goals = {
       id: "bounty",
       number: "01",
       label: "Document Real Bug Bounty Findings",
-      body: "Every real finding deserves a proper write-up — from the first hint of something off to the final report. These notes capture that process: the wrong turns, the aha moments, and the exact payload that worked.",
+      body: "Every real finding deserves a proper write-up — from the first hint of something off to the final report. We capture that process: the wrong turns, the aha moments, and the exact payload that worked.",
       tag: "Bug Bounty",
       cmd: "document --findings --live",
       statusLine: "Indexing 3 confirmed vulnerabilities…",
@@ -55,7 +55,7 @@ const goals = {
       id: "bounty",
       number: "01",
       label: "مستندسازی یافته‌های واقعی باگ باونتی",
-      body: "هر یافته‌ی واقعی لایق یک write-up درست است — از اولین نشانه‌ی چیز غیرعادی تا گزارش نهایی. این یادداشت‌ها آن فرایند را ثبت می‌کنند: راه‌های اشتباه، لحظات کشف، و دقیقاً همان payload که کار کرد.",
+      body: "هر یافته‌ی واقعی لایق یک write-up درست است — از اولین نشانه‌ی چیز غیرعادی تا گزارش نهایی. ما آن فرایند را ثبت می‌کنیم: راه‌های اشتباه، لحظات کشف، و دقیقاً همان payload که کار کرد.",
       tag: "Bug Bounty",
       cmd: "document --findings --live",
       statusLine: "Indexing 3 confirmed vulnerabilities…",
@@ -102,7 +102,7 @@ function useTyping(text: string, active: boolean, speed = 22): string {
 
 // ── ghost block: full static content, invisible, for height reservation ───────
 function GhostBlock({ g, isFa }: { g: Goal; isFa: boolean }) {
-  const cmdText = `zal@blog:~$ ./goal ${g.number}  # ${g.cmd}`;
+  const cmdText = `team@kavlabs:~$ ./goal ${g.number}  # ${g.cmd}`;
   return (
     <div className="space-y-1 invisible select-none" aria-hidden>
       <div className="flex items-start gap-1.5 font-mono text-[11px] md:text-[12px] leading-snug" dir="ltr">
@@ -139,7 +139,7 @@ function TerminalBlock({
   isFa: boolean;
   triggerDelay: number;
   containerInView: boolean;
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const prefersReduced = useReducedMotion();
   const [active, setActive] = useState(false);
@@ -156,7 +156,7 @@ function TerminalBlock({
     }
   });
 
-  const cmdText = `zal@blog:~$ ./goal ${g.number}  # ${g.cmd}`;
+  const cmdText = `team@kavlabs:~$ ./goal ${g.number}  # ${g.cmd}`;
   const typedCmd = useTyping(cmdText, active, prefersReduced ? 0 : 16);
   const cmdDone = typedCmd.length >= cmdText.length;
   const typedStatus = useTyping(g.statusLine, cmdDone, prefersReduced ? 0 : 26);
@@ -240,14 +240,36 @@ function TitleBar() {
       <span className="h-2.5 w-2.5 rounded-full bg-amber-400/55" />
       <span className="h-2.5 w-2.5 rounded-full bg-primary/55" />
       <span className="ml-auto select-none font-mono text-[10px] text-muted-foreground/70">
-        zal@blog — ~/goals — bash
+        team@kavlabs — ~/goals — bash
       </span>
     </div>
   );
 }
 
 // ── main export ───────────────────────────────────────────────────────────────
-export default function GoalsTerminalFixedHeight({ isFa = false }: { isFa?: boolean }) {
+/**
+ * Terminal-based goals section component.
+ * Only supports the terminal variant for displaying goals.
+ */
+export default function GoalSectionClient({
+  locale,
+  isFa = false,
+  variant = "terminal",
+}: {
+  locale?: string;
+  isFa?: boolean;
+  variant?: "terminal";
+}) {
+  // Only terminal variant is supported
+  if (variant !== "terminal") {
+    console.warn(`Unsupported variant: ${variant}. Only 'terminal' is supported.`);
+  }
+  
+  // Validate locale format (optional, for consistency with other components)
+  if (locale && !["en", "fa"].includes(locale)) {
+    console.warn(`Unsupported locale: ${locale}`);
+  }
+  
   const prefersReduced = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -294,7 +316,7 @@ export default function GoalsTerminalFixedHeight({ isFa = false }: { isFa?: bool
       <div className={`relative z-0 ${bodyPadding}`} aria-hidden>
         {/* comment line */}
         <div className="invisible select-none font-mono text-[10px]" dir="ltr">
-          # security researcher notes — goal manifest v1.0
+          # kavlabs security research — goal manifest v1.0
         </div>
         {list.map((g) => (
           <GhostBlock key={g.id} g={g} isFa={isFa} />
@@ -325,7 +347,7 @@ export default function GoalsTerminalFixedHeight({ isFa = false }: { isFa?: bool
             className="select-none font-mono text-[10px] text-muted-foreground/60"
             dir="ltr"
           >
-            # security researcher notes — goal manifest v1.0
+            # kavlabs security research — goal manifest v1.0
           </motion.div>
         )}
 

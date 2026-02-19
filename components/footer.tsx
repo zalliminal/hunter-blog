@@ -26,7 +26,7 @@ const NAV = {
 } as const;
 
 const EXTERNALS = [
-  { href: "https://github.com/zalliminal", icon: Github, label: "GitHub" },
+  { href: "https://github.com/kavlabsallimina", icon: Github, label: "GitHub" },
   { href: "/rss.xml", icon: Rss, label: "RSS Feed" },
   { href: "mailto:you@example.com", icon: Mail, label: "Email" },
 ] as const;
@@ -49,11 +49,11 @@ export function SiteFooter({ locale }: SiteFooterProps) {
   // ── localised strings ───────────────────────────────────────────
   const copy = {
     tagline: isRTL
-      ? " یادداشت های کسی که دوست داره  بیشتر یاد بگیره "
-      : "notes from someone who loves to learn more",
+      ? " یادداشت‌هایی از ذهن‌های کاوشگر، برای ذهن‌های کنجکاو"
+      : "Notes from exploratory minds, for curious minds",
     // pgpLabel: isRTL ? "اثر انگشت PGP" : "PGP fingerprint",
     rights: isRTL ? "تمام حقوق محفوظ است" : "all rights reserved",
-    brand: "Zalliminal",
+    brand: "KavLabs",
     madeWith: isRTL
       ? "ساخته‌شده با عشق توسط"
       : "made with love by",

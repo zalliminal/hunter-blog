@@ -27,32 +27,31 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: {
-    default: "Hunter Notes — bug bounty & security writeups",
-    template: "%s — Hunter Notes",
+    default: "KavBlog — security research & writeups by KavLabs",
+    template: "%s — KavBlog",
   },
   description:
-    "Zalliminal security researcher. Real-world writeups, notes and ideas in English and Farsi.",
+    "KavLabs security research team. Real-world writeups, notes and ideas in English and Farsi.",
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Hunter Notes — bug bounty & security writeups",
+    title: "KavBlog — security research & writeups by KavLabs",
     description:
-      "Zalliminal security researcher. Real-world writeups, notes and ideas in English and Farsi.",
+      "KavLabs security research team. Real-world writeups, notes and ideas in English and Farsi.",
     url: siteUrl,
-    siteName: "Hunter Notes",
+    siteName: "KavBlog",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hunter Notes — bug bounty & security writeups",
+    title: "KavBlog — security research & writeups by KavLabs",
     description:
-      "Zalliminal security researcher. Real-world writeups, notes and ideas in English and Farsi.",
+      "KavLabs security research team. Real-world writeups, notes and ideas in English and Farsi.",
   },
   verification: {
     google: "DFB-Ev3KX6Ofu24zMPweEXoHSwKcw195ZJ1SCZTbKyc",
   },
   authors: [
-    { name: "Zal", url: siteUrl },
-    { name: "ParhamF", url: siteUrl },
+    { name: "KavLabs Team", url: siteUrl },
   ],
 
   keywords: [

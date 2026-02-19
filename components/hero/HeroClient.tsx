@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import type { Locale, NavDictionary } from "@/lib/i18n";
-import ZalliminalCard from "./ZalliminalCard";
+import KavLabsCard from "./KavLabsCard";
 
 type Props = {
   locale: Locale;
@@ -74,8 +74,8 @@ function handleContactClick(e: React.MouseEvent<HTMLButtonElement>) {
 export default function HeroClient({ locale, isFa, dict }: Props) {
   const isRTL = locale === "fa";
   const headline = isFa
-    ? "یادداشت‌های یک محقق امنیت"
-    : "security researcher notes";
+    ? "یادداشت‌های میدانی امنیت"
+    : "Security research notes";
 
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-background/60 to-background/40 p-6 shadow-lg">
@@ -86,26 +86,25 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
         variants={heroVariants}
       >
         <motion.div variants={item} className="space-y-4">
-          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl pb-3">
+          <h1 className="text-lg font-semibold tracking-tight sm:text-2xl pb-3 ">
             <TypingText text={headline} isRTL={isRTL} />
           </h1>
-
           <p className="max-w-xl text-sm text-muted-foreground leading-relaxed">
             {isFa ? (
               <>
-                میتونی منو زال صدام کنی.این‌جا جایی است برای ایده‌ها، چیزهایی که یاد
-                می‌گیرم و write-up‌های میدانی و مینیمال،مستقیم سر اصل مطلب.
+                ما اینجا هستیم تا به‌صورت آزاد، یادگیری امنیت را برای همه آسان کنیم — یادداشت‌های
+                میدانی، آموزش‌های عملی و ابزارهای کاربردی.
               </>
             ) : (
               <>
-                You can Call me Zal. This is a quiet place for ideas, notes, field
-                write-ups and short technical essays. Minimal and focused — with one foot
-                in myth and the other in the in-between.
+                We’re here to freely make security learning accessible — field notes, hands-on
+                tutorials, and practical tools.
               </>
             )}
           </p>
 
-          <motion.div variants={item} className="flex flex-wrap gap-3 pt-4">
+
+          <motion.div variants={item} className="flex flex-wrap gap-3 pt-6">
             {/* Latest posts */}
             <Link
               href={`/${locale}/blog`}
@@ -113,7 +112,6 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
             >
               {isFa ? "جدیدترین مطالب" : "Latest posts"}
             </Link>
-
 
             {/* ── Contact us ──────────────────────────────────────────── */}
             <motion.button
@@ -136,7 +134,7 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
         </motion.div>
 
         <motion.div variants={item}>
-          <ZalliminalCard isFa={isFa} locale={locale} />
+          <KavLabsCard isFa={isFa} locale={locale} />
         </motion.div>
       </motion.div>
 

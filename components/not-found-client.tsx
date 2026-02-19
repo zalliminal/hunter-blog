@@ -33,7 +33,7 @@ const dict = {
 
 // ── traceroute lines (technical – kept in English) ─────────────────
 const TRACE_LINES = [
-  { delay: 0,    text: "$ traceroute --max-hops=8 zalliminal.dev/[path]" },
+  { delay: 0,    text: "$ traceroute --max-hops=8 kavlabs.dev/[path]" },
   { delay: 600,  text: " 1  gateway.local (192.168.1.1)   0.412 ms" },
   { delay: 1100, text: " 2  10.0.0.1 (10.0.0.1)          1.883 ms" },
   { delay: 1700, text: " 3  transit-node-3 (185.x.x.x)   22.41 ms" },

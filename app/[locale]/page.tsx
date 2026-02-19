@@ -9,6 +9,7 @@ import HeroClient from "@/components/hero/HeroClient";
 import AboutSectionClient from "@/components/hero/AboutSectionClient";
 import LatestPostsClient from "@/components/hero/LatestPostClient";
 import GoalsSectionClient from "@/components/hero/GoalSectionClient";
+import TeamSectionClient from "@/components/hero/TeamSectionClient";
 
 type PageParams = { locale: Locale };
 
@@ -44,11 +45,7 @@ export default async function LocaleHomePage({
         <LatestPostsClient posts={latestPosts} locale={locale} />
       </section>
 
-      {/*
-       * Goals — placed ABOVE the About section.
-       * variant="both"  → renders the box card first, then the open/lines layout below it.
-       * Change to "box" or "open" to show only one version.
-       */}
+      {/* Goals — terminal variant */}
       <GoalsSectionClient locale={locale} isFa={isFa} variant="terminal" />
 
       {/* About */}
@@ -59,6 +56,16 @@ export default async function LocaleHomePage({
           </h2>
         </div>
         <AboutSectionClient locale={locale} isFa={isFa} />
+      </section>
+
+      {/* Team Section */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            {isFa ? "تیم ما" : "Our Team"}
+          </h2>
+        </div>
+        <TeamSectionClient locale={locale} isFa={isFa} />
       </section>
     </div>
   );

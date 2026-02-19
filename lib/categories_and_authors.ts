@@ -1,7 +1,8 @@
 // ============================================================
 //  categories.ts — Blog taxonomy & author config
 //  Used for: post tagging · category pages · search filtering
-//  Bilingual: en + fa | Colors match site's green-primary theme
+//  Bilingual: en + fa | Colors match site's theme
+//  NOTE: added i18n essentials and author signature color tokens
 // ============================================================
 
 // ─────────────────────────────────────────────────────────────
@@ -12,6 +13,9 @@ export type LocalizedString = {
   en: string;
   fa: string;
 };
+
+export const LOCALES = ["en", "fa"] as const;
+export type Locale = (typeof LOCALES)[number];
 
 export type CategoryId =
   | "digital-literacy"
@@ -44,6 +48,23 @@ export type Category = {
   primaryAuthor: AuthorId;
 };
 
+export type ColorToken = {
+  hex: string;
+  tailwind?: string;
+  /** optional OKLCH string if you want to use inline styles consistent with globals */
+  oklch?: string;
+};
+
+export type AuthorSignature = {
+  colors: {
+    primary: ColorToken;   // main brand color (Parham: yellow, Zal: green)
+    secondary: ColorToken; // accent / supporting color (choose complement)
+    neutral: ColorToken;   // neutral (both asked to include black)
+  };
+  /** optional small tagline (localized) used on cards / hero */
+  tagline?: LocalizedString;
+};
+
 export type Author = {
   id: AuthorId;
   name: LocalizedString;
@@ -52,7 +73,6 @@ export type Author = {
   bio: LocalizedString;
   /** Path relative to /public */
   avatar: string;
-  /** Zal has no real photo — use an abstract SVG avatar */
   isAnonymous: boolean;
   links: {
     twitter?: string;
@@ -61,21 +81,15 @@ export type Author = {
     immunefi?: string;
     telegram?: string;
   };
+  /** i18n-friendly short tagline (one-liner) and signature colors */
+  signature: AuthorSignature;
 };
 
 // ─────────────────────────────────────────────────────────────
-//  CATEGORIES
+//  CATEGORIES (unchanged except comments)
 // ─────────────────────────────────────────────────────────────
 
 export const CATEGORIES: Record<CategoryId, Category> = {
-
-  /**
-   * Category 1 — Digital Literacy & Awareness
-   * Author: Parham
-   * Target: general users, complete beginners
-   * Vibe: approachable, shareable, no jargon
-   * Color: teal-green (chart-2 family from globals.css)
-   */
   "digital-literacy": {
     id: "digital-literacy",
     slug: "digital-literacy",
@@ -85,7 +99,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     description: {
       en: "Everyday security awareness for everyone — no prior knowledge required. How the internet works, staying safe online, and understanding threats in plain language.",
-      fa: "آگاهی امنیتی روزمره برای همه — بدون نیاز به دانش قبلی. اینترنت چطور کار می‌کنه، چطور آنلاین امن بمونیم و تهدیدها رو به زبان ساده بفهمیم.",
+      fa: "آگاهی امنیتی روزمره برای همه — بدون نیاز به دانش قبلی. اینترنت چطور کار می‌کند، چطور آنلاین امن بمانیم و تهدیدها را به زبان ساده بفهمیم.",
     },
     color: {
       bg: "bg-teal-100 dark:bg-teal-950",
@@ -96,13 +110,6 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     primaryAuthor: "parham",
   },
 
-  /**
-   * Category 2 — Security Fundamentals
-   * Author: Parham (with Zal writeup references)
-   * Target: students, developers entering security
-   * Vibe: structured, educational, bridges theory and practice
-   * Color: primary green (--primary / chart-1 from globals.css)
-   */
   "security-fundamentals": {
     id: "security-fundamentals",
     slug: "security-fundamentals",
@@ -123,13 +130,6 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     primaryAuthor: "parham",
   },
 
-  /**
-   * Category 3 — Attack Techniques & Research
-   * Author: Zal
-   * Target: security researchers, pentesters, bug bounty hunters
-   * Vibe: technical, precise, practitioner-first
-   * Color: indigo-blue (chart-3 from globals.css) — distinct, serious feel
-   */
   "attack-techniques": {
     id: "attack-techniques",
     slug: "attack-techniques",
@@ -150,13 +150,6 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     primaryAuthor: "zal",
   },
 
-  /**
-   * Category 4 — Lab Writeups & CTF
-   * Author: Zal (links to Parham's open-source repo for solutions)
-   * Target: hands-on learners, students, junior hunters
-   * Vibe: practical, step-by-step, methodology over answers
-   * Color: amber (chart-4 from globals.css) — "practice/lab" feel
-   */
   "lab-writeups": {
     id: "lab-writeups",
     slug: "lab-writeups",
@@ -176,15 +169,13 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     primaryAuthor: "zal",
   },
-
 } as const;
 
 // ─────────────────────────────────────────────────────────────
-//  AUTHORS
+//  AUTHORS — now with localized taglines & signature color tokens
 // ─────────────────────────────────────────────────────────────
 
 export const AUTHORS: Record<AuthorId, Author> = {
-
   zal: {
     id: "zal",
     name: {
@@ -193,7 +184,7 @@ export const AUTHORS: Record<AuthorId, Author> = {
     },
     handle: "@zal",
     role: {
-      en: "Blockchain Security Researcher · Bug Bounty Hunter",
+      en: "Security Researcher · Bug Bounty Hunter",
       fa: "محقق امنیت بلاکچین · باگ باونتی هانتر",
     },
     bio: {
@@ -203,9 +194,32 @@ export const AUTHORS: Record<AuthorId, Author> = {
     avatar: "/profiles/zal_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/zal_handle",       // replace with real handle
-      hackerone: "https://hackerone.com/zal",     // replace with real profile
+      twitter: "https://x.com/zal_handle", // replace with real handle
+      hackerone: "https://hackerone.com/zal", // replace with real profile
       immunefi: "https://immunefi.com/profile/zal",
+    },
+    signature: {
+      tagline: {
+        en: "Blockchain security & exploitation research",
+        fa: "تحقیق در امنیت بلاکچین و اکسپلویت",
+      },
+      colors: {
+        primary: {
+          hex: "#16A34A", // green  (tailwind emerald/green-ish)
+          tailwind: "text-green-600 bg-green-50 dark:bg-green-900",
+          oklch: "oklch(0.5638 0.1872 143.25)",
+        },
+        secondary: {
+          hex: "#8B5CF6", // violet / purple accent
+          tailwind: "text-violet-600",
+          oklch: "oklch(0.5000 0.2000 280.00)",
+        },
+        neutral: {
+          hex: "#0B0F11", // near-black neutral
+          tailwind: "text-black",
+          oklch: "oklch(0.1500 0.0100 50.00)",
+        },
+      },
     },
   },
 
@@ -217,22 +231,44 @@ export const AUTHORS: Record<AuthorId, Author> = {
     },
     handle: "@parham",
     role: {
-      en: "Security Educator · Developer",
-      fa: "مدرس امنیت · توسعه‌دهنده",
+      en: "Security Researcher · Developer",
+      fa: "محقق امنیت · توسعه‌دهنده",
     },
     bio: {
       en: "Security educator and developer who loves teaching — from programming basics to smart contract security. Collaborates with Zal to write developer-focused analyses of real vulnerabilities. All challenge solutions are open-source on GitHub.",
-      fa: "مدرس امنیت و توسعه‌دهنده‌ای که آموزش دادن رو دوست داره — از مبانی برنامه‌نویسی تا امنیت قراردادهای هوشمند. با زال همکاری می‌کنم تا تحلیل‌های Developer-focused از آسیب‌پذیری‌های واقعی بنویسم. تمام جواب چالش‌ها open-source هستن.",
+      fa: "مدرس امنیت و توسعه‌دهنده‌ای که آموزش دادن را دوست دارد — از مبانی برنامه‌نویسی تا امنیت قراردادهای هوشمند. با زال همکاری می‌کنم تا تحلیل‌های Developer-focused از آسیب‌پذیری‌های واقعی بنویسیم. تمام جواب‌ها open-source هستند.",
     },
     avatar: "/profiles/parhamf_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/parham_handle",      // replace with real handle
-      github: "https://github.com/parham",          // replace with real username
-      telegram: "https://t.me/parham_channel",      // replace with real channel
+      twitter: "https://x.com/parham_handle", // replace with real handle
+      github: "https://github.com/parham", // replace with real username
+      telegram: "https://t.me/parham_channel", // replace with real channel
+    },
+    signature: {
+      tagline: {
+        en: "Security educator, write-ups & tooling",
+        fa: "آموزشگر امنیت، write-up و ابزار",
+      },
+      colors: {
+        primary: {
+          hex: "#FFC857", // yellow
+          tailwind: "text-amber-600 bg-amber-50 dark:bg-amber-900",
+          oklch: "oklch(0.7700 0.1600 85.00)",
+        },
+        secondary: {
+          hex: "#3B82F6", // blue accent
+          tailwind: "text-blue-600",
+          oklch: "oklch(0.5400 0.2000 250.00)",
+        },
+        neutral: {
+          hex: "#0B0F11", // near-black neutral (same as Zal's neutral)
+          tailwind: "text-black",
+          oklch: "oklch(0.1500 0.0100 50.00)",
+        },
+      },
     },
   },
-
 } as const;
 
 // ─────────────────────────────────────────────────────────────
@@ -249,7 +285,7 @@ export const CATEGORY_IDS: CategoryId[] = [
 export const AUTHOR_IDS: AuthorId[] = ["zal", "parham"];
 
 // ─────────────────────────────────────────────────────────────
-//  HELPERS
+//  HELPERS (i18n-friendly helpers added)
 // ─────────────────────────────────────────────────────────────
 
 export function getCategory(id: CategoryId): Category {
@@ -275,12 +311,6 @@ export function getCategoriesByAuthor(authorId: AuthorId): Category[] {
 
 /**
  * Type guard — safe to use when reading `category` from MDX frontmatter.
- *
- * @example
- * const raw = frontmatter.category  // string | undefined
- * if (isCategoryId(raw)) {
- *   const cat = getCategory(raw)  // fully typed
- * }
  */
 export function isCategoryId(value: unknown): value is CategoryId {
   return typeof value === "string" && value in CATEGORIES;
@@ -292,32 +322,33 @@ export function isAuthorId(value: unknown): value is AuthorId {
 
 /**
  * Localized category label — for rendering in nav/filters.
- *
- * @example
- * getCategoryLabel("attack-techniques", "fa") // "تکنیک‌های حمله"
  */
-export function getCategoryLabel(
-  id: CategoryId,
-  locale: "en" | "fa"
-): string {
+export function getCategoryLabel(id: CategoryId, locale: Locale): string {
   return CATEGORIES[id].label[locale];
 }
 
-export function getCategoryDescription(
-  id: CategoryId,
-  locale: "en" | "fa"
-): string {
+export function getCategoryDescription(id: CategoryId, locale: Locale): string {
   return CATEGORIES[id].description[locale];
 }
 
-export function getAuthorRole(id: AuthorId, locale: "en" | "fa"): string {
+export function getAuthorRole(id: AuthorId, locale: Locale): string {
   return AUTHORS[id].role[locale];
 }
 
-export function getAuthorName(id: AuthorId, locale: "en" | "fa"): string {
+export function getAuthorName(id: AuthorId, locale: Locale): string {
   return AUTHORS[id].name[locale];
 }
 
-export function getAuthorBio(id: AuthorId, locale: "en" | "fa"): string {
+export function getAuthorBio(id: AuthorId, locale: Locale): string {
   return AUTHORS[id].bio[locale];
+}
+
+/** New: get localized small tagline for author (use on cards / hero) */
+export function getAuthorTagline(id: AuthorId, locale: Locale): string | undefined {
+  return AUTHORS[id].signature?.tagline?.[locale];
+}
+
+/** New: returns AuthorSignature.colors for styling UI components */
+export function getAuthorSignatureColors(id: AuthorId): AuthorSignature["colors"] {
+  return AUTHORS[id].signature.colors;
 }

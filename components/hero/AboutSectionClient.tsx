@@ -116,18 +116,12 @@ function SocialCard({ card, prefersReduced }: SocialCardProps) {
 
 // ══════════════════════════════════════════════════════════════════════════════
 // DRAW-IN RING HOOK
-//
-// Timing:
-//   SCROLL_DELAY_MS — pause after click so scroll finishes first
-//   DRAW_MS         — border traces around the card (slow & visible)
-//   HOLD_MS         — border stays fully drawn so the user notices it
-//   FADE_MS         — border fades out smoothly
 // ══════════════════════════════════════════════════════════════════════════════
-const SCROLL_DELAY_MS = 200;  // ~matches typical smooth-scroll duration
-const DRAW_MS         = 1500; // slow, deliberate draw around the card
-const HOLD_MS         = 1000; // sit fully drawn for a full second
-const FADE_MS         = 1000; // gentle fade out
-const RADIUS          = 16;   // matches rounded-2xl ≈ 1rem = 16px
+const SCROLL_DELAY_MS = 200;
+const DRAW_MS         = 1500;
+const HOLD_MS         = 1000;
+const FADE_MS         = 1000;
+const RADIUS          = 16;
 
 function useDrawRing(
   cardRef: React.RefObject<HTMLElement>,
@@ -146,14 +140,12 @@ function useDrawRing(
     if (prefersReduced || !cardRef.current) return;
     clearTimers();
 
-    // ── Delay: wait for smooth-scroll to land before animating ──────────────
     const t0 = setTimeout(() => {
       if (!cardRef.current || !glowRef.current || !crispRef.current) return;
 
       const { width: w, height: h } = cardRef.current.getBoundingClientRect();
       const r = RADIUS;
 
-      // Rounded-rect path, top-center start, clockwise
       const d = [
         `M ${w / 2} 0`,
         `L ${w - r} 0`,
@@ -170,7 +162,6 @@ function useDrawRing(
       const perimeter = 2 * (w - 2 * r) + 2 * (h - 2 * r) + 2 * Math.PI * r;
       const paths = [glowRef.current, crispRef.current];
 
-      // STEP 1 — arm: set geometry, full dashoffset (hidden), no transition
       paths.forEach((p) => {
         p.style.transition       = "none";
         p.style.opacity          = "0";
@@ -179,17 +170,14 @@ function useDrawRing(
         p.style.strokeDashoffset = `${perimeter}`;
       });
 
-      // Force reflow — browser must register the starting state
       void glowRef.current.getBoundingClientRect();
 
-      // STEP 2 — draw in: transition dashoffset to 0 (border traces around)
       paths.forEach((p) => {
         p.style.transition       = `stroke-dashoffset ${DRAW_MS}ms cubic-bezier(0.45, 0, 0.55, 1), opacity 150ms ease`;
         p.style.opacity          = "1";
         p.style.strokeDashoffset = "0";
       });
 
-      // STEP 3 — after draw + hold: fade out
       const t1 = setTimeout(() => {
         if (!glowRef.current || !crispRef.current) return;
         paths.forEach((p) => {
@@ -197,7 +185,6 @@ function useDrawRing(
           p.style.opacity    = "0";
         });
 
-        // STEP 4 — after fade: reset dashoffset silently
         const t2 = setTimeout(() => {
           paths.forEach((p) => {
             p.style.transition       = "none";
@@ -236,22 +223,22 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
   }, [fire]);
 
   const copy = {
-    kicker:        isFa ? "پشت پرده شکار"                   : "Behind the hunt",
+    kicker:        isFa ? "پشت پرده کاوش"                   : "Behind the research",
     title:         isFa ? "جایی بین باگ، اسطوره و کد"        : "Somewhere between bugs, myth and code",
-    lead:          isFa ? "من از دریچه‌ی باگ باونتی و OWASP به دنیای وب نگاه می‌کنم؛ جایی که هر باگ می‌تواند هم تهدید باشد، هم فرصت برای فهم عمیق‌تر سیستم‌ها." : "I look at the web through bug bounty and OWASP lenses, where every bug is both a threat and a chance to understand systems more deeply.",
-    story:         isFa ? "کار من روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا همان جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و write‑upهای کوتاه و قابل اجرا تبدیل می‌شود." : "Most of my work lives on the edge: where bug reports meet real remediation and actual code. This is where security theory turns into small tools, field scripts and short, practical write‑ups.",
-    skillsTitle:   isFa ? "چیزهایی که روی‌شان حساب می‌کنم" : "What I lean on",
+    lead:          isFa ? "ما از دریچه‌ی باگ باونتی و OWASP به دنیای وب نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها." : "We look at the web through bug bounty and OWASP lenses — where every vulnerability is both a threat and a chance to understand systems more deeply.",
+    story:         isFa ? "کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و write-upهای کوتاه تبدیل می‌شود." : "Our work lives on the edge: where bug reports meet real remediation and actual code. This is where security theory turns into small tools, field scripts and short, practical write-ups.",
+    skillsTitle:   isFa ? "چیزهایی که روی‌شان حساب می‌کنیم" : "What we lean on",
     bugBountyBody: isFa ? "از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً impact دارند." : "From logic issues to chained bugs with real impact — focused on findings that actually move the needle.",
     owaspBody:     isFa ? "سامان‌دهی ذهن با OWASP Top 10؛ از تزریق و کنترل دسترسی تا سوءاستفاده از misconfigها." : "A mental map built around OWASP Top 10 — from injection and access control to misconfig exploitation.",
     codeLabel:     isFa ? "کد به‌عنوان ابزار"               : "Code as a tool",
-    codeBody:      isFa ? "Python، Go و Solidity برای ساخت PoC، اتوماسیون، fuzzing سبک و تحلیل رفتار قراردادهای هوشمند." : "Python, Go and Solidity for PoCs, small automation, lightweight fuzzing and smart‑contract behavior analysis.",
+    codeBody:      isFa ? "Python، Go و Solidity برای ساخت PoC، اتوماسیون، fuzzing سبک و تحلیل رفتار قراردادهای هوشمند." : "Python, Go and Solidity for PoCs, small automation, lightweight fuzzing and smart-contract behavior analysis.",
     socialTitle:   isFa ? "شبکه‌های اجتماعی"               : "Our Socials",
-    contactTitle:  isFa ? "در تماس بمانیم"                  : "Stay in touch",
-    contactBody:   isFa ? "اگر روی تحقیق، همکاری یا ایده‌ای امنیتی فکر می‌کنی، یک ایمیل کوتاه کافی است." : "If you're thinking about research, collaboration or a strange security idea, a short email is enough to start.",
+    contactTitle:  isFa ? "در تماس بمانید"                  : "Stay in touch",
+    contactBody:   isFa ? "اگر روی تحقیق، همکاری یا ایده‌ای امنیتی فکر می‌کنید، یک ایمیل کوتاه کافی است." : "If you're thinking about research, collaboration or a strange security idea, a short email is enough to start.",
     emailCta:      isFa ? "فرستادن ایمیل"                   : "Send an email",
     cvSoon:        isFa ? "به‌زودی"                         : "Coming soon",
     cvLabel:       isFa ? "دانلود رزومه"                    : "Download CV",
-    contactEmail:  "you@example.com",
+    contactEmail:  "hello@kavlabs.dev", // Update with real email
   } as const;
 
   const socialCards: Array<{
@@ -261,10 +248,10 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
     icon: ReactNode;
     brand: (typeof socialBrands)[keyof typeof socialBrands];
   }> = [
-    { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/your-space",           icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
-    { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@you@instance",           icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
-    { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@your-handle</Ltr>,   icon: <SiX        size={17} />, brand: socialBrands.twitter  },
-    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@your-channel</Ltr>,  icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
+    { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/kavlabs",              icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
+    { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@kavlabs@infosec.exchange", icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
+    { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@kavlabs</Ltr>,      icon: <SiX        size={17} />, brand: socialBrands.twitter  },
+    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs_channel</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
   ];
 
   const chips = [
@@ -295,10 +282,10 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary/80">{copy.kicker}</p>
             <h2 id="about-section-heading" className="text-lg font-semibold tracking-tight md:text-xl">{copy.title}</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              {isFa ? <>من از دریچه‌ی باگ باونتی و <Ltr>OWASP</Ltr> به دنیای وب نگاه می‌کنم؛ جایی که هر باگ می‌تواند هم تهدید باشد، هم فرصت برای فهم عمیق‌تر سیستم‌ها.</> : copy.lead}
+              {isFa ? <>ما از دریچه‌ی باگ باونتی و <Ltr>OWASP</Ltr> به دنیای وب نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها.</> : copy.lead}
             </p>
             <p className="text-xs leading-relaxed text-muted-foreground/90">
-              {isFa ? <>کار من روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا همان جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و <Ltr>write‑ups</Ltr>های کوتاه و قابل اجرا تبدیل می‌شود.</> : copy.story}
+              {isFa ? <>کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و <Ltr>write-ups</Ltr>های کوتاه تبدیل می‌شود.</> : copy.story}
             </p>
             <div className="pt-3">
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{copy.skillsTitle}</p>
@@ -323,14 +310,11 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
 
             {/* ── Social card with ring overlay ────────────────────────── */}
             <div className="relative">
-
-              {/* SVG ring — absolute, pointer-events-none, z above card */}
               <svg
                 aria-hidden
                 className="pointer-events-none absolute inset-0 z-20 overflow-visible"
                 style={{ width: "100%", height: "100%" }}
               >
-                {/* glow path — thick, blurred */}
                 <path
                   ref={glowRef}
                   fill="none"
@@ -343,7 +327,6 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                   opacity={0}
                   style={{ filter: "blur(5px)" }}
                 />
-                {/* crisp path — thin, sharp */}
                 <path
                   ref={crispRef}
                   fill="none"
