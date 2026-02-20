@@ -1,10 +1,3 @@
-// ============================================================
-//  categories.ts — Blog taxonomy & author config
-//  Used for: post tagging · category pages · search filtering
-//  Bilingual: en + fa | Colors match site's theme
-//  NOTE: added i18n essentials and author signature color tokens
-// ============================================================
-
 // ─────────────────────────────────────────────────────────────
 //  TYPES
 // ─────────────────────────────────────────────────────────────
@@ -99,7 +92,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     description: {
       en: "Everyday security awareness for everyone — no prior knowledge required. How the internet works, staying safe online, and understanding threats in plain language.",
-      fa: "آگاهی امنیتی روزمره برای همه — بدون نیاز به دانش قبلی. اینترنت چطور کار می‌کند، چطور آنلاین امن بمانیم و تهدیدها را به زبان ساده بفهمیم.",
+      fa: "آگاهی امنیتی روزمره برای همه — بدون نیاز به دانش قبلی. از اینترنت چطور کار می‌کند و چطور آنلاین امن بمانیم تا تهدیدها را به زبان ساده بفهمیم.",
     },
     color: {
       bg: "bg-teal-100 dark:bg-teal-950",
@@ -119,7 +112,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     description: {
       en: "Structured security education — networking, cryptography, core tools, and career guidance. The bridge between curious beginner and working professional.",
-      fa: "آموزش ساختارمند امنیت — شبکه، رمزنگاری، ابزارهای اصلی و مسیر شغلی. پل بین مبتدی کنجکاو و متخصص حرفه‌ای.",
+      fa: "آموزش ساختارمند امنیت — وب، شبکه، رمزنگاری، ابزارهای اصلی و مسیر راه. پل بین مبتدی کنجکاو و متخصص حرفه‌ای.",
     },
     color: {
       bg: "bg-green-100 dark:bg-green-950",
@@ -139,7 +132,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     description: {
       en: "Deep-dive vulnerability research, exploitation techniques, OWASP Top 10, bug bounty methodology, and real-world attack patterns — written for practitioners.",
-      fa: "تحقیق عمیق آسیب‌پذیری، تکنیک‌های اکسپلویت، OWASP Top 10، متدولوژی باگ باونتی و الگوهای حمله واقعی — برای متخصصان.",
+      fa: "تحقیق عمیق آسیب‌پذیری، تکنیک‌های اکسپلویت، OWASP Top 10، متدولوژی باگ باونتی و الگوهای حمله واقعی — برای یادگیری تخصصی.",
     },
     color: {
       bg: "bg-indigo-100 dark:bg-indigo-950",
@@ -159,7 +152,7 @@ export const CATEGORIES: Record<CategoryId, Category> = {
     },
     description: {
       en: "Step-by-step solutions for PortSwigger labs, HackTheBox machines, TryHackMe rooms, and CTF challenges — with methodology and thought process, not just answers. Full code solutions in Parham's open-source repo.",
-      fa: "حل قدم‌به‌قدم لب‌های PortSwigger، ماشین‌های HackTheBox، TryHackMe و چالش‌های CTF — با متدولوژی و روند تفکر، نه فقط جواب. تمام کدها در ریپوی open-source پرهام.",
+      fa: "حل قدم‌به‌قدم لب‌های PortSwigger، ماشین‌های HackTheBox، TryHackMe و چالش‌های CTF و هر نوع چالشی که ارزش داره — با متدولوژی و روند تفکر، نه فقط جواب با کد و یادگیری کامل.",
     },
     color: {
       bg: "bg-amber-100 dark:bg-amber-950",
@@ -179,8 +172,8 @@ export const AUTHORS: Record<AuthorId, Author> = {
   zal: {
     id: "zal",
     name: {
-      en: "Zal",
-      fa: "زال",
+      en: "Zalliminal",
+      fa: "زال‌لیمینال",
     },
     handle: "@zal",
     role: {
@@ -189,14 +182,14 @@ export const AUTHORS: Record<AuthorId, Author> = {
     },
     bio: {
       en: "Anonymous security researcher focused on blockchain and smart contract vulnerabilities. Hunting bugs in DeFi protocols and web applications. Collaborates with Parham on developer-focused breakdowns of real findings.",
-      fa: "محقق امنیت ناشناس با تمرکز روی آسیب‌پذیری‌های بلاکچین و قراردادهای هوشمند. شکار باگ در پروتکل‌های DeFi و اپلیکیشن‌های وب. با پرهام روی تحلیل‌های Developer-focused از یافته‌های واقعی همکاری می‌کنم.",
+      fa: "من یه محقق امنیت ساده با تمرکز روی آسیب‌پذیری‌های بلاکچین و قراردادهای هوشمند. شکار باگ در پروتکل‌های DeFi و اپلیکیشن‌های وب. با پرهام روی تحلیل‌های Developer-focused از یافته‌های واقعی همکاری می‌کنم.",
     },
     avatar: "/profiles/zal_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/zal_handle", // replace with real handle
-      hackerone: "https://hackerone.com/zal", // replace with real profile
-      immunefi: "https://immunefi.com/profile/zal",
+      twitter: "https://x.com/kavlabs",
+      github: "https://github.com/zalliminal",
+      telegram: "https://t.me/kavlabs",
     },
     signature: {
       tagline: {
@@ -235,20 +228,20 @@ export const AUTHORS: Record<AuthorId, Author> = {
       fa: "محقق امنیت · توسعه‌دهنده",
     },
     bio: {
-      en: "Security educator and developer who loves teaching — from programming basics to smart contract security. Collaborates with Zal to write developer-focused analyses of real vulnerabilities. All challenge solutions are open-source on GitHub.",
-      fa: "مدرس امنیت و توسعه‌دهنده‌ای که آموزش دادن را دوست دارد — از مبانی برنامه‌نویسی تا امنیت قراردادهای هوشمند. با زال همکاری می‌کنم تا تحلیل‌های Developer-focused از آسیب‌پذیری‌های واقعی بنویسیم. تمام جواب‌ها open-source هستند.",
+      en: "Security Researcher and developer who loves teaching — from programming basics to smart contract security. Collaborates with Zal to write developer-focused analyses of real vulnerabilities. All challenge solutions and tools are open-source on GitHub.",
+      fa: "محقق امنیت و توسعه‌دهنده‌ای که آموزش دادن و یاد گرفتن و ساختن رو دوست داره — از مبانی برنامه‌نویسی تا امنیت قراردادهای هوشمند. با زال همکاری می‌کنم تا تحلیل‌های Developer-focused از آسیب‌پذیری‌های واقعی بنویسیم. تمام جواب‌ها و ابزار های شخصی open-source هستند.",
     },
     avatar: "/profiles/parhamf_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/parham_handle", // replace with real handle
-      github: "https://github.com/parham", // replace with real username
-      telegram: "https://t.me/parham_channel", // replace with real channel
+      twitter: "https://x.com/kavlabs",
+      github: "https://github.com/parhamf6",
+      telegram: "https://t.me/kavlabs",
     },
     signature: {
       tagline: {
-        en: "Security educator, write-ups & tooling",
-        fa: "آموزشگر امنیت، write-up و ابزار",
+        en: "Security Researcher, write-ups & tooling",
+        fa: "محقق امنیت، write-up و ابزار",
       },
       colors: {
         primary: {

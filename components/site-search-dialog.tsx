@@ -46,7 +46,7 @@ export function SiteSearchDialog({ locale, open, onOpenChange }: Props) {
     noMatches: isRTL ? "چیزی پیدا نشد." : "No matches found.",
     noMatchesSub: isRTL ? "سعی کنید کلمات کلیدی دیگری امتحان کنید" : "Try different keywords or check your spelling",
     new: isRTL ? "جدید" : "NEW",
-    idleHint: isRTL ? "شروع به تایپ کنید تا پست‌ها را جستجو کنید" : "Start typing to search through posts",
+    idleHint: isRTL ? "شروع به تایپ کنید تا در پست‌ها جستجو کنید" : "Start typing to search through posts",
     resultsCount: (n: number) => isRTL ? `${n} نتیجه` : `${n} result${n !== 1 ? "s" : ""}`,
   };
 

@@ -203,13 +203,23 @@ div[data-locale="fa"],
   text-align: right;
 }
 
-/* Keep code blocks LTR even in Farsi content */
+/* Apply Farsi font to monospace/label elements in Farsi content */
+/* This ensures UI labels, badges, and non-code monospace text render correctly in Farsi */
+[lang="fa"] .font-mono:not(pre):not(code),
+[lang="fa"] [class*="font-mono"]:not(pre):not(code) {
+  font-family: var(--font-farsi), var(--font-mono);
+}
+
+/* Keep actual code blocks LTR and in monospace font even in Farsi content */
 [lang="fa"] pre,
 [lang="fa"] code,
+[lang="fa-IR"] pre,
+[lang="fa-IR"] code,
 div[data-locale="fa"] pre,
 div[data-locale="fa"] code,
 pre,
 code {
+  font-family: var(--font-mono);
   direction: ltr;
   text-align: left;
 }

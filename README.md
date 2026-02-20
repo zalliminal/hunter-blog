@@ -1,23 +1,35 @@
-## Hunter Blog
+# KavLabs
 
-Hunter Blog is an **open‑source personal blog** built with Next.js, React, and MDX. It is designed as a fast, modern place to publish articles, notes, and other content with support for tagging, syntax highlighting, and a clean reading experience.
+## Language / زبان
 
-## Features
+- **[English](#english)** | **[فارسی](#فارسی)**
+
+---
+
+## English
+
+### KavLabs
+
+KavLabs is an **open‑source security research notes platform** built with Next.js, React, and MDX. It's designed to help people learn about cybersecurity through comprehensive articles, research notes, and educational content with support for tagging, syntax highlighting, and a clean reading experience.
+
+### Features
 
 - **Modern stack**: Next.js 16, React 19, Tailwind CSS, MDX content.
-- **Content-focused**: Optimized for reading blog posts and personal notes.
-- **Tagging system**: Organize posts by tags to help readers discover related content.
-- **Syntax highlighting**: Great for technical and code-heavy posts.
+- **Security-focused**: Optimized for security research, notes, and educational content.
+- **Tagging system**: Organize posts by tags to help readers discover related security topics.
+- **Syntax highlighting**: Perfect for technical and code-heavy security articles.
 - **Dark/light themes**: Pleasant reading experience in different environments.
 
-## Authors
+### Authors & Contributors
 
 This project is built and maintained by:
 
 - **Parham Forati** ([`parhamf6` on GitHub](https://github.com/parhamf6))
 - **zalliminal** ([GitHub profile](https://github.com/zalliminal))
 
-## Getting Started
+Together, we aim to make cybersecurity knowledge accessible to everyone through this collaborative platform.
+
+### Getting Started
 
 Install dependencies:
 
@@ -33,33 +45,19 @@ pnpm dev
 
 Then open `http://localhost:3000` in your browser.
 
-## License
+### Questions?
 
-This is an **open‑source personal blog**. You are welcome to fork it, customize it for your own personal site, and contribute improvements via pull requests.
+If you have any questions about this project, feel free to reach out to us or open an issue on GitHub!
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Project History
 
-## Getting Started
+**KavLabs** started as a personal blog for Zal, that built by Parham. Over time, it evolved from a personal platform into a collaborative project focused on sharing security research and educational content. Today, both Parham and Zal run KavLabs together as a community-driven platform dedicated to making cybersecurity knowledge accessible to learners at all levels.
 
-First, run the development server:
+### License
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This is an **open‑source project**. You are welcome to fork it, customize it for your own needs, and contribute improvements via pull requests. just don't forget to mention us.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
+### Learn More
 
 To learn more about Next.js, take a look at the following resources:
 
@@ -68,8 +66,55 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## فارسی
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### کاولبز
+
+کاولبز یک **پلتفرم متن‌باز تحقیقات امنیتی** هستش که با Next.js و React و MDX ساخته شده. این پروژه برای کمک به افراد کنجکاو در یادگیری امنیت سایبری از طریق مقالات جامع، یادداشت‌های تحقیقی و محتوای آموزشی با پشتیبانی از تگ ها، دسته بندی، هایلایت کدها و تجربیه خواندن روان طراحی شده است.
+
+### ویژگی‌ها
+
+- **استک مدرن**: Next.js 16، React 19، Tailwind CSS، و MDX برای محتوا .
+- **تمرکز بر امنیت**: بهینه‌شده برای تحقیقات امنیتی، یادداشت‌ها و محتوای آموزشی.
+- **سیستم برچسب‌گذاری**: تنظیم پست‌ها بر اساس برچسب‌ها برای کمک به خوانندگان در کشف مطالب مرتبط.
+- **هایلایت سینتکس**: ایده‌آل برای مقالات تکنیکی و سنگین کدها.
+- **تم‌های روشن و تاریک**: تجربیه خواندن دلپذیر در محیط‌های مختلف.
+
+### نویسندگان و مشارکین
+
+این پروژه توسط افراد زیر ساخته و نگهداری می‌شود:
+
+- **پرهام فراتی** ([`parhamf6` در GitHub](https://github.com/parhamf6))
+- **zalliminal** ([نمایه GitHub](https://github.com/zalliminal))
+
+به‌طور مشترک، هدف ما این هست که دانش امنیت سایبری را برای همه از طریق این پلتفرم همکاری‌محور در دسترس قرار بدهیم.
+
+### شروع کردن
+
+نصب وابستگی‌ها:
+
+```bash
+pnpm install
+```
+
+اجرای سرور توسعه:
+
+```bash
+pnpm dev
+```
+
+سپس `http://localhost:3000` را در مرورگر خود باز کنید.
+
+### سؤالات؟
+
+اگر سؤالی درباره این پروژه دارید، با ما تماس بگیرید یا یک issue در GitHub باز کنید!
+
+### تاریخچه پروژه
+
+**کاولبز** به‌عنوان یک سایت شخصی برای زال شروع شد و توسط پرهام ساخته شد. در طول زمان، از یک پلتفرم شخصی به یک پروژه همکاری‌محور تبدیل شد که بر اشتراک‌گذاری تحقیقات امنیتی و محتوای آموزشی تمرکز دارد. امروز، پرهام و زال کاولبز را به‌طور مشترک اجرا می‌کنند به‌عنوان یک پلتفرم محور جامعه که به دسترسی‌پذیری دانش امنیت سایبری برای یادگیرندگان در تمام سطوح اختصاص دارد.
+
+### مجوز
+
+این یک **پروژه متن‌باز** است. میتونید آن را fork کنید، برای نیازهای خود سفارشی کنید و از طریق درخواست‌های سحب بهبودها را مشارکت کنید. فقط یادتون نره از ما هم یادی کنید.

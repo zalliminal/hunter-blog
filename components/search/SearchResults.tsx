@@ -24,7 +24,7 @@ const i18n = {
   },
   fa: {
     noResults: "پستی یافت نشد",
-    noResultsHint: "کلمه دیگری امتحان کن یا فیلترها را کم کن.",
+    noResultsHint: "کلمه‌ی دیگری رو امتحان کن یا فیلترها رو کم کن.",
     startPrompt: "برای جستجو تایپ کن…",
     startPromptSub: "جستجو بر اساس عنوان، توضیحات یا تگ.",
     resultCount: (n: number) => `${n} نتیجه`,
@@ -44,11 +44,6 @@ export function SearchResults({
   const showEmpty = !isPending && results.length === 0 && (hasQuery || hasFilters);
   const showIdle = !hasQuery && !hasFilters;
 
-  // Determine which panel to show. We deliberately avoid `mode="wait"` on
-  // AnimatePresence: with multi-filter interactions the state can briefly
-  // pass through results.length === 0 while the URL transition is in flight.
-  // mode="wait" would lock the exit animation and leave the screen blank.
-  // Instead each panel fades in/out simultaneously.
   const panel: "idle" | "empty" | "results" =
     showIdle && !isPending
       ? "idle"
@@ -95,8 +90,6 @@ export function SearchResults({
 
         {panel === "results" && results.length > 0 && (
           <motion.div
-            // Key stays "results" so we don't re-mount on every filter change.
-            // Individual cards use layout animations to reorder smoothly.
             key="results"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

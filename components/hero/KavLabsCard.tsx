@@ -27,13 +27,13 @@ export default function KavLabsCard({ isFa, locale }: { isFa: boolean; locale: L
       </p>
 
       <div className="mt-6 text-xs text-muted-foreground">
-        <strong>{isFa ? "تلفظ (تقریبی):" : "Pronunciation (approx.):"}</strong>
+        <strong>{isFa ? "تلفظ:" : "Pronunciation (approx.):"}</strong>
         <div className="mt-1">{isFa ? kavlabs.fa.pron : kavlabs.en.pron}</div>
       </div>
 
       <div className="mt-6 flex gap-2">
-        <Link href={`/${locale}/tags`} className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
-          {isFa ? "همهٔ تگ‌ها" : "View tags"}
+        <Link href={`/${locale}/search`} className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
+          {isFa ? "جستجوی پیشرفته" : "Advance Search"}
         </Link>
 
         <a href="/rss.xml" className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">

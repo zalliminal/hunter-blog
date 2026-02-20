@@ -52,7 +52,7 @@ export default async function LocaleHomePage({
       <section className="space-y-4">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
-            {isFa ? "درباره شکار و کد" : "About the hunt & code"}
+            {isFa ? "یه کم درباره ما" : "a little bit about us"}
           </h2>
         </div>
         <AboutSectionClient locale={locale} isFa={isFa} />

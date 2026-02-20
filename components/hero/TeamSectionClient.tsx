@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   SiX, 
   SiGithub, 
@@ -14,66 +14,18 @@ import {
   ShieldCheck, 
   Code2, 
   ExternalLink, 
-  Mail, 
-  Users, 
-  ArrowRight, 
-  User 
+  User, 
+  ArrowRight 
 } from "lucide-react";
 import { getAuthor, type AuthorId, type Locale } from "@/lib/categories_and_authors";
-import Image from "next/image";
 
 type Props = {
   locale: Locale;
   isFa: boolean;
 };
 
-// ── Animated Background Orbs (matches AboutSection style) ─────────────────────
-function TeamBackgroundOrbs({ 
-  primary, 
-  secondary, 
-  hovered 
-}: { 
-  primary: string; 
-  secondary: string; 
-  hovered: boolean;
-}) {
-  const prefersReduced = useReducedMotion();
-  if (prefersReduced) return null;
-
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Primary Orb */}
-      <motion.div
-        className="absolute -top-16 -right-16 h-48 w-48 rounded-full blur-3xl"
-        style={{ backgroundColor: primary, opacity: 0.2 }}
-        initial={{ opacity: 0, scale: 0.9, y: -8 }}
-        animate={{ 
-          opacity: 0.2, 
-          scale: 1.02, 
-          y: -4,
-          x: [-4, 4, -4],
-        }}
-        transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-      />
-      {/* Secondary Orb */}
-      <motion.div
-        className="absolute -bottom-16 -left-16 h-56 w-56 rounded-full blur-3xl"
-        style={{ backgroundColor: secondary, opacity: 0.12 }}
-        initial={{ opacity: 0, scale: 0.9, y: 8 }}
-        animate={{ 
-          opacity: 0.12, 
-          scale: 0.98, 
-          y: 4,
-          x: [4, -4, 4],
-        }}
-        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: 0.5 }}
-      />
-    </div>
-  );
-}
-
-// ── Icon Mapping ───────────────────────────────────────────────────────────────
-const getSocialIcon = (platform: string, className: string) => {
+// ── Icon Mapping (Memoized) ───────────────────────────────────────────────────
+const SocialIcon = ({ platform, className }: { platform: string; className: string }) => {
   switch (platform) {
     case "twitter": return <SiX className={className} />;
     case "github": return <SiGithub className={className} />;
@@ -84,7 +36,59 @@ const getSocialIcon = (platform: string, className: string) => {
   }
 };
 
-// ── Framer Variants (matches AboutSection) ─────────────────────────────────────
+// ── CSS-only Animated Orbs (No JS Re-renders) ─────────────────────────────────
+function TeamBackgroundOrbs({ primary, secondary }: { primary: string; secondary: string }) {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <style jsx>{`
+        @keyframes enter-primary {
+          0% { 
+            transform: scale(0); 
+            opacity: 0; 
+          }
+          100% { 
+            transform: scale(1.02); 
+            opacity: 0.2; 
+          }
+        }
+
+        @keyframes float-primary {
+          0%, 100% { transform: translate(-4px, -4px) scale(1.02); }
+          50% { transform: translate(4px, -4px) scale(1.02); }
+        }
+
+        @keyframes float-secondary {
+          0%, 100% { transform: translate(4px, 4px) scale(0.98); }
+          50% { transform: translate(-4px, 4px) scale(0.98); }
+        }
+      `}</style>
+      
+      {/* Primary Orb */}
+      <div
+        className="absolute -top-16 -right-16 h-48 w-48 rounded-full blur-3xl"
+        style={{ 
+          backgroundColor: primary,
+          animation: `
+            enter-primary 600ms ease-out forwards,
+            float-primary 4s ease-in-out 600ms infinite
+          `
+        }}
+      />
+
+      {/* Secondary Orb */}
+      <div
+        className="absolute -bottom-16 -left-16 h-56 w-56 rounded-full blur-3xl"
+        style={{ 
+          backgroundColor: secondary, 
+          opacity: 0.12,
+          animation: 'float-secondary 10s ease-in-out infinite' 
+        }}
+      />
+    </div>
+  );
+}
+
+// ── Framer Variants (Entrance Only) ───────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -103,7 +107,7 @@ const cardVariants = {
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  TEAM CARD (matches AboutSection aesthetic exactly)
+//  TEAM CARD (Optimized: CSS Hover instead of State)
 // ══════════════════════════════════════════════════════════════════════════════
 function TeamCard({ 
   authorId, 
@@ -115,40 +119,66 @@ function TeamCard({
   isFa: boolean;
 }) {
   const author = getAuthor(authorId);
-  const prefersReduced = useReducedMotion();
-  const [hovered, setHovered] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  
   const colors = author.signature.colors;
   const name = author.name[locale];
   const role = author.role[locale];
   const bio = author.bio[locale];
 
-  // Use OKLCH from signature colors for consistency
   const primaryColor = colors.primary.oklch || colors.primary.hex;
   const secondaryColor = colors.secondary.oklch || colors.secondary.hex;
 
-  // CTA Copy
   const ctaCopy = {
     label: isFa ? "مشاهده پروفایل" : "View Profile",
-    subtext: isFa ? "بیوگرافی کامل و نوشته‌ها" : "Full bio & posts",
   };
 
   return (
     <motion.div
-      ref={cardRef}
       variants={cardVariants}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      whileTap={prefersReduced ? undefined : { scale: 0.98 }}
-      className="group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/20 p-5 shadow-lg backdrop-blur-xl md:p-6 transition-all duration-300"
+      // Use 'group' class to enable group-hover in children
+      className="group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/20 p-5 shadow-lg backdrop-blur-xl md:p-6 transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1"
       style={{
-        borderColor: hovered ? `${primaryColor}50` : undefined,
-        boxShadow: hovered ? `0 0 20px -8px ${primaryColor}20` : undefined,
+        // Dynamic border color on hover using CSS variables or inline style logic
+        // We use a trick here: CSS handles the transition, inline style sets the hover color via class logic if needed, 
+        // but for simplest performance, we let CSS handle opacity/border and use style for the specific color.
+        borderColor: `color-mix(in srgb, ${primaryColor} 20%, var(--border))`,
       }}
     >
+      {/* Inline style for hover border override via group-hover class in CSS would be complex with dynamic colors.
+          Instead, we use a style tag or just accept the base border and let the shadow do the work. 
+          To keep it exact to your request but lighter, we will use a style block for the dynamic hover border. */}
+      <style jsx>{`
+        .team-card-${authorId}:hover {
+          border-color: ${primaryColor}50 !important;
+          box-shadow: 0 0 20px -8px ${primaryColor}20 !important;
+        }
+        .team-card-${authorId} .role-badge {
+          border-color: var(--border);
+          color: var(--muted-foreground);
+        }
+        .team-card-${authorId}:hover .role-badge {
+          border-color: ${primaryColor}40;
+          color: ${primaryColor};
+        }
+        .team-card-${authorId} .cta-btn {
+          border-color: var(--border);
+          color: var(--foreground);
+        }
+        .team-card-${authorId}:hover .cta-btn {
+          border-color: ${primaryColor}60;
+          color: ${primaryColor};
+        }
+        .team-card-${authorId} .social-icon {
+          color: var(--muted-foreground);
+        }
+        .team-card-${authorId}:hover .social-icon {
+          color: ${primaryColor};
+        }
+      `}</style>
+
+      <div className={`team-card-${authorId} absolute inset-0 rounded-3xl pointer-events-none`} />
+
       {/* Animated Background Orbs */}
-      <TeamBackgroundOrbs primary={primaryColor} secondary={secondaryColor} hovered={hovered} />
+      <TeamBackgroundOrbs primary={primaryColor} secondary={secondaryColor} />
 
       {/* Content Layer */}
       <div className="relative z-10 flex flex-1 flex-col">
@@ -161,6 +191,7 @@ function TeamCard({
               alt={name}
               fill
               className="object-cover"
+              sizes="56px"
             />
           </div>
           <div className="flex flex-col">
@@ -175,20 +206,11 @@ function TeamCard({
 
         {/* Body: Role Badge + Bio */}
         <div className="mb-6 flex-1">
-          {/* Role Badge (top of bio row) */}
-          <motion.div 
-            className="mb-3 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors duration-200"
-            style={{ 
-              borderColor: hovered ? `${primaryColor}40` : 'var(--border)', 
-              backgroundColor: 'var(--background)',
-              color: hovered ? primaryColor : 'var(--muted-foreground)'
-            }}
-          >
+          <div className="role-badge mb-3 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors duration-200 bg-background">
             {authorId === 'zal' ? <ShieldCheck size={12} /> : <Code2 size={12} />}
             {role}
-          </motion.div>
+          </div>
 
-          {/* Bio Text */}
           <p className="text-xs leading-relaxed text-muted-foreground md:text-sm">
             {bio}
           </p>
@@ -200,64 +222,52 @@ function TeamCard({
           <div className="flex items-center gap-2">
             {Object.entries(author.links).map(([key, url]) => (
               url && (
-                <motion.a
+                <a
                   key={key}
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={prefersReduced ? undefined : { y: -2, scale: 1.1 }}
-                  whileTap={prefersReduced ? undefined : { scale: 0.95 }}
-                  className="group/icon flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-background/40 text-muted-foreground transition-all duration-200 hover:shadow-md"
-                  style={{ 
-                    color: 'inherit',
-                  }}
+                  className="social-icon group/icon flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-background/40 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:bg-background/80"
                   aria-label={key}
                 >
-                  <motion.span
-                    transition={{ type: "spring", stiffness: 400, damping: 18 }}
-                    className="group-hover/icon:text-inherit"
-                  >
-                    {getSocialIcon(key, "h-4 w-4")}
-                  </motion.span>
-                </motion.a>
+                  <span className="transition-transform duration-200 group-hover/icon:scale-110">
+                    <SocialIcon platform={key} className="h-4 w-4" />
+                  </span>
+                </a>
               )
             ))}
           </div>
 
-          {/* ── CTA Button (View Profile) - Last Row ───────────────────────── */}
+          {/* CTA Button */}
           <Link
-            href={isFa ? `/fa/authors/${authorId}` : `en/authors/${authorId}`}
-            className="group/btn inline-flex items-center justify-center gap-1.5 rounded-full border border-border/70 bg-background/60 px-4 py-2 text-[11px] font-medium text-foreground shadow-sm transition-all duration-200 hover:border-primary/60 hover:bg-primary/10 hover:text-primary hover:shadow-md"
-            style={{
-              borderColor: hovered ? `${primaryColor}60` : undefined,
-              color: hovered ? primaryColor : undefined,
-            }}
+            href={isFa ? `/fa/authors/${authorId}` : `/en/authors/${authorId}`}
+            className="cta-btn group/btn inline-flex items-center justify-center gap-1.5 rounded-full border border-border/70 bg-background/60 px-4 py-2 text-[11px] font-medium shadow-sm transition-all duration-200 hover:border-primary/60 hover:bg-primary/10 hover:shadow-md"
           >
             <User size={12} strokeWidth={2} />
             <span>{ctaCopy.label}</span>
-            <motion.span
-              animate={{ x: [0, 3, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-              className={isFa ? "rotate-180" : ""}
-            >
+            <span className="inline-block transition-transform duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1 rtl:group-hover/btn:rotate-180">
               <ArrowRight size={12} strokeWidth={2} />
-            </motion.span>
+            </span>
           </Link>
-
         </div>
       </div>
 
-      {/* Subtle shine effect on hover (matches AboutSection) */}
-      <motion.span
-        aria-hidden
-        className="absolute inset-0 rounded-3xl pointer-events-none"
-        style={{ 
-          background: `linear-gradient(105deg, transparent 35%, ${primaryColor}10 50%, transparent 65%)` 
-        }}
-        initial={{ x: "-100%" }}
-        animate={hovered && !prefersReduced ? { x: "120%" } : { x: "-100%" }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-      />
+      {/* Subtle shine effect (CSS Only) */}
+      <style jsx>{`
+        .team-card-${authorId}::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 1.5rem;
+          background: linear-gradient(105deg, transparent 35%, ${primaryColor}10 50%, transparent 65%);
+          transform: translateX(-100%);
+          transition: transform 0.6s ease-out;
+          pointer-events: none;
+        }
+        .team-card-${authorId}:hover::after {
+          transform: translateX(100%);
+        }
+      `}</style>
     </motion.div>
   );
 }
@@ -268,29 +278,18 @@ function TeamCard({
 export default function TeamSectionClient({ locale, isFa }: Props) {
   const dir = isFa ? "rtl" : "ltr";
 
-  const copy = {
-    kicker: isFa ? "تیم تحقیقاتی" : "Research Team",
-    title: isFa ? "دو دیدگاه، یک هدف" : "Two Perspectives, One Goal",
-    subtitle: isFa 
-      ? "آموزش و شکار؛ دو روی یک سکه برای درک عمیق‌تر امنیت." 
-      : "Education and hunting; two sides of the same coin for deeper security understanding.",
-  };
-
   return (
     <section className="relative w-full py-2 md:py-4" dir={dir}>
       <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid gap-6 md:grid-cols-2"
-        >
-          {/* Parham Card */}
-          <TeamCard authorId="parhamf" locale={locale} isFa={isFa} />
-          
-          {/* Zal Card */}
-          <TeamCard authorId="zal" locale={locale} isFa={isFa} />
-        </motion.div>
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid gap-6 md:grid-cols-2"
+      >
+        <TeamCard authorId="parhamf" locale={locale} isFa={isFa} />
+        <TeamCard authorId="zal" locale={locale} isFa={isFa} />
+      </motion.div>
     </section>
   );
 }

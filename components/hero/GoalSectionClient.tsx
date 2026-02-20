@@ -1,21 +1,5 @@
 "use client";
 
-/**
- * FIX — GHOST LAYER HEIGHT RESERVATION
- *
- * Problem: typing animation causes layout shift as content grows.
- * Problem 2: fixed height wastes space on large screens.
- *
- * Solution:
- *   1. Render ALL content invisibly (aria-hidden, invisible) immediately.
- *      This "ghost" layer makes the wrapper claim its full final height
- *      from the very first paint — zero layout shift.
- *   2. The live animated layer sits absolute on top, typing out
- *      visibly inside the already-reserved space.
- *   3. max-h-[90dvh] caps height on small screens so it never overflows.
- *   4. No fixed px height → no wasted empty space on large screens.
- */
-
 import { motion, useReducedMotion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
@@ -25,58 +9,59 @@ const goals = {
     {
       id: "bounty",
       number: "01",
-      label: "Document Real Bug Bounty Findings",
-      body: "Every real finding deserves a proper write-up — from the first hint of something off to the final report. We capture that process: the wrong turns, the aha moments, and the exact payload that worked.",
+      label: "Document Bug Bounty Findings",
+      body: "We share anything valuable we gain from reading or writing write-ups — from the first sign of something unusual to the final report. We document the full journey: the wrong paths, the discovery moments, and the exact payload that worked.",
       tag: "Bug Bounty",
       cmd: "document --findings --live",
-      statusLine: "Indexing 3 confirmed vulnerabilities…",
+      statusLine: "Indexing confirmed vulnerabilities…",
     },
     {
       id: "teach",
       number: "02",
-      label: "Teach Security in Farsi & English",
-      body: "Security knowledge shouldn't be gated behind language. Resources in Farsi are rare — this space exists to change that, publishing the same depth of technical content in both directions.",
+      label: "Teach Security in Farsi and English",
+      body: "Knowledge should not remain behind language barriers. Farsi security resources are rare or underrepresented — this space exists to change that by publishing content that truly helps the community grow.",
       tag: "Bilingual",
       cmd: "teach --lang fa,en --depth full",
       statusLine: "Compiling bilingual knowledge base…",
     },
     {
-      id: "tools",
+      id: "path",
       number: "03",
-      label: "Share Tools, Scripts & PoCs",
-      body: "Theory becomes real when you can run it. Alongside every concept, expect working code — small Python scripts, Go utilities, and proof-of-concept exploits you can actually use in the field.",
-      tag: "Open Source",
-      cmd: "release --tools py,go --mode public",
-      statusLine: "Pushing artifacts to repository…",
+      label: "Security Learning Path & Practical Guidance",
+      body: "Along your security journey, we help you move forward by solving important challenges, breaking them down clearly, and publishing educational articles — so you can step confidently into security and truly understand the depth behind each concept.",
+      tag: "Educational",
+      cmd: "guide --security --practical",
+      statusLine: "Building structured learning roadmap…",
     },
   ],
+
   fa: [
     {
       id: "bounty",
       number: "01",
-      label: "مستندسازی یافته‌های واقعی باگ باونتی",
-      body: "هر یافته‌ی واقعی لایق یک write-up درست است — از اولین نشانه‌ی چیز غیرعادی تا گزارش نهایی. ما آن فرایند را ثبت می‌کنیم: راه‌های اشتباه، لحظات کشف، و دقیقاً همان payload که کار کرد.",
-      tag: "Bug Bounty",
+      label: "مستندسازی یافته‌های باگ باونتی",
+      body: "هر چیز ارزشمندی که از خواندن یا نوشتن write-up بدست بیاریم رو به اشتراک میزاریم — از اولین نشانه‌ی چیز غیرعادی تا گزارش نهایی. ما آن فرایند را ثبت می‌کنیم: راه‌های اشتباه، لحظات کشف، و دقیقاً همان payload که کار کرد.",
+      tag: "باگ باونتی",
       cmd: "document --findings --live",
-      statusLine: "Indexing 3 confirmed vulnerabilities…",
+      statusLine: "در حال ایندکس آسیب‌پذیری‌های تأییدشده…",
     },
     {
       id: "teach",
       number: "02",
       label: "آموزش امنیت به فارسی و انگلیسی",
-      body: "دانش امنیت نباید پشت سد زبان بماند. منابع فارسی کمیاب است — این فضا برای تغییر آن وجود دارد، همان عمق محتوای فنی را در هر دو زبان منتشر می‌کند.",
+      body: "دانش نباید پشت سد زبان بماند. منابع فارسی درباره امنیت کمیاب یا کمتر دیده شده‌اند — این فضا برای تغییر این موضوع به وجود آمده تا محتوایی منتشر کند که واقعاً به رشد جامعه کمک کند.",
       tag: "دوزبانه",
       cmd: "teach --lang fa,en --depth full",
-      statusLine: "Compiling bilingual knowledge base…",
+      statusLine: "در حال کامپایل پایگاه دانش دوزبانه…",
     },
     {
-      id: "tools",
+      id: "path",
       number: "03",
-      label: "اشتراک‌گذاری ابزار، اسکریپت و PoC",
-      body: "تئوری وقتی واقعی می‌شود که بتوانی اجرایش کنی. کنار هر مفهوم، کد واقعی انتظار داری — اسکریپت‌های کوچک Python، ابزارهای Go، و exploit‌های proof-of-concept که در میدان استفاده می‌کنی.",
-      tag: "اوپن‌سورس",
-      cmd: "release --tools py,go --mode public",
-      statusLine: "Pushing artifacts to repository…",
+      label: "راهنمای مسیر امنیت و یادگیری عملی",
+      body: "راهنمای مسیر امنیت شما. با حل چالش‌های مهم و توضیح آن‌ها و همچنین با مقاله‌های آموزشی کمکتان می‌کنیم در مسیر امنیت قدم بگذارید و بتوانید عمق ماجرا را به‌درستی درک کنید.",
+      tag: "آموزشی",
+      cmd: "guide --security --practical",
+      statusLine: "در حال ساخت نقشه مسیر آموزشی…",
     },
   ],
 };

@@ -24,14 +24,6 @@ type Props = {
   filters: SearchFilters;
   tags: TagSummary[];
   locale: "en" | "fa";
-  /**
-   * Pass your app's Persian font className here so it's forwarded into the
-   * Popover/Dropdown portals which don't inherit from the page tree.
-   *
-   * Example (in SearchPageClient or page.tsx):
-   *   import { vazir } from "@/lib/fonts"
-   *   <FilterBar fontClassName={locale === "fa" ? vazir.className : undefined} ... />
-   */
   fontClassName?: string;
   onToggleCategory: (id: CategoryId) => void;
   onToggleAuthor: (id: AuthorId) => void;
@@ -58,17 +50,7 @@ const i18n = {
   },
 };
 
-// ─── FilterPill ────────────────────────────────────────────────────────────────
-//
-// WHY forwardRef:
-//   PopoverTrigger's `asChild` merges the trigger's ref + onClick onto the
-//   immediate child element. Without forwardRef, Radix can't attach to our
-//   button — so it used to wrap it in a <span>, which caused a bug where
-//   clicking the trigger while the popover was open fired two events:
-//   1. pointer-down-outside → close
-//   2. span's onClick → re-open
-//   This caused the popover to flicker and multi-select to behave erratically.
-//   forwardRef lets asChild attach directly to the <button> element.
+
 const FilterPill = forwardRef<
   HTMLButtonElement,
   {
@@ -108,11 +90,6 @@ const FilterPill = forwardRef<
   );
 });
 
-// ─── Portal class helper ───────────────────────────────────────────────────────
-//
-// Popover and Dropdown portals render outside the React/DOM tree, so they do
-// NOT inherit `dir`, `lang`, or font classes from their parents. We pass them
-// explicitly via this helper.
 function portalContentClass(fontClassName?: string) {
   return cn(fontClassName);
 }
@@ -148,7 +125,6 @@ function CategoryFilter({
         align="start"
         side="bottom"
         sideOffset={8}
-        // Must set dir explicitly — the portal is outside the RTL tree
         dir={dir}
         className={cn("w-64 p-2", portalContentClass(fontClassName))}
       >
@@ -162,7 +138,6 @@ function CategoryFilter({
                 onClick={() => onToggle(cat.id)}
                 className={cn(
                   "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
-                  // text-start respects dir; text-left is always LTR-pinned
                   "text-start",
                   active
                     ? "bg-muted text-foreground"
@@ -186,7 +161,7 @@ function CategoryFilter({
   );
 }
 
-// ─── AuthorFilter ──────────────────────────────────────────────────────────────
+// ─── AuthorFilter ───
 function AuthorFilter({
   filters,
   locale,
@@ -248,7 +223,7 @@ function AuthorFilter({
   );
 }
 
-// ─── TagFilter ─────────────────────────────────────────────────────────────────
+// ─── TagFilter ───
 function TagFilter({
   filters,
   tags,
@@ -315,7 +290,7 @@ function TagFilter({
   );
 }
 
-// ─── SortToggle ────────────────────────────────────────────────────────────────
+// ─── SortToggle ───
 function SortToggle({
   sort,
   locale,
@@ -371,7 +346,7 @@ function SortToggle({
   );
 }
 
-// ─── FilterBar ─────────────────────────────────────────────────────────────────
+// ─── FilterBar ───
 export function FilterBar({
   filters,
   tags,
@@ -414,13 +389,6 @@ export function FilterBar({
         onToggle={onToggleTag}
         t={t}
       />
-
-      {/*
-        ms-auto = margin-inline-start: auto (CSS logical property).
-        In LTR this pushes the sort button to the RIGHT.
-        In RTL this pushes it to the LEFT.
-        The old ml-auto always pushed right, breaking RTL layout.
-      */}
       <div className="ms-auto">
         <SortToggle
           sort={filters.sort}

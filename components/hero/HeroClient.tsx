@@ -74,7 +74,7 @@ function handleContactClick(e: React.MouseEvent<HTMLButtonElement>) {
 export default function HeroClient({ locale, isFa, dict }: Props) {
   const isRTL = locale === "fa";
   const headline = isFa
-    ? "یادداشت‌های میدانی امنیت"
+    ? "یادداشت‌های تحقیقاتی امنیت"
     : "Security research notes";
 
   return (
@@ -92,13 +92,13 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
           <p className="max-w-xl text-sm text-muted-foreground leading-relaxed">
             {isFa ? (
               <>
-                ما اینجا هستیم تا به‌صورت آزاد، یادگیری امنیت را برای همه آسان کنیم — یادداشت‌های
-                میدانی، آموزش‌های عملی و ابزارهای کاربردی.
+                ما اینجا هستیم تا به‌صورت آزاد، یادگیری امنیت و سواد دیجیتال را برای همه آسان کنیم — یادداشت‌های
+                میدانی، آموزش‌های عملی و نقشه‌ی راهی برای شما.
               </>
             ) : (
               <>
-                We’re here to freely make security learning accessible — field notes, hands-on
-                tutorials, and practical tools.
+                We’re here to freely make security and Digital Literacy learning accessible — field notes, hands-on
+                tutorials, and a roadmap for you.
               </>
             )}
           </p>
@@ -110,7 +110,7 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
               href={`/${locale}/blog`}
               className="inline-flex items-center gap-2 rounded-md bg-primary/80 px-4 py-2 text-sm font-medium text-white shadow-sm hover:brightness-110"
             >
-              {isFa ? "جدیدترین مطالب" : "Latest posts"}
+              {isFa ? "همه مطالب" : "All posts"}
             </Link>
 
             {/* ── Contact us ──────────────────────────────────────────── */}
@@ -128,7 +128,7 @@ export default function HeroClient({ locale, isFa, dict }: Props) {
               ].join(" ")}
             >
               <Mail size={14} strokeWidth={2} aria-hidden />
-              {isFa ? "تماس با ما" : "Contact us"}
+              {isFa ? "ارتباط با ما" : "Contact us"}
             </motion.button>
           </motion.div>
         </motion.div>

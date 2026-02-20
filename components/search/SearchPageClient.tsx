@@ -18,15 +18,6 @@ type Props = {
   posts: Post[];
   tags: TagSummary[];
   locale: Locale;
-  /**
-   * Your app's Persian font className (e.g. vazir.className).
-   * Pass this in from the page so portal-based components (Popover, Dropdown)
-   * — which render outside the DOM tree — also get the correct font.
-   *
-   * Example in page.tsx:
-   *   import { vazir } from "@/lib/fonts"
-   *   <SearchPageClient fontClassName={locale === "fa" ? vazir.className : undefined} ... />
-   */
   fontClassName?: string;
 };
 
@@ -37,7 +28,7 @@ const i18n = {
   },
   fa: {
     title: "جستجو پیشرفته",
-    subtitle: "در میان همه پست‌ها، دسته‌بندی‌ها و نویسندگان بگرد.",
+    subtitle: "در بین همه پست‌ها، دسته‌بندی‌ها و نویسندگان بگرد.",
   },
 };
 

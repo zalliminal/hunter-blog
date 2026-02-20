@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 const vazir = Vazirmatn({
   variable: "--font-farsi",
   subsets: ["arabic"],
+  display: "swap",
 });
 
 const siteUrl = getSiteUrl();

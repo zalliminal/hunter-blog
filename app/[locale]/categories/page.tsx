@@ -45,7 +45,7 @@ export default async function CategoriesPage({
               </h1>
               <p className="text-muted-foreground text-base max-w-2xl leading-relaxed">
                 {locale === "fa"
-                  ? "هر دسته بندی برای یک سطح مختلف از یادگیری طراحی شده‌است. انتخاب کنید و شروع کنید."
+                  ? "هر دسته بندی برای یک سطح مختلف از یادگیری طراحی شده. انتخاب کن و شروع کن."
                   : "Each category is tailored for a different learning level. Choose one and dive in."}
               </p>
             </div>

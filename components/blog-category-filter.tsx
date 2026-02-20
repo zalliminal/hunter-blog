@@ -27,7 +27,7 @@ export function BlogCategoryFilter({ locale }: BlogCategoryFilterProps) {
 
   const isRTL = locale === "fa";
 
-  const filterLabel = locale === "fa" ? "فیلتر حسب دسته" : "Filter by category";
+  const filterLabel = locale === "fa" ? "فیلتر بر اساس دسته" : "Filter by category";
   const clearLabel = locale === "fa" ? "پاک کردن فیلتر" : "Clear filter";
 
   return (

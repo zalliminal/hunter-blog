@@ -226,18 +226,16 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
     kicker:        isFa ? "پشت پرده کاوش"                   : "Behind the research",
     title:         isFa ? "جایی بین باگ، اسطوره و کد"        : "Somewhere between bugs, myth and code",
     lead:          isFa ? "ما از دریچه‌ی باگ باونتی و OWASP به دنیای وب نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها." : "We look at the web through bug bounty and OWASP lenses — where every vulnerability is both a threat and a chance to understand systems more deeply.",
-    story:         isFa ? "کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و write-upهای کوتاه تبدیل می‌شود." : "Our work lives on the edge: where bug reports meet real remediation and actual code. This is where security theory turns into small tools, field scripts and short, practical write-ups.",
-    skillsTitle:   isFa ? "چیزهایی که روی‌شان حساب می‌کنیم" : "What we lean on",
-    bugBountyBody: isFa ? "از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً impact دارند." : "From logic issues to chained bugs with real impact — focused on findings that actually move the needle.",
+    story:         isFa ? "کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به نوشته های ساده، اسکریپت‌های میدانی و write-upهای کوتاه تبدیل می‌شود." : "Our work lives on the edge: where bug reports meet real remediation and actual code. This is where security theory turns into small tools, field scripts and short, practical write-ups.",
+    skillsTitle:   isFa ? "چیزهایی که روشون حساب می‌کنیم" : "What we lean on",
+    bugBountyBody: isFa ? "از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً تاثیر دارند." : "From logic issues to chained bugs with real impact — focused on findings that actually move the needle.",
     owaspBody:     isFa ? "سامان‌دهی ذهن با OWASP Top 10؛ از تزریق و کنترل دسترسی تا سوءاستفاده از misconfigها." : "A mental map built around OWASP Top 10 — from injection and access control to misconfig exploitation.",
     codeLabel:     isFa ? "کد به‌عنوان ابزار"               : "Code as a tool",
-    codeBody:      isFa ? "Python، Go و Solidity برای ساخت PoC، اتوماسیون، fuzzing سبک و تحلیل رفتار قراردادهای هوشمند." : "Python, Go and Solidity for PoCs, small automation, lightweight fuzzing and smart-contract behavior analysis.",
+    codeBody:      isFa ? "ما از زبان هایی مثل Python و Go و غیره استفاده میکنیم برای تحلیل رفتار ها و اتوماسیون از ساخت PoC تا fuzzing و غیره." : "Python, Go and etc for PoCs, small automation, lightweight fuzzing and smart-contract behavior analysis.",
     socialTitle:   isFa ? "شبکه‌های اجتماعی"               : "Our Socials",
-    contactTitle:  isFa ? "در تماس بمانید"                  : "Stay in touch",
+    contactTitle:  isFa ? "در تماس باشید"                  : "Stay in touch",
     contactBody:   isFa ? "اگر روی تحقیق، همکاری یا ایده‌ای امنیتی فکر می‌کنید، یک ایمیل کوتاه کافی است." : "If you're thinking about research, collaboration or a strange security idea, a short email is enough to start.",
     emailCta:      isFa ? "فرستادن ایمیل"                   : "Send an email",
-    cvSoon:        isFa ? "به‌زودی"                         : "Coming soon",
-    cvLabel:       isFa ? "دانلود رزومه"                    : "Download CV",
     contactEmail:  "hello@kavlabs.dev", // Update with real email
   } as const;
 
@@ -255,9 +253,18 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
   ];
 
   const chips = [
-    { label: isFa ? <Ltr>Bug bounty</Ltr> : "Bug bounty",                    body: isFa ? <>از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً <Ltr>impact</Ltr> دارند.</> : copy.bugBountyBody },
+    { label: isFa ? <Ltr>Bug bounty</Ltr> : "Bug bounty",                    body: isFa ? <>از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً تاثیر دارند.</> : copy.bugBountyBody },
     { label: isFa ? <Ltr>OWASP &amp; web vulns</Ltr> : "OWASP & web vulns",  body: isFa ? <>سامان‌دهی ذهن با <Ltr>OWASP Top 10</Ltr>؛ از تزریق و کنترل دسترسی تا سوءاستفاده از <Ltr>misconfig</Ltr>ها.</> : copy.owaspBody },
-    { label: copy.codeLabel,                                                   body: isFa ? <><Ltr>Python</Ltr>، <Ltr>Go</Ltr> و <Ltr>Solidity</Ltr> برای ساخت <Ltr>PoC</Ltr>، اتوماسیون، <Ltr>fuzzing</Ltr> سبک و تحلیل رفتار قراردادهای هوشمند.</> : copy.codeBody },
+    {
+      label: copy.codeLabel,
+      body: isFa ? (
+        <>
+          ما از زبان‌هایی مثل <Ltr>Python</Ltr> و <Ltr>Go</Ltr> و غیره استفاده می‌کنیم
+          برای تحلیل رفتارها و اتوماسیون؛
+          از ساخت <Ltr>PoC</Ltr> تا <Ltr>fuzzing</Ltr> و غیره.
+        </>
+      ) : copy.codeBody
+    },
   ];
 
   const baseContainerProps = prefersReduced
@@ -282,10 +289,10 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary/80">{copy.kicker}</p>
             <h2 id="about-section-heading" className="text-lg font-semibold tracking-tight md:text-xl">{copy.title}</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              {isFa ? <>ما از دریچه‌ی باگ باونتی و <Ltr>OWASP</Ltr> به دنیای وب نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها.</> : copy.lead}
+              {isFa ? <>ما از دریچه‌ی باگ باونتی و <Ltr>OWASP</Ltr>  و یادگیری به دنیای دیجیتال نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها.</> : copy.lead}
             </p>
             <p className="text-xs leading-relaxed text-muted-foreground/90">
-              {isFa ? <>کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به ابزارهای روزمره، اسکریپت‌های میدانی و <Ltr>write-ups</Ltr>های کوتاه تبدیل می‌شود.</> : copy.story}
+              {isFa ? <>کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به نوشته های ساده، اسکریپت‌های میدانی و <Ltr>write-ups</Ltr>های کوتاه تبدیل می‌شود.</> : copy.story}
             </p>
             <div className="pt-3">
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{copy.skillsTitle}</p>
@@ -372,11 +379,6 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                   <Mail size={11} strokeWidth={2} />
                   <span>{copy.emailCta}</span>
                 </motion.a>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border/70 bg-background/40 px-3 py-1.5 text-[11px] text-muted-foreground/80">
-                  <FileDown size={11} strokeWidth={1.75} />
-                  <span>{copy.cvLabel}</span>
-                  <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">{copy.cvSoon}</span>
-                </div>
               </div>
             </motion.article>
 

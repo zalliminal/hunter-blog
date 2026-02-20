@@ -47,7 +47,7 @@ export default async function TagsIndexPage({
           </h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
             {isFa
-              ? "همهٔ موضوعاتی که تا الان درباره‌شان نوشته‌ام."
+              ? "همهٔ موضوعاتی که تا الان درباره‌شان نوشته‌ایم."
               : "Topics and themes that the blog keeps circling back to."}
           </p>
         </header>
