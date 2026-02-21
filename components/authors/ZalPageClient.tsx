@@ -345,7 +345,7 @@ const specialties = [
 ];
 
   const socialLinks = [
-    { icon: <SiX size={13} />, label: copy.socialX, handle: AUTHORS.zal.handle, href: AUTHORS.zal.links.twitter || "#" },
+    { icon: <SiX size={13} />, label: copy.socialX, handle: "x.com/kavlabs", href: AUTHORS.zal.links.twitter || "#" },
     { icon: <Github size={13} />, label: copy.socialGithub, handle: "github.com/zalliminal", href: AUTHORS.zal.links.hackerone || "#" },
     { icon: <SiTelegram size={15} />, label: copy.socialTelegram, handle: "t.me/kavlabs", href: AUTHORS.zal.links.immunefi || "#" },
   ];

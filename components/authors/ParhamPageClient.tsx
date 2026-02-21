@@ -314,9 +314,9 @@ export default function ParhamPageClient({ locale, isFa, posts }: Props) {
 ], [isFa]);
 
   const socialLinks = React.useMemo(() => [
-    { icon: <SiX size={13} />, label: copy.socialX, handle: AUTHORS.parhamf.handle, href: AUTHORS.parhamf.links.twitter || "#" },
-    { icon: <Github size={13} />, label: copy.socialGithub, handle: "github.com/parham", href: AUTHORS.parhamf.links.github || "#" },
-    { icon: <SiTelegram size={15} />, label: copy.socialTelegram, handle: "t.me/parham_channel", href: AUTHORS.parhamf.links.telegram || "#" },
+    { icon: <SiX size={13} />, label: copy.socialX, handle: "x.com/kavlabs", href: AUTHORS.parhamf.links.twitter || "#" },
+    { icon: <Github size={13} />, label: copy.socialGithub, handle: "github.com/parhamf6", href: AUTHORS.parhamf.links.github || "#" },
+    { icon: <SiTelegram size={15} />, label: copy.socialTelegram, handle: "t.me/kavlabs", href: AUTHORS.parhamf.links.telegram || "#" },
   ], [copy]);
 
   return (

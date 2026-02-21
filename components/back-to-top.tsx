@@ -25,13 +25,22 @@ export function BackToTop() {
         <motion.button
           type="button"
           onClick={scrollToTop}
-          className="fixed bottom-5 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground shadow-md backdrop-blur hover:bg-muted/50"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
+          className="fixed bottom-6 left-4 z-50
+                    flex h-9 w-9 items-center justify-center 
+                    rounded-md border border-muted-foreground/30 
+                    bg-background/50 backdrop-blur-sm 
+                    text-muted-foreground 
+                    transition-colors duration-300 
+                    hover:border-primary hover:text-primary hover:bg-primary/10 
+                    focus:outline-none focus:ring-2 focus:ring-primary/50 sm:left-auto sm:right-5"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 0.4, y: 0 }}
+          whileHover={{ opacity: 1, scale: 1.05 }}
+          exit={{ opacity: 0, y: 10 }}
           aria-label="Back to top"
         >
-          <ChevronUp className="h-5 w-5" />
+          <ChevronUp className="h-5 w-5 font-mono" strokeWidth={2.5} />
+          <div className="absolute inset-0 -z-10 rounded-md bg-primary/20 blur-md opacity-0 transition-opacity duration-300 hover:opacity-50" />
         </motion.button>
       )}
     </AnimatePresence>

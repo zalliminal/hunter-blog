@@ -249,7 +249,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
     { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/kavlabs",              icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
     { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@kavlabs@infosec.exchange", icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
     { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@kavlabs</Ltr>,      icon: <SiX        size={17} />, brand: socialBrands.twitter  },
-    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs_channel</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
+    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
   ];
 
   const chips = [
@@ -313,7 +313,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
           </motion.article>
 
           {/* ── Side column ─────────────────────────────────────────────── */}
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-between">
 
             {/* ── Social card with ring overlay ────────────────────────── */}
             <div className="relative">
@@ -353,7 +353,8 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                 variants={prefersReduced ? undefined : itemVariants}
                 className="rounded-2xl border border-border/70 bg-background/60 p-4 shadow-md backdrop-blur-xl"
               >
-                <p className="mb-3 text-xs font-medium text-foreground">{copy.socialTitle}</p>
+                <h2 className="mb-2 text-md font-semibold text-foreground">{copy.socialTitle}</h2>
+                <p className="text-xs font-medium text-muted-foreground mb-4">{isFa ? <>میتونید مارو اینجا ها پیدا کنید</> : <>You can find us in this places</>}</p>
                 <div className="grid grid-cols-2 gap-3">
                   {socialCards.map((card) => (
                     <SocialCard key={card.key} card={card} prefersReduced={prefersReduced} />
