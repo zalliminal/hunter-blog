@@ -1,0 +1,43 @@
+---
+slug: "osi-model"
+term: "OSI Model"
+abbreviation: "OSI"
+shortDefinition: "A seven-layer model that describes how network communications between systems work, with each layer having a specific function."
+category: "Network Prerequisites"
+tags: ["network", "protocol", "layering", "communications"]
+relatedTerms: ["tcp-ip", "ip-address", "http", "port"]
+language: "en"
+hasTranslation: true
+translationSlug: "osi-model"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.imperva.com/learn/application-security/osi-model/"
+  - "https://aws.amazon.com/what-is/osi-model/"
+---
+
+## What is the OSI Model?
+
+In one sentence: OSI is a seven-layer model that shows how data travels from your computer to the destination computer.
+
+Let me explain with an example. Imagine you want to send a letter to your friend. This letter must go through several stages: first you write it, then put it in an envelope, write the address, give it to the post office, they send it to the destination city, it gets delivered to your friend, and they open and read it. Network works exactly the same way! Data must pass through seven stages (layers) to reach its destination.
+
+### The Seven OSI Layers from Top to Bottom:
+
+**Layer 7 - Application:** This is the layer you directly interact with. For example, when you open a website with your browser or send an email.
+
+**Layer 6 - Presentation:** Here data is prepared for transmission. Like encryption, compression, or format conversion.
+
+**Layer 5 - Session:** Manages communication between two systems. This layer decides when communication starts, how long it lasts, and when it ends.
+
+**Layer 4 - Transport:** Responsible for reliable data delivery. Here it's decided whether to use TCP (reliable) or UDP (fast).
+
+**Layer 3 - Network:** Addressing and routing. This is where IP Addresses work and data is sent to the destination via the best path.
+
+**Layer 2 - Data Link:** Data transfer between devices connected to each other in a local network. MAC Address works here.
+
+**Layer 1 - Physical:** Cables, fiber optics, electrical signals. Anything physical that transfers data.
+
+### Why is it important for security?
+
+Because each layer has its own specific vulnerabilities. For example, the Application layer can have XSS, the Network layer can have IP Spoofing, the Physical layer can have cable cuts or eavesdropping. When you know which layer each attack happens in, you can understand it better and prevent it.

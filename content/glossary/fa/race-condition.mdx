@@ -1,0 +1,38 @@
+---
+slug: "race-condition"
+term: "شرط مسابقه"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری که زمانی رخ می‌دهد چندین فرآیند همزمان به یک منبع دسترسی پیدا کنند و نتیجه به ترتیب اجرا بستگی داشته باشد."
+category: "انواع حملات"
+tags: ["همزمانی", "زمان", "logic", "thread"]
+relatedTerms: ["concurrency", "timing", "logic-bug", "threading"]
+language: "fa"
+hasTranslation: true
+translationSlug: "race-condition"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/vulnerabilities/Race_Condition"
+  - "https://cwe.mitre.org/data/definitions/362.html"
+---
+
+## شرط مسابقه چیه؟
+
+خلاصه در یه جمله: وقتی دو تا کار همزمان بخوان یه چیز رو تغییر بدن و نتیجه بستگی داشته باشه کی زودتر تموم بشه!
+
+فرض کن حسابت <span dir="ltr">۱۰۰</span> تومنه. دو تا درخواست همزمان میاد برای برداشت <span dir="ltr">۱۰۰</span> تومن. اگه سیستم چک نکنه، هر دو درخواست موفق می‌شن و تو <span dir="ltr">۲۰۰</span> تومن برداشت می‌کنی در حالی که فقط <span dir="ltr">۱۰۰</span> تومن داشتی! این یعنی <span dir="ltr">Race</span> <span dir="ltr">Condition</span>.
+
+### چطور کار می‌کنه؟
+
+<span dir="ltr">۱</span>. درخواست <span dir="ltr">۱</span>: موجودی رو می‌خونه (<span dir="ltr">۱۰۰</span> تومن)
+<span dir="ltr">۲</span>. درخواست <span dir="ltr">۲</span>: موجودی رو می‌خونه (<span dir="ltr">۱۰۰</span> تومن)
+<span dir="ltr">۳</span>. درخواست <span dir="ltr">۱</span>: <span dir="ltr">۱۰۰</span> تومن برمی‌داره، موجودی می‌شه <span dir="ltr">۰</span>
+<span dir="ltr">۴</span>. درخواست <span dir="ltr">۲</span>: <span dir="ltr">۱۰۰</span> تومن برمی‌داره، موجودی می‌شه -<span dir="ltr">۱۰۰</span>!
+
+چون چک نکردن بین مرحله <span dir="ltr">۲</span> و <span dir="ltr">۳</span>.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">Race</span> <span dir="ltr">Condition</span> می‌تونه منجر به برداشت اضافی، دور زدن محدودیت‌ها، یا دسترسی غیرمجاز بشه. پیدا کردنش سخته، تست کردنش سخته.
+
+---

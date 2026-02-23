@@ -21,19 +21,20 @@ export type NavDictionary = {
   navSearch: string;
   navTheme: string;
   navLanguage: string;
-  navMore:string;
+  navMore: string;
   navCategories: string;
   navAdvancedSearch: string;
+  navGlossary: string;
   // Add descriptions for navigation items
   tagsDescription: string;
   categoriesDescription: string;
   advancedSearchDescription: string;
+  glossaryDescription: string;
   latestPosts: string;
   viewAllPosts: string;
   blogIndexTitle: string;
   blogIndexDescription: string;
 };
-
 
 export type Dictionaries = {
   nav: NavDictionary;
@@ -52,12 +53,14 @@ const en: Dictionaries = {
     navSearch: "Search",
     navTheme: "Theme",
     navLanguage: "Language",
-    navMore:"More",
+    navMore: "More",
     navCategories: "Categories",
     navAdvancedSearch: "Advanced Search",
+    navGlossary: "Glossary",
     tagsDescription: "Browse content by tags and topics",
     categoriesDescription: "Explore posts organized by categories",
     advancedSearchDescription: "Search with advanced filters and options",
+    glossaryDescription: "Security terms and concepts explained",
     latestPosts: "Latest posts",
     viewAllPosts: "View all posts",
     blogIndexTitle: "All posts",
@@ -79,12 +82,14 @@ const fa: Dictionaries = {
     navSearch: "جستجو",
     navTheme: "تم",
     navLanguage: "زبان",
-    navMore:"بیشتر",
+    navMore: "بیشتر",
     navCategories: "دسته‌بندی‌ها",
     navAdvancedSearch: "جستجوی پیشرفته",
+    navGlossary: "واژه‌نامه",
     tagsDescription: "مرور محتوا بر اساس تگ‌ها و موضوعات",
     categoriesDescription: "کاوش پست‌های سازمان‌یافته بر اساس دسته‌بندی‌ها",
     advancedSearchDescription: "جستجو با فیلترها و گزینه‌های پیشرفته",
+    glossaryDescription: "اصطلاحات و مفاهیم امنیتی به زبان ساده",
     latestPosts: "آخرین پست‌ها",
     viewAllPosts: "نمایش همهٔ پست‌ها",
     blogIndexTitle: "همهٔ پست‌ها",

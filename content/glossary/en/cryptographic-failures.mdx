@@ -1,0 +1,58 @@
+---
+slug: "cryptographic-failures"
+term: "Cryptographic Failures"
+abbreviation: "N/A"
+shortDefinition: "Vulnerabilities that occur due to improper use or lack of proper encryption to protect sensitive data."
+category: "OWASP Top 10"
+tags: ["owasp", "encryption", "data-security", "ssl"]
+relatedTerms: ["https", "encryption", "hash", "tls"]
+language: "en"
+hasTranslation: true
+translationSlug: "cryptographic-failures"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+  - "https://cwe.mitre.org/data/definitions/311.html"
+---
+
+## What are Cryptographic Failures?
+
+In one sentence: When sensitive data isn't encrypted or is poorly encrypted, attackers can read it!
+
+Imagine you have a confidential letter. You have two ways to send it: either in a regular envelope (anyone can read it), or in a tamper-proof envelope (only receiver can open it). Encryption is this! If not done properly, anyone in the path can read the data.
+
+### Types of Cryptographic Failures:
+
+**1. Transmission without Encryption:**
+Site has HTTP not HTTPS. Anyone in the network (like café WiFi) can see what you're sending (password, bank card, etc.).
+
+**2. Weak Encryption:**
+Using old algorithms like MD5 or DES that are easily broken.
+
+**3. Storing Passwords without Hash:**
+Storing passwords in Plain Text. If database leaks, all passwords leak!
+
+**4. Weak Encryption Keys:**
+Using short or guessable keys. Attacker easily brute forces.
+
+**5. Invalid SSL Certificate:**
+Using expired or self-signed SSL. Browser warns but unaware users continue.
+
+### Real Example:
+
+Imagine you have a site that stores passwords like this in database:
+```
+user: ali, password: 123456
+```
+
+Hacker steals database and has all passwords! But if you hashed:
+```
+user: ali, password: $2b$12$KIXxYz... (non-reversible)
+```
+
+Hacker can't figure out the original password.
+
+### Why is it important for security?
+
+Because it's number 2 in OWASP Top 10 2021! Sensitive data like passwords, bank information, personal info if leaked, it's a disaster. Both financially and reputationally.

@@ -1,0 +1,37 @@
+---
+slug: "session"
+term: "Session"
+abbreviation: "N/A"
+shortDefinition: "A period of interaction between user and website that continues from login to logout."
+category: "Web Security"
+tags: ["session", "authentication", "cookie", "token"]
+relatedTerms: ["cookie", "authentication", "token", "session-fixation"]
+language: "en"
+hasTranslation: true
+translationSlug: "session"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/access-management/what-is-a-session/"
+  - "https://owasp.org/www-community/attacks/Session_management"
+---
+
+## What is Session?
+
+In one sentence: Session means from when you login to when you logout, the site recognizes you!
+
+Imagine you entered a building. Guard gives you a card. As long as you have the card, you can go anywhere. When you go out, you give the card. Session is this — you login, site gives you a Session ID, as long as you didn't logout or Session expired, site recognizes you.
+
+### Session Problems:
+
+**Session Fixation:** Hacker gives you Session ID, you login, hacker enters your account with the same Session ID!
+
+**Session Hijacking:** Hacker steals your Session ID (through XSS, MitM) and gets into your account.
+
+**No Session Timeout:** Session never expires. If hacker steals it, can always use it.
+
+**Guessable Session ID:** Session IDs have patterns. Hacker can guess.
+
+### Why is it important for security?
+
+Because Session means access to user's account. If Session leaks, hacker gets into account without password!

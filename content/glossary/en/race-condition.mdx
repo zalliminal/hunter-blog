@@ -1,0 +1,36 @@
+---
+slug: "race-condition"
+term: "Race Condition"
+abbreviation: "N/A"
+shortDefinition: "A vulnerability that occurs when multiple processes access a resource simultaneously and the result depends on execution order."
+category: "Attack Types"
+tags: ["concurrency", "timing", "logic", "thread"]
+relatedTerms: ["concurrency", "timing", "logic-bug", "threading"]
+language: "en"
+hasTranslation: true
+translationSlug: "race-condition"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/vulnerabilities/Race_Condition"
+  - "https://cwe.mitre.org/data/definitions/362.html"
+---
+
+## What is Race Condition?
+
+In one sentence: When two tasks try to change something simultaneously and the result depends on who finishes first!
+
+Imagine your account has 100 dollars. Two requests come simultaneously to withdraw 100 dollars. If system doesn't check, both requests succeed and you withdraw 200 dollars while you only had 100! This is Race Condition.
+
+### How does it work?
+
+1. Request 1: Reads balance (100 dollars)
+2. Request 2: Reads balance (100 dollars)
+3. Request 1: Takes 100 dollars, balance becomes 0
+4. Request 2: Takes 100 dollars, balance becomes -100!
+
+Because they didn't check between step 2 and 3.
+
+### Why is it important for security?
+
+Because Race Condition can lead to extra withdrawal, bypassing limits, or unauthorized access. Finding it is hard, testing it is hard.

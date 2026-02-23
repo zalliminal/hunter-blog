@@ -1,0 +1,49 @@
+---
+slug: "security-misconfiguration"
+term: "پیکربندی ناامن"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری‌هایی که به دلیل تنظیمات نادرست یا پیش‌فرض سرورها، برنامه‌ها و سرویس‌ها ایجاد می‌شوند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "کانفیگ", "سرور", "تنظیمات"]
+relatedTerms: ["server", "hardening", "default-password", "exposed-admin"]
+language: "fa"
+hasTranslation: true
+translationSlug: "security-misconfiguration"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A05_2021-Security_Misconfiguration/"
+  - "https://cwe.mitre.org/data/definitions/16.html"
+---
+
+## پیکربندی ناامن چیه؟
+
+خلاصه در یه جمله: وقتی سرور یا برنامه رو با تنظیمات پیش‌فرض یا غلط رها می‌کنی و هکر راحت وارد می‌شه!
+
+فرض کن یه خونه خریدی. در رو قفل نمی‌کنی، پنجره‌ها بازه، کلید یدک رو زیر گلیم گذاشتی! هکر هم میاد راحت وارد می‌شه. پیکربندی ناامن همینه — سیستم امنه، ولی تو درست کانفیگش نکردی .
+
+### مثال‌های پیکربندی ناامن:
+
+**<span dir="ltr">۱</span>. پسورد پیش‌فرض:**
+سرور رو نصب می‌کنی، پسورد <span dir="ltr">admin</span>/<span dir="ltr">admin</span> رو عوض نمی‌کنی. هکر با همون وارد می‌شه!
+
+**<span dir="ltr">۲</span>. صفحه ادمین عمومی:**
+پنل ادمین رو می‌ذاری روی `/__PROTECTED_4__` و هیچ محافظتی نداره. هکر راحت پیداش می‌کنه!
+
+**<span dir="ltr">۳</span>. <span dir="ltr">Error</span> <span dir="ltr">Messages</span> زیاد:**
+وقتی خطا می‌خوره، تمام جزئیات رو نشون می‌ده (نسخه سرور، مسیر فایل‌ها، کوئری <span dir="ltr">SQL</span>). هکر از این اطلاعات استفاده می‌کنه!
+
+**<span dir="ltr">۴</span>. سرویس‌های غیرضروری:**
+پورت‌های اضافی بازه، سرویس‌هایی که نیاز نیستن روشنه. هر کدوم یه راه نفوذه!
+
+**<span dir="ltr">۵</span>. <span dir="ltr">Headers</span> امنیتی نداره:**
+<span dir="ltr">Headers</span> مثل `__PROTECTED_13__`، `__PROTECTED_14__` رو نمی‌ذاری. سایتت در برابر کلیک‌جکینگ و <span dir="ltr">XSS</span> آسیب‌پذیره!
+
+**<span dir="ltr">۶</span>. <span dir="ltr">Cloud</span> <span dir="ltr">Storage</span> عمومی:**
+باکت <span dir="ltr">S3</span> رو عمومی می‌ذاری. هر کسی می‌تونه فایل‌هات رو دانلود کنه!
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۵</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! خیلی از شرکت‌ها پول زیاد می‌دن برای امنیت، ولی چون کانفیگ رو درست انجام نمی‌دن، هکر راحت وارد می‌شه. این آسیب‌پذیری‌ها معمولاً راحت‌ترین هدف‌ها هستن.
+
+---

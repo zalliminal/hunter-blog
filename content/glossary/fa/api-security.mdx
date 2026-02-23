@@ -1,0 +1,46 @@
+---
+slug: "api-security"
+term: "امنیت API"
+abbreviation: "API"
+shortDefinition: "مجموعه‌ای از بهترین روش‌ها برای محافظت از APIها در برابر حملات و دسترسی غیرمجاز."
+category: "امنیت وب"
+tags: ["api", "وب", "احراز-هویت", "rate-limit"]
+relatedTerms: ["rest", "graphql", "authentication", "rate-limiting"]
+language: "fa"
+hasTranslation: true
+translationSlug: "api-security"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-project-api-security/"
+  - "https://www.fortinet.com/resources/cyberglossary/api-security"
+---
+
+## امنیت <span dir="ltr">API</span> چیه؟
+
+خلاصه در یه جمله: APIها درگاه‌های ارتباطی برنامه‌هان، اگه امن نباشن هکر می‌تونه از طریقشون به داده‌ها و سرویس‌ها دسترسی پیدا کنه!
+
+فرض کن یه رستوران داری. آشپزخونه (سرور) رو نمی‌ذاری هر کسی وارد بشه. یه پنجره سفارش داری (<span dir="ltr">API</span>). مشتری از اونجا سفارش می‌ده. اگه اون پنجره امن نباشه، هکر می‌تونه بیاد سفارش فیک بده، غذا رایگان بگیره، یا حتی بره تو آشپزخونه!
+
+### مشکلات رایج <span dir="ltr">API</span>:
+
+**<span dir="ltr">۱</span>. احراز هویت ضعیف:**
+<span dir="ltr">API</span> <span dir="ltr">Key</span> راحت دزدیده می‌شه، <span dir="ltr">Token</span> چک نمی‌شه.
+
+**<span dir="ltr">۲</span>. <span dir="ltr">Rate</span> <span dir="ltr">Limiting</span> نداره:**
+هکر می‌تونه بی‌نهایت درخواست بفرسته (<span dir="ltr">Brute</span> <span dir="ltr">Force</span>، <span dir="ltr">DDoS</span>).
+
+**<span dir="ltr">۳</span>. داده‌های زیاد برمی‌گردونه:**
+<span dir="ltr">API</span> تمام داده‌ها رو برمی‌گردونه، کلاینت فقط یه بخشش رو نشون می‌ده. هکر مستقیم به <span dir="ltr">API</span> می‌زنه و همه داده‌ها رو می‌گیره!
+
+**<span dir="ltr">۴</span>. <span dir="ltr">Injection</span>:**
+<span dir="ltr">API</span> ورودی‌ها رو چک نمی‌کنه. <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>، <span dir="ltr">Command</span> <span dir="ltr">Injection</span>.
+
+**<span dir="ltr">۵</span>. <span dir="ltr">Mass</span> <span dir="ltr">Assignment</span>:**
+هکر فیلدهایی رو می‌فرسته که نباید (مثل `__PROTECTED_26__=__PROTECTED_27__`).
+
+### چرا برای امنیت مهمه؟
+
+چون امروزه همه چیز APIه! موبایل، وب، سرویس‌های سوم. اگه <span dir="ltr">API</span> امن نباشه، کل سیستم در خطره.
+
+---

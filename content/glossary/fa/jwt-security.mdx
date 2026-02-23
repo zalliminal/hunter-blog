@@ -1,0 +1,52 @@
+---
+slug: "jwt-security"
+term: "امنیت JWT"
+abbreviation: "JWT"
+shortDefinition: "توکن‌های JSON Web Token برای احراز هویت استفاده می‌شوند و باید به درستی پیاده‌سازی و محافظت شوند."
+category: "احراز هویت"
+tags: ["توکن", "احراز-هویت", "api", "signature"]
+relatedTerms: ["authentication", "token", "api", "oauth"]
+language: "fa"
+hasTranslation: true
+translationSlug: "jwt-security"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://jwt.io/introduction"
+  - "https://auth0.com/blog/jwt-security-best-practices/"
+---
+
+## امنیت <span dir="ltr">JWT</span> چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">JWT</span> توکنیه برای احراز هویت، اگه درست پیاده‌سازی نشه هکر می‌تونه جعلش کنه و وارد اکانت بقیه بشه!
+
+فرض کن یه کارت عضویت داری که امضا شده. اگه امضا رو بتونی جعل کنی، می‌تونی کارت فیک بسازی و خودت رو عضو جا بزنی! <span dir="ltr">JWT</span> همینه — یه توکنه که امضا داره. اگه امضا رو درست چک نکنی، هکر می‌تونه توکن فیک بسازه.
+
+### ساختار <span dir="ltr">JWT</span>:
+
+**<span dir="ltr">Header</span>:** الگوریتم و نوع توکن
+**<span dir="ltr">Payload</span>:** داده‌ها (مثل <span dir="ltr">user_id</span>, <span dir="ltr">role</span>)
+**<span dir="ltr">Signature</span>:** امضا برای تأیید اعتبار
+
+### مشکلات رایج <span dir="ltr">JWT</span>:
+
+**<span dir="ltr">۱</span>. الگوریتم <span dir="ltr">None</span>:**
+هکر الگوریتم رو می‌کنه `__PROTECTED_12__`، امضا رو حذف می‌کنه. سرور اگه چک نکنه، توکن رو قبول می‌کنه!
+
+**<span dir="ltr">۲</span>. کلید ضعیف:**
+کلید امضا کوتاه یا قابل حدسه. هکر <span dir="ltr">Brute</span> <span dir="ltr">Force</span> می‌کنه.
+
+**<span dir="ltr">۳</span>. عدم تأیید امضا:**
+سرور اصلاً امضا رو چک نمی‌کنه!
+
+**<span dir="ltr">۴</span>. داده‌های حساس تو <span dir="ltr">Payload</span>:**
+<span dir="ltr">Payload</span> رمزنگاری نمی‌شه، فقط <span dir="ltr">Base64</span> می‌شه. هر کسی می‌تونه بخونه!
+
+**<span dir="ltr">۵</span>. انقضای طولانی:**
+توکن تاریخ انقضا نداره یا طولانیه. هکر اگه بدزدش، ماه‌ها می‌تونه استفاده کنه!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">JWT</span> برای احراز هویت استفاده می‌شه. اگه <span dir="ltr">JWT</span> رو هکر جعل کنه، می‌تونه وارد اکانت هر کسی بشه، حتی ادمین!
+
+---

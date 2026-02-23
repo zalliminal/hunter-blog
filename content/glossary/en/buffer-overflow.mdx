@@ -1,0 +1,37 @@
+---
+slug: "buffer-overflow"
+term: "Buffer Overflow"
+abbreviation: "N/A"
+shortDefinition: "A vulnerability that occurs when data is written beyond buffer capacity and overwrites adjacent memory."
+category: "Attack Types"
+tags: ["memory", "injection", "low-level", "c"]
+relatedTerms: ["memory", "stack", "heap", "code-execution"]
+language: "en"
+hasTranslation: true
+translationSlug: "buffer-overflow"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-a-buffer-overflow-attack/"
+  - "https://owasp.org/www-community/vulnerabilities/Buffer_Overflow"
+---
+
+## What is Buffer Overflow?
+
+In one sentence: When you write more data than the space allocated for it and it spills over to other data!
+
+Imagine you have a form that only fits 10 characters. You write 20 characters. The extra 10 spills onto adjacent data! If that adjacent data is important (like function return address), hacker can take control of the program!
+
+### How does it work?
+
+You have a C program:
+```c
+char buffer[10];
+gets(buffer); // User gives 50 characters!
+```
+
+40 extra characters spill onto Stack. If hacker calculates precisely, can change Return Address and execute their own code!
+
+### Why is it important for security?
+
+Because Buffer Overflow can lead to Remote Code Execution. Hacker takes full control of the program. Many old bugs were this.

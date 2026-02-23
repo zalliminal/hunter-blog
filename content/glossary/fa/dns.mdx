@@ -1,0 +1,47 @@
+---
+slug: "dns"
+term: "سیستم نام دامنه"
+abbreviation: "DNS"
+shortDefinition: "سیستمی که نام‌های دامنه (مثل google.com) رو به آدرس‌های IP تبدیل می‌کنه تا مرورگرها بتونن وب‌سایت‌ها رو پیدا کنن."
+category: "پیش‌نیازهای شبکه"
+tags: ["شبکه", "دامنه", "اینترنت", "resolution"]
+relatedTerms: ["ip-address", "http", "domain", "dns-spoofing"]
+language: "fa"
+hasTranslation: true
+translationSlug: "dns"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/dns/what-is-dns/"
+  - "https://www.fortinet.com/resources/cyberglossary/what-is-dns"
+---
+
+## <span dir="ltr">DNS</span> اصلا چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">DNS</span> مثل دفترچه تلفن اینترنته — اسم وب‌سایت رو می‌گیره و شماره‌ش (<span dir="ltr">IP</span> <span dir="ltr">Address</span>) رو بهت می‌ده.
+
+بذار با یه مثال بگم. فرض کن می‌خوای به دوستت زنگ بزنی. دو راه داری: یا شماره‌ش رو حفظی (که سخته)، یا از دفترچه تلفن استفاده می‌کنی. <span dir="ltr">DNS</span> دقیقاً همون دفترچه تلفنه برای اینترنت!
+
+وقتی تو مرورگر می‌زنی `__PROTECTED_5__.__PROTECTED_6__`، کامپیوتر تو نمی‌دونه این کجاست! باید <span dir="ltr">IP</span> Addressش رو بدونی. اینجاست که <span dir="ltr">DNS</span> وارد عمل می‌شه. می‌پرسه "<span dir="ltr">google</span>.<span dir="ltr">com</span> کجاست؟" و <span dir="ltr">DNS</span> <span dir="ltr">Server</span> می‌گه "اینجا: <span dir="ltr">142</span>.<span dir="ltr">250</span>.<span dir="ltr">185</span>.<span dir="ltr">78</span>". حالا مرورگر تو می‌تونه بره به اون آدرس .
+
+### مراحل کار <span dir="ltr">DNS</span>:
+
+<span dir="ltr">۱</span>. تو آدرس رو می‌زنی تو مرورگر
+<span dir="ltr">۲</span>. کامپیوترت می‌پرسه از <span dir="ltr">DNS</span> <span dir="ltr">Resolver</span> (معمولاً <span dir="ltr">ISP</span>)
+<span dir="ltr">۳</span>. <span dir="ltr">Resolver</span> می‌گرده تو <span dir="ltr">DNS</span> Serverها
+<span dir="ltr">۴</span>. <span dir="ltr">IP</span> <span dir="ltr">Address</span> رو پیدا می‌کنه و برمی‌گردونه
+<span dir="ltr">۵</span>. مرورگر وصل می‌شه به اون <span dir="ltr">IP</span>
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">DNS</span> امنیت ذاتی نداره! مهاجمان می‌تونن:
+
+**<span dir="ltr">DNS</span> <span dir="ltr">Spoofing</span>:** جواب <span dir="ltr">DNS</span> رو جعل کنن و تو رو بفرستن به یه سایت فیک به جای سایت اصلی .
+
+**<span dir="ltr">DNS</span> <span dir="ltr">Tunneling</span>:** داده‌ها رو قاچاقی از طریق <span dir="ltr">DNS</span> رد و بدل کنن.
+
+**<span dir="ltr">DNS</span> <span dir="ltr">Hijacking</span>:** کنترل <span dir="ltr">DNS</span> رو بگیرن و تمام ترافیک تو رو هدایت کنن به جایی که می‌خوان.
+
+برای همین <span dir="ltr">DNS</span> امن (مثل <span dir="ltr">DNS</span> <span dir="ltr">over</span> <span dir="ltr">HTTPS</span>) مهمه.
+
+---

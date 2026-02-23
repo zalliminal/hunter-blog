@@ -1,0 +1,41 @@
+---
+slug: "man-in-the-middle"
+term: "Man-in-the-Middle Attack"
+abbreviation: "MitM"
+shortDefinition: "An attack where attacker secretly intercepts or manipulates communication between two parties."
+category: "Attack Types"
+tags: ["eavesdropping", "network", "manipulation", "communication"]
+relatedTerms: ["ssl", "https", "wifi", "arp-spoofing"]
+language: "en"
+hasTranslation: true
+translationSlug: "man-in-the-middle"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-man-in-the-middle-attack/"
+  - "https://www.fortinet.com/resources/cyberglossary/man-in-the-middle-attack"
+---
+
+## What is Man-in-the-Middle Attack?
+
+In one sentence: When hacker comes between you and server, sees everything and even changes it without you understanding!
+
+Imagine you're corresponding with your friend via letters. But the postman opens all letters, reads them, even changes them, then sends them! You and your friend think you're talking directly, but hacker is in the middle and sees everything. This is MitM.
+
+### How does it work?
+
+**1. Public WiFi:**
+You go to café, connect to free WiFi. Hacker controls that WiFi. Everything you send (if not HTTPS) hacker sees!
+
+**2. ARP Spoofing:**
+Hacker pretends to be the router. All network traffic goes through them.
+
+**3. DNS Spoofing:**
+Hacker fakes DNS response. You think you went to `bank.com`, but went to hacker's fake site!
+
+**4. SSL Stripping:**
+Hacker makes HTTPS connection HTTP. You don't notice, hacker sees everything!
+
+### Why is it important for security?
+
+Because MitM can lead to password theft, bank information theft, Session theft, or even malware injection. And you never understand!

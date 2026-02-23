@@ -1,0 +1,48 @@
+---
+slug: "waf"
+term: "فایروال برنامه‌های وب"
+abbreviation: "WAF"
+shortDefinition: "سیستم امنیتی که ترافیک وب رو بررسی می‌کنه و درخواست‌های مخرب رو قبل از رسیدن به سرور مسدود می‌کنه."
+category: "امنیت وب"
+tags: ["امنیت", "فایروال", "وب", "محافظت"]
+relatedTerms: ["firewall", "sql-injection", "xss", "waf-bypass"]
+language: "fa"
+hasTranslation: true
+translationSlug: "waf"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ddos/glossary/web-application-firewall-waf/"
+  - "https://owasp.org/www-community/Web_Application_Firewall"
+---
+
+## <span dir="ltr">WAF</span> اصلا چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">WAF</span> مثل نگهبان جلوی در وب‌سایتته — درخواست‌ها رو چک می‌کنه و اگه مشکوک بودن راه نمی‌ده.
+
+فرض کن یه مهمونی داری. یه نگهبان گذاشتی جلوی در که مهمون‌ها رو چک کنه. اگه کسی مشکوک بود (مثلاً مست بود یا دعوا می‌خواست راه بندازه) راهش نمی‌ده. <span dir="ltr">WAF</span> دقیقاً همینه برای وب‌سایت تو!
+
+### <span dir="ltr">WAF</span> چطور کار می‌کنه؟
+
+وقتی یه درخواست میاد به سمت سرور تو، اول می‌رسه به <span dir="ltr">WAF</span>. <span dir="ltr">WAF</span> درخواست رو بررسی می‌کنه:
+
+- آیا کد مخرب داره؟ (مثل <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>)
+- آیا اسکریپت مشکوک داره؟ (مثل <span dir="ltr">XSS</span>)
+- آیا الگوی حمله داره؟
+- آیا از <span dir="ltr">IP</span> مشکوک اومده؟
+
+اگه تمیز بود، می‌فرسته به سرور. اگه کثیف بود، بلاک می‌کنه و یه خطا نشون می‌ده .
+
+### انواع <span dir="ltr">WAF</span>:
+
+**<span dir="ltr">Cloud-based</span>:** مثل <span dir="ltr">Cloudflare</span>. نیازی به نصب نداری، ترافیک اول می‌ره به اونا، بعد میاد به تو.
+
+**<span dir="ltr">Host-based</span>:** روی سرور خودت نصب می‌شه. مثل <span dir="ltr">ModSecurity</span>.
+
+**<span dir="ltr">Hardware-based</span>:** یه دستگاه فیزیکیه که جلوی سرورت می‌ذاری. گرونه ولی قدرتمنده.
+
+### چرا برای امنیت مهمه؟
+
+چون خط اول دفاعیه! حتی اگه کدت باگ داشته باشه، <span dir="ltr">WAF</span> می‌تونه جلوی خیلی از حملات رو بگیره. اما... کامل نیست! مهاجمان راه‌های دور زدنش رو یاد گرفتن (<span dir="ltr">WAF</span> <span dir="ltr">Bypass</span>) که بعداً می‌گم.
+
+---

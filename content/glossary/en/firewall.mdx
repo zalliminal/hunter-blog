@@ -1,0 +1,47 @@
+---
+slug: "firewall"
+term: "Firewall"
+abbreviation: "N/A"
+shortDefinition: "A security system that inspects and controls network traffic based on predefined rules."
+category: "Defensive"
+tags: ["security", "network", "filter", "protection"]
+relatedTerms: ["waf", "network", "port", "rules"]
+language: "en"
+hasTranslation: true
+translationSlug: "firewall"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-a-firewall/"
+  - "https://www.fortinet.com/resources/cyberglossary/firewall"
+---
+
+## What is Firewall?
+
+In one sentence: Firewall is like a border guard — decides who can enter the network and who can't!
+
+Imagine you have a country. You have borders, customs, guards. Not everyone can enter. Must be checked, have permit. Firewall is this for your network — inspects traffic, if allowed lets through, if not, blocks.
+
+### Types of Firewall:
+
+**Packet Filtering:** Checks packets (IP, port). Simple.
+
+**Stateful Inspection:** Also checks connection status. Smarter.
+
+**Proxy Firewall:** Acts like intermediary. Traffic goes through it.
+
+**Next-Gen Firewall:** Deep packet inspection, intrusion detection, has antivirus.
+
+### How does Firewall work?
+
+You have some Rules:
+- Allow port 80 (HTTP)
+- Allow port 443 (HTTPS)
+- Block port 22 (SSH) from outside
+- Block all traffic from IP X
+
+Every packet that comes or goes, gets checked against these rules.
+
+### Why is it important for security?
+
+Because firewall is the first line of defense! Blocks many network attacks, closes unnecessary ports, blocks suspicious traffic.

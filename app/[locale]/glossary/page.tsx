@@ -1,12 +1,15 @@
-// app/[locale]/search/page.tsx
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { Locale } from "@/lib/i18n";
-import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
-import { getAllPosts, getTagSummaries } from "@/lib/blog";
-import { SearchPageClient } from "@/components/search/SearchPageClient";
+import { DEFAULT_LOCALE, isLocale, LOCALES } from "@/lib/i18n";
+import { getAllGlossaryTerms, getAllGlossaryCategories } from "@/lib/glossary";
+import { GlossaryIndexClient } from "@/components/glossary/glossary-index-client";
 
 const FA_FONT_CLASS = "font-[family-name:var(--font-farsi)]";
+
+export async function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({
   params,
@@ -15,27 +18,24 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: rawLocale } = await params;
   const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+
   return {
-    title: locale === "fa" ? "جستجو پیشرفته" : "Advanced Search",
+    title: locale === "fa" ? "واژه‌نامه امنیت" : "Security Glossary",
     description:
       locale === "fa"
-        ? "جستجو در پست‌های بلاگ"
-        : "Search blog posts by title, tag, category or author.",
+        ? "راهنمای جامع مفاهیم، اصطلاحات و تکنیک‌های امنیت سایبری"
+        : "Comprehensive guide to cybersecurity concepts, terms, and techniques",
   };
 }
 
-// Fix #13: skeleton matches the real layout so there's no layout shift
-// when Suspense resolves and SearchPageClient mounts + auto-focuses
-function SearchPageSkeleton() {
+function GlossarySkeleton() {
   return (
     <div className="space-y-5 animate-pulse">
       <div className="space-y-1.5">
         <div className="h-8 w-48 rounded-lg bg-muted" />
         <div className="h-4 w-72 rounded bg-muted" />
       </div>
-      {/* Input skeleton — same height as real SearchInput (h-12) */}
       <div className="h-12 w-full rounded-2xl bg-muted" />
-      {/* Filter bar skeleton */}
       <div className="flex gap-2">
         {[80, 72, 56, 64].map((w, i) => (
           <div key={i} className="h-8 rounded-full bg-muted" style={{ width: w }} />
@@ -45,7 +45,7 @@ function SearchPageSkeleton() {
   );
 }
 
-export default async function SearchPage({
+export default async function GlossaryPage({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
@@ -53,19 +53,18 @@ export default async function SearchPage({
   const { locale: rawLocale } = await params;
   const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
 
-  const posts = getAllPosts(locale);
-  const tags = getTagSummaries(locale);
+  // Load ALL terms (no filtering)
+  const terms = getAllGlossaryTerms(locale);
+  const categories = getAllGlossaryCategories(locale);
 
-  // Fix #15: pass font class so Popover/Dropdown portals render with correct font
   const fontClassName = locale === "fa" ? FA_FONT_CLASS : undefined;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      {/* Fix #13: Suspense boundary with matching skeleton prevents focus flash */}
-      <Suspense fallback={<SearchPageSkeleton />}>
-        <SearchPageClient
-          posts={posts}
-          tags={tags}
+      <Suspense fallback={<GlossarySkeleton />}>
+        <GlossaryIndexClient
+          terms={terms}
+          categories={categories}
           locale={locale}
           fontClassName={fontClassName}
         />

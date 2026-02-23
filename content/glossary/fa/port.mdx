@@ -1,0 +1,51 @@
+---
+slug: "port"
+term: "پورت شبکه"
+abbreviation: "Port"
+shortDefinition: "نقطه انتهایی مجازی در شبکه که سرویس‌های مختلف از طریق آن ارتباط برقرار می‌کنند."
+category: "پیش‌نیازهای شبکه"
+tags: ["شبکه", "ارتباطات", "سرویس", "firewall"]
+relatedTerms: ["tcp-udp", "ip-address", "firewall", "nmap"]
+language: "fa"
+hasTranslation: true
+translationSlug: "port"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/network-layer/what-is-a-port/"
+  - "https://www.fortinet.com/resources/cyberglossary/what-is-a-port"
+---
+
+## پورت چیه؟
+
+خلاصه در یه جمله: پورت مثل شماره اتاق تو یه ساختمانه — <span dir="ltr">IP</span> آدرس ساختمانه، پورت شماره اتاقه که سرویس خاصی اونجاست!
+
+بذار با مثال بگم. فرض کن یه ساختمان بزرگ داری (این <span dir="ltr">IP</span> <span dir="ltr">Address</span> تو). تو این ساختمان اتاق‌های مختلفی داری (پورت‌ها). هر اتاق یه کار خاصی می‌کنه:
+
+- اتاق <span dir="ltr">۸۰</span>: وب‌سایت (<span dir="ltr">HTTP</span>)
+- اتاق <span dir="ltr">۴۴۳</span>: وب‌سایت امن (<span dir="ltr">HTTPS</span>)
+- اتاق <span dir="ltr">۲۲</span>: <span dir="ltr">SSH</span> (دسترسی از راه دور)
+- اتاق <span dir="ltr">۲۱</span>: <span dir="ltr">FTP</span> (انتقال فایل)
+- اتاق <span dir="ltr">۳۳۰۶</span>: <span dir="ltr">MySQL</span> (دیتابیس)
+
+وقتی کسی می‌خواد به سرویسی وصل بشه، هم <span dir="ltr">IP</span> رو می‌خواد هم پورت رو. مثلاً `__PROTECTED_14__.__PROTECTED_15__.__PROTECTED_16__.__PROTECTED_17__:__PROTECTED_18__` یعنی برو به این آدرس، اتاق <span dir="ltr">۸۰</span>.
+
+### پورت‌های معروف:
+
+| پورت | سرویس |
+|------|-------|
+| <span dir="ltr">20</span>, <span dir="ltr">21</span> | <span dir="ltr">FTP</span> |
+| <span dir="ltr">22</span> | <span dir="ltr">SSH</span> |
+| <span dir="ltr">23</span> | <span dir="ltr">Telnet</span> |
+| <span dir="ltr">25</span> | <span dir="ltr">SMTP</span> (ایمیل) |
+| <span dir="ltr">53</span> | <span dir="ltr">DNS</span> |
+| <span dir="ltr">80</span> | <span dir="ltr">HTTP</span> |
+| <span dir="ltr">443</span> | <span dir="ltr">HTTPS</span> |
+| <span dir="ltr">3306</span> | <span dir="ltr">MySQL</span> |
+| <span dir="ltr">3389</span> | <span dir="ltr">RDP</span> |
+
+### چرا برای امنیت مهمه؟
+
+چون هکرها اول کاری که می‌کنن <span dir="ltr">Port</span> <span dir="ltr">Scanning</span> هست — تمام پورت‌ها رو چک می‌کنن ببینن کدوم‌ها بازه. هر پورت باز یعنی یه سرویس داره گوش می‌ده و ممکنه آسیب‌پذیر باشه. برای همین فایروال‌ها پورت‌های غیرضروری رو می‌بندن .
+
+---

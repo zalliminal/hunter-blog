@@ -1,0 +1,47 @@
+---
+slug: "security-misconfiguration"
+term: "Security Misconfiguration"
+abbreviation: "N/A"
+shortDefinition: "Vulnerabilities that occur due to incorrect or default settings of servers, applications, and services."
+category: "OWASP Top 10"
+tags: ["owasp", "configuration", "server", "settings"]
+relatedTerms: ["server", "hardening", "default-password", "exposed-admin"]
+language: "en"
+hasTranslation: true
+translationSlug: "security-misconfiguration"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A05_2021-Security_Misconfiguration/"
+  - "https://cwe.mitre.org/data/definitions/16.html"
+---
+
+## What is Security Misconfiguration?
+
+In one sentence: When you leave server or application with default or wrong settings and hacker easily gets in!
+
+Imagine you bought a house. You don't lock the door, windows are open, you put spare key under the doormat! Hacker comes and easily gets in. Security misconfiguration is this — the system is secure, but you didn't configure it properly!
+
+### Examples of Security Misconfiguration:
+
+**1. Default Password:**
+You install server, don't change admin/admin password. Hacker gets in with the same!
+
+**2. Public Admin Page:**
+You put admin panel on `/admin` with no protection. Hacker easily finds it!
+
+**3. Too Many Error Messages:**
+When error occurs, shows all details (server version, file paths, SQL query). Hacker uses this info!
+
+**4. Unnecessary Services:**
+Extra ports are open, unnecessary services are running. Each one is an entry point!
+
+**5. No Security Headers:**
+You don't put headers like `X-Frame-Options`, `Content-Security-Policy`. Your site is vulnerable to clickjacking and XSS!
+
+**6. Public Cloud Storage:**
+You leave S3 bucket public. Anyone can download your files!
+
+### Why is it important for security?
+
+Because it's number 5 in OWASP Top 10 2021! Many companies spend lots of money on security, but because they don't configure properly, hacker easily gets in. These vulnerabilities are usually the easiest targets.

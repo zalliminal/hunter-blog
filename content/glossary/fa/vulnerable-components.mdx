@@ -1,0 +1,48 @@
+---
+slug: "vulnerable-components"
+term: "کامپوننت‌های آسیب‌پذیر و قدیمی"
+abbreviation: "N/A"
+shortDefinition: "استفاده از کتابخانه‌ها، فریم‌ورک‌ها و نرم‌افزارهایی که دارای آسیب‌پذیری‌های شناخته شده هستند یا به‌روزرسانی نشده‌اند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "کتابخانه", "آپدیت", "dependency"]
+relatedTerms: ["npm", "composer", "dependency-management", "cve"]
+language: "fa"
+hasTranslation: true
+translationSlug: "vulnerable-components"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/"
+  - "https://cwe.mitre.org/data/definitions/1104.html"
+---
+
+## کامپوننت‌های آسیب‌پذیر چیه؟
+
+خلاصه در یه جمله: وقتی از کتابخانه‌ها و فریم‌ورک‌های قدیمی یا باگ‌دار استفاده می‌کنی، هکر از باگ‌های اون‌ها استفاده می‌کنه!
+
+فرض کن می‌خوای خونه بسازی. به جای اینکه خودت آجر بسازی، از کارخونه آجر می‌خری. اگه کارخونه آجر معیوب داده باشه، خونه تو هم ضعیف می‌شه! تو برنامه‌نویسی هم همینطوره — از کتابخانه‌های دیگران استفاده می‌کنی. اگه اون‌ها باگ داشته باشن، برنامه تو هم باگ داره .
+
+### چرا این اتفاق می‌افته؟
+
+**<span dir="ltr">۱</span>. آپدیت نمی‌کنی:**
+یه کتابخانه استفاده می‌کنی، دو سال آپدیتش نمی‌کنی. تو این دو سال <span dir="ltr">۱۰</span> تا آسیب‌پذیری کشف شده!
+
+**<span dir="ltr">۲</span>. Dependencyهای زیاد:**
+یه کتابخانه نصب می‌کنی، اون <span dir="ltr">۵۰</span> تا کتابخانه دیگه نیاز داره. تو نمی‌دونی اون <span dir="ltr">۵۰</span> تا چی‌ان و آسیب‌پذیرن یا نه!
+
+**<span dir="ltr">۳</span>. کتابخانه‌های نامعتبر:**
+از کتابخانه‌هایی استفاده می‌کنی که معروف نیستن، نگهداری نمی‌شن، یا حتی مخرب‌ان!
+
+### مثال واقعی:
+
+**<span dir="ltr">Log4Shell</span> (<span dir="ltr">2021</span>):**
+یه کتابخانه به اسم <span dir="ltr">Log4j</span> (برای لاگ کردن در جاوا) یه باگ وحشتناک داشت. میلیون‌ها برنامه از این استفاده می‌کردن. هکرها راحت می‌تونستن کد دلخواهشون رو اجرا کنن! فقط چون یه کتابخانه آپدیت نشده بود .
+
+**<span dir="ltr">Equifax</span> (<span dir="ltr">2017</span>):**
+یه شرکت بزرگ اعتبارسنجی، از یه کتابخانه قدیمی <span dir="ltr">Apache</span> <span dir="ltr">Struts</span> استفاده می‌کرد. باگش رو می‌دونستن ولی آپدیت نکردن. <span dir="ltr">۱۴۷</span> میلیون نفر داده‌شون دزدیده شد!
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۶</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! تو دنیای امروز، <span dir="ltr">۸۰</span>-<span dir="ltr">۹۰</span>٪ کد برنامه‌ها از کتابخانه‌های دیگه‌ست. اگه اون‌ها آسیب‌پذیر باشن، برنامه تو هم آسیب‌پذیره. برای همین <span dir="ltr">Dependency</span> <span dir="ltr">Scanning</span> و آپدیت منظم مهمه.
+
+---

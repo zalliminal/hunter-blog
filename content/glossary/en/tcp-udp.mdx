@@ -1,0 +1,40 @@
+---
+slug: "tcp-udp"
+term: "TCP and UDP Protocols"
+abbreviation: "TCP/UDP"
+shortDefinition: "Two main transport layer protocols where TCP is reliable and UDP is faster but doesn't guarantee delivery."
+category: "Network Prerequisites"
+tags: ["network", "protocol", "transport-layer", "osi"]
+relatedTerms: ["osi-model", "ip-address", "port", "http"]
+language: "en"
+hasTranslation: true
+translationSlug: "tcp-udp"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ddos/glossary/tcp-udp/"
+  - "https://www.geeksforgeeks.org/difference-between-tcp-and-udp/"
+---
+
+## What are TCP and UDP?
+
+In one sentence: TCP is like registered mail (arrives and you're sure), UDP is like SMS (fast but might not arrive)!
+
+Imagine you want to send an important package. You have two options:
+
+**TCP (Transmission Control Protocol):** You send the package, receiver confirms, if it doesn't arrive you send again. You're sure it arrives but takes a bit longer. This is used for websites, email, files.
+
+**UDP (User Datagram Protocol):** You throw the package their way, don't ask if it arrived or not. It's fast but might get lost. This is used for video streaming, online games, voice calls (if some data gets lost it doesn't matter).
+
+### Key Differences:
+
+| Feature | TCP | UDP |
+|---------|-----|-----|
+| Reliability | ✅ Yes | ❌ No |
+| Speed | Slower | Faster |
+| Data Order | Preserved | Not preserved |
+| Use Case | Web, email, files | Video, games, audio |
+
+### Why is it important for security?
+
+Because DDoS attacks usually use UDP (because it's faster and easier to send high volume). Also TCP Connection Hijacking exists where attacker takes control of TCP connection. Understanding these helps you understand how network traffic works and where attacks can happen.

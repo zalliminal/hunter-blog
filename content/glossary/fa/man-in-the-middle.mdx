@@ -1,0 +1,43 @@
+---
+slug: "man-in-the-middle"
+term: "حمله مرد میانی"
+abbreviation: "MitM"
+shortDefinition: "حمله‌ای که مهاجم به صورت مخفیانه ارتباط بین دو طرف را شنود یا دستکاری می‌کند."
+category: "انواع حملات"
+tags: ["شنود", "شبکه", "دستکاری", "ارتباط"]
+relatedTerms: ["ssl", "https", "wifi", "arp-spoofing"]
+language: "fa"
+hasTranslation: true
+translationSlug: "man-in-the-middle"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-man-in-the-middle-attack/"
+  - "https://www.fortinet.com/resources/cyberglossary/man-in-the-middle-attack"
+---
+
+## حمله مرد میانی چیه؟
+
+خلاصه در یه جمله: وقتی هکر بیاد وسط ارتباط تو و سرور، همه چی رو ببینه و حتی تغییر بده بدون اینکه تو بفهمی!
+
+فرض کن داری با دوستت نامه نگاری می‌کنی. ولی پستچی همه نامه‌ها رو باز می‌کنه، می‌خونه، حتی تغییر می‌ده، بعد می‌فرسته! تو و دوستت فکر می‌کنید مستقیم حرف می‌زنید، ولی هکر وسطه و همه چی رو می‌بینه. این یعنی <span dir="ltr">MitM</span>.
+
+### چطور کار می‌کنه؟
+
+**<span dir="ltr">۱</span>. <span dir="ltr">WiFi</span> عمومی:**
+می‌ری کافه، وصل می‌شی به وای‌فای رایگان. هکر همون وای‌فای رو کنترل می‌کنه. هر چی می‌فرستی (اگه <span dir="ltr">HTTPS</span> نباشه) هکر می‌بینه!
+
+**<span dir="ltr">۲</span>. <span dir="ltr">ARP</span> <span dir="ltr">Spoofing</span>:**
+هکر خودش رو جای روتر جا می‌زنه. تمام ترافیک شبکه از طریق اون رد می‌شه.
+
+**<span dir="ltr">۳</span>. <span dir="ltr">DNS</span> <span dir="ltr">Spoofing</span>:**
+هکر جواب <span dir="ltr">DNS</span> رو جعل می‌کنه. تو فکر می‌کنی رفتی به `__PROTECTED_11__.__PROTECTED_12__`، ولی رفتی به سایت فیک هکر!
+
+**<span dir="ltr">۴</span>. <span dir="ltr">SSL</span> <span dir="ltr">Stripping</span>:**
+هکر ارتباط <span dir="ltr">HTTPS</span> رو می‌کنه <span dir="ltr">HTTP</span>. تو متوجه نمی‌شی، هکر همه چی رو می‌بینه!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">MitM</span> می‌تونه منجر به دزدی پسورد، اطلاعات بانکی، <span dir="ltr">Session</span>، یا حتی تزریق بدافزار بشه. و تو هیچوقت نمی‌فهمی!
+
+---

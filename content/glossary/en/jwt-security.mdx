@@ -1,0 +1,50 @@
+---
+slug: "jwt-security"
+term: "JWT Security"
+abbreviation: "JWT"
+shortDefinition: "JSON Web Token tokens are used for authentication and must be properly implemented and protected."
+category: "Authentication"
+tags: ["token", "authentication", "api", "signature"]
+relatedTerms: ["authentication", "token", "api", "oauth"]
+language: "en"
+hasTranslation: true
+translationSlug: "jwt-security"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://jwt.io/introduction"
+  - "https://auth0.com/blog/jwt-security-best-practices/"
+---
+
+## What is JWT Security?
+
+In one sentence: JWT is a token for authentication, if not implemented properly hacker can forge it and get into others' accounts!
+
+Imagine you have a membership card that's signed. If you can forge the signature, you can make a fake card and pretend to be a member! JWT is this — it's a token that has a signature. If you don't check the signature properly, hacker can make a fake token.
+
+### JWT Structure:
+
+**Header:** Algorithm and token type
+**Payload:** Data (like user_id, role)
+**Signature:** Signature for verification
+
+### Common JWT Problems:
+
+**1. None Algorithm:**
+Hacker makes algorithm `none`, removes signature. If server doesn't check, accepts the token!
+
+**2. Weak Key:**
+Signature key is short or guessable. Hacker Brute Forces.
+
+**3. No Signature Verification:**
+Server doesn't check signature at all!
+
+**4. Sensitive Data in Payload:**
+Payload isn't encrypted, only Base64. Anyone can read it!
+
+**5. Long Expiry:**
+Token has no expiry date or it's long. If hacker steals it, can use for months!
+
+### Why is it important for security?
+
+Because JWT is used for authentication. If hacker forges JWT, can get into anyone's account, even admin!

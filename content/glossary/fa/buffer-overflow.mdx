@@ -1,0 +1,39 @@
+---
+slug: "buffer-overflow"
+term: "سرریز بافر"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری که زمانی رخ می‌دهد داده‌ای بیشتر از ظرفیت بافر نوشته شود و حافظه مجاور را بازنویسی کند."
+category: "انواع حملات"
+tags: ["حافظه", "تزریق", "low-level", "c"]
+relatedTerms: ["memory", "stack", "heap", "code-execution"]
+language: "fa"
+hasTranslation: true
+translationSlug: "buffer-overflow"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-a-buffer-overflow-attack/"
+  - "https://owasp.org/www-community/vulnerabilities/Buffer_Overflow"
+---
+
+## سرریز بافر چیه؟
+
+خلاصه در یه جمله: وقتی داده‌ای بیشتر از جایی که براش در نظر گرفته شده بنویسی و بره روی داده‌های دیگه!
+
+فرض کن یه فرم داری که فقط <span dir="ltr">۱۰</span> تا کاراکتر جا می‌گیره. تو <span dir="ltr">۲۰</span> تا کاراکتر می‌نویسی. <span dir="ltr">۱۰</span> تای اضافی می‌ریزه روی داده‌های کناری! اگه اون داده‌های کناری مهم باشن (مثل آدرس برگشت تابع)، هکر می‌تونه کنترل برنامه رو بگیره!
+
+### چطور کار می‌کنه؟
+
+برنامه‌ای به زبان <span dir="ltr">C</span> داری:
+```__PROTECTED_4__
+__PROTECTED_5__ __PROTECTED_6__[__PROTECTED_7__];
+__PROTECTED_8__(__PROTECTED_9__); // کاربر __PROTECTED_10__ کاراکتر می‌ده!
+```
+
+<span dir="ltr">۴۰</span> کاراکتر اضافی می‌ریزه روی <span dir="ltr">Stack</span>. اگه هکر دقیق محاسبه کنه، می‌تونه <span dir="ltr">Return</span> <span dir="ltr">Address</span> رو عوض کنه و کد خودش رو اجرا کنه!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">Buffer</span> <span dir="ltr">Overflow</span> می‌تونه منجر به <span dir="ltr">Remote</span> <span dir="ltr">Code</span> <span dir="ltr">Execution</span> بشه. هکر کامل کنترل برنامه رو می‌گیره. خیلی از باگ‌های قدیمی این بودن.
+
+---

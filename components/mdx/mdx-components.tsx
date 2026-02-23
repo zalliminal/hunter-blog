@@ -1,7 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import { CodeBlock } from "./code-block";
 import { slugifyHeading } from "@/lib/toc";
-import { Link } from "lucide-react"; // optional, for heading anchor icon
+import { Link } from "lucide-react"; 
+import { GlossaryTermMDX } from "@/components/glossary/glossary-term-mdx";
+
 
 // --- Helper: extract line highlights from metastring ---
 function extractHighlightLines(meta?: string): number[] {
@@ -75,6 +77,7 @@ export const mdxComponents: MDXComponents = {
   // Typography
   h2: Heading("h2"),
   h3: Heading("h3"),
+  GlossaryTerm: GlossaryTermMDX,
 
   p: (props) => (
     <p

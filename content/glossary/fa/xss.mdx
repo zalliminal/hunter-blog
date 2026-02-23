@@ -1,0 +1,51 @@
+---
+slug: "xss"
+term: "اسکریپت‌نویسی بین‌سایتی"
+abbreviation: "XSS"
+shortDefinition: "آسیب‌پذیری امنیتی که به مهاجمان اجازه می‌دهد اسکریپت‌های مخرب را در صفحات وبی که توسط کاربران دیگر مشاهده می‌شود، تزریق کنند."
+category: "OWASP Top 10"
+tags: ["امنیت-وب", "تزریق", "سمت-کلاینت", "جاوااسکریپت"]
+relatedTerms: ["sql-injection", "csrf", "content-security-policy"]
+language: "fa"
+hasTranslation: true
+translationSlug: "xss"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/attacks/xss/"
+  - "https://portswigger.net/web-security/cross-site-scripting"
+---
+
+## اسکریپت‌نویسی بین‌سایتی چیه؟
+
+خلاصه در یه جمله: وقتی هکر بتونه کد <span dir="ltr">JavaScript</span> مخرب تو سایت تو بذاره و وقتی کاربرای دیگه سایت رو باز می‌کنن، اون کد اجرا بشه!
+
+فرض کن یه تابلو اعلانات داری تو محله. هر کسی می‌تونه یادداشت بذاره. هکر میاد یه یادداشت می‌ذاره که وقتی کسی می‌خونهش، ناخودآگاه کیفش رو می‌ده به هکر! <span dir="ltr">XSS</span> همینه — هکر کد <span dir="ltr">JavaScript</span> می‌ذاره تو سایت تو، کاربرای دیگه که میان سایت رو می‌بینن، کد اجرا می‌شه و داده‌هاشون دزدیده می‌شه.
+
+### انواع <span dir="ltr">XSS</span>:
+
+**<span dir="ltr">Reflected</span> <span dir="ltr">XSS</span>:** کد مخرب تو <span dir="ltr">URL</span> هست. کاربر روی لینک کلیک می‌کنه، کد اجرا می‌شه. معمولاً با فیشینگ همراهه.
+
+**<span dir="ltr">Stored</span> <span dir="ltr">XSS</span>:** کد مخرب تو دیتابیس ذخیره می‌شه. هر کسی صفحه رو باز کنه، کد اجرا می‌شه. خطرناک‌تره!
+
+**<span dir="ltr">DOM</span> <span dir="ltr">XSS</span>:** کد مخرب تو مرورگر کاربر اجرا می‌شه، بدون اینکه به سرور برسه.
+
+### مثال <span dir="ltr">XSS</span>:
+
+فرض کن یه سایت داری که کامنت می‌گیره و نمایش می‌ده:
+```__PROTECTED_12__
+<__PROTECTED_13__>نظر کاربر: [کامنت کاربر]</__PROTECTED_14__>
+```
+
+هکر کامنت می‌ذاره:
+```__PROTECTED_15__
+<__PROTECTED_16__>__PROTECTED_17__.__PROTECTED_18__='__PROTECTED_19__://__PROTECTED_20__.__PROTECTED_21__/__PROTECTED_22__?__PROTECTED_23__='+__PROTECTED_24__.__PROTECTED_25__</__PROTECTED_26__>
+```
+
+وقتی کاربر دیگه صفحه رو باز می‌کنه، این کد اجرا می‌شه و کوکی کاربر فرستاده می‌شه به هکر! هکر با کوکی می‌تونه وارد اکانت کاربر بشه.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">XSS</span> می‌تونه منجر به دزدی <span dir="ltr">Session</span>، دزدی اطلاعات شخصی، <span dir="ltr">Redirect</span> به سایت فیشینگ، یا حتی انجام اقدامات به نام کاربر بشه.
+
+---

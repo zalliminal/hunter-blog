@@ -1,0 +1,54 @@
+---
+slug: "remote-code-execution"
+term: "اجرای کد از راه دور"
+abbreviation: "RCE"
+shortDefinition: "آسیب‌پذیری که به مهاجمان اجازه می‌دهد کد دلخواه خود را روی سرور هدف اجرا کنند."
+category: "انواع حملات"
+tags: ["اجرای-کد", "سرور", "کنترل", "exploit"]
+relatedTerms: ["command-injection", "buffer-overflow", "exploit", "shell"]
+language: "fa"
+hasTranslation: true
+translationSlug: "remote-code-execution"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.fortinet.com/resources/cyberglossary/remote-code-execution"
+  - "https://cwe.mitre.org/data/definitions/94.html"
+---
+
+## اجرای کد از راه دور چیه؟
+
+خلاصه در یه جمله: وقتی هکر بتونه از راه دور کد دلخواهش رو روی سرور تو اجرا کنه و کامل کنترلش رو بگیره!
+
+فرض کن یه سرور داری. هکر از طریق یه باگ، می‌تونه دستور بده به سرور تو. مثلاً بگه "تمام فایل‌ها رو بفرست برام" یا "یه کاربر ادمین جدید بساز". هکر الان کنترل سرور تو رو داره، از راه دور! این یعنی <span dir="ltr">RCE</span>.
+
+### چطور اتفاق می‌افته؟
+
+- <span dir="ltr">Command</span> <span dir="ltr">Injection</span>
+- <span dir="ltr">Buffer</span> <span dir="ltr">Overflow</span>
+- <span dir="ltr">Deserialization</span> <span dir="ltr">Vulnerability</span>
+- <span dir="ltr">File</span> <span dir="ltr">Upload</span> <span dir="ltr">Vulnerability</span>
+- <span dir="ltr">Remote</span> <span dir="ltr">File</span> <span dir="ltr">Inclusion</span>
+
+### مثال <span dir="ltr">RCE</span>:
+
+فرض کن یه فرم داری که <span dir="ltr">IP</span> رو <span dir="ltr">Ping</span> می‌کنه:
+```
+__PROTECTED_16__ [__PROTECTED_17__]
+```
+
+هکر می‌زنه: `__PROTECTED_16__.__PROTECTED_17__.__PROTECTED_18__.__PROTECTED_19__; __PROTECTED_20__ /__PROTECTED_21__/__PROTECTED_22__`
+
+سرور اجرا می‌کنه:
+```
+__PROTECTED_25__ __PROTECTED_26__.__PROTECTED_27__.__PROTECTED_28__.__PROTECTED_29__
+__PROTECTED_30__ /__PROTECTED_31__/__PROTECTED_32__
+```
+
+و فایل حساس رو نشون می‌ده!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">RCE</span> بدترین نوع آسیب‌پذیریه! هکر کامل کنترل سرور رو می‌گیره. می‌تونه همه چی رو بدزده، همه چی رو پاک کنه، سرور رو کنه بخشی از <span dir="ltr">Botnet</span>.
+
+---

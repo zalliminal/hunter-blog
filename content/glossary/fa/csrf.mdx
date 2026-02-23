@@ -1,0 +1,47 @@
+---
+slug: "csrf"
+term: "جعل درخواست بین‌سایتی"
+abbreviation: "CSRF"
+shortDefinition: "حمله‌ای که مهاجم کاربر فریب‌خورده را وادار می‌کند درخواست‌های ناخواسته‌ای را به یک وب‌سایت ارسال کند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "جعل", "درخواست", "session"]
+relatedTerms: ["xss", "session", "token", "same-site"]
+language: "fa"
+hasTranslation: true
+translationSlug: "csrf"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/attacks/csrf"
+  - "https://portswigger.net/web-security/csrf"
+---
+
+## <span dir="ltr">CSRF</span> اصلا چیه؟
+
+خلاصه در یه جمله: وقتی هکر بتونه کاری کنه که تو ناخودآگاه یه کاری رو تو سایت انجام بدی (مثل انتقال پول، تغییر پسورد) در حالی که خبر نداری!
+
+فرض کن تو بانک لاگین کردی و رفتی یه سایت دیگه. اون سایت یه کد مخرب داره که به صورت خودکار یه درخواست انتقال پول به حساب هکر می‌فرسته به بانک. بانک فکر می‌کنه تو درخواست دادی (چون لاگین هستی) و پول رو انتقال می‌ده! این یعنی <span dir="ltr">CSRF</span>.
+
+### چطور کار می‌کنه؟
+
+<span dir="ltr">۱</span>. تو وارد سایت بانک می‌شی (لاگین می‌کنی)
+<span dir="ltr">۲</span>. <span dir="ltr">Session</span> <span dir="ltr">Cookie</span> تو مرورگرت ذخیره می‌شه
+<span dir="ltr">۳</span>. می‌ری یه سایت دیگه (که هکر کنترلش می‌کنه)
+<span dir="ltr">۴</span>. اون سایت یه درخواست مخرب به بانک می‌فرسته
+<span dir="ltr">۵</span>. مرورگرت <span dir="ltr">Cookie</span> رو خودکار ضمیمه می‌کنه
+<span dir="ltr">۶</span>. بانک فکر می‌کنه تو درخواست دادی و اجرا می‌کنه!
+
+### مثال <span dir="ltr">CSRF</span>:
+
+هکر یه صفحه می‌سازه با این کد:
+```__PROTECTED_12__
+<__PROTECTED_13__ __PROTECTED_14__="__PROTECTED_15__://__PROTECTED_16__.__PROTECTED_17__/__PROTECTED_18__?__PROTECTED_19__=__PROTECTED_20__&__PROTECTED_21__=__PROTECTED_22__" __PROTECTED_23__="__PROTECTED_24__:__PROTECTED_25__">
+```
+
+وقتی تو (که لاگین هستی به بانک) این صفحه رو باز می‌کنی، مرورگرت این درخواست رو می‌فرسته به بانک و پول انتقال پیدا می‌کنه!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">CSRF</span> می‌تونه منجر به انجام هر کاری به نام کاربر بشه — انتقال پول، تغییر پسورد، تغییر ایمیل، حذف اکانت. کاربر هیچوقت نمی‌فهمه چی شده!
+
+---

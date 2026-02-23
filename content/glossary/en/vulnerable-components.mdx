@@ -1,0 +1,46 @@
+---
+slug: "vulnerable-components"
+term: "Vulnerable and Outdated Components"
+abbreviation: "N/A"
+shortDefinition: "Using libraries, frameworks, and software that have known vulnerabilities or are not updated."
+category: "OWASP Top 10"
+tags: ["owasp", "library", "update", "dependency"]
+relatedTerms: ["npm", "composer", "dependency-management", "cve"]
+language: "en"
+hasTranslation: true
+translationSlug: "vulnerable-components"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/"
+  - "https://cwe.mitre.org/data/definitions/1104.html"
+---
+
+## What are Vulnerable Components?
+
+In one sentence: When you use old or buggy libraries and frameworks, hacker uses their bugs!
+
+Imagine you want to build a house. Instead of making bricks yourself, you buy bricks from factory. If factory gave you defective bricks, your house becomes weak! In programming it's the same — you use others' libraries. If they have bugs, your program has bugs too.
+
+### Why does this happen?
+
+**1. You don't update:**
+You use a library, don't update it for two years. In these two years 10 vulnerabilities were discovered!
+
+**2. Many Dependencies:**
+You install one library, it needs 50 other libraries. You don't know what those 50 are and if they're vulnerable!
+
+**3. Unreliable Libraries:**
+You use libraries that aren't famous, aren't maintained, or even malicious!
+
+### Real Example:
+
+**Log4Shell (2021):**
+A library called Log4j (for logging in Java) had a terrible bug. Millions of programs used this. Hackers could easily execute their own code! Just because one library wasn't updated.
+
+**Equifax (2017):**
+A big credit scoring company used an old Apache Struts library. They knew about the bug but didn't update. 147 million people's data was stolen!
+
+### Why is it important for security?
+
+Because it's number 6 in OWASP Top 10 2021! In today's world, 80-90% of program code is from others' libraries. If they're vulnerable, your program is vulnerable too. That's why Dependency Scanning and regular updates are important.

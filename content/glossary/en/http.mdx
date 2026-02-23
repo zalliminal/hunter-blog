@@ -1,0 +1,44 @@
+---
+slug: "http"
+term: "HyperText Transfer Protocol"
+abbreviation: "HTTP"
+shortDefinition: "A protocol used for transferring data between browser and server, forming the foundation of web communications."
+category: "Network Prerequisites"
+tags: ["web", "protocol", "request-response", "client-server"]
+relatedTerms: ["https", "tcp-ip", "request-response", "headers"]
+language: "en"
+hasTranslation: true
+translationSlug: "http"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.freecodecamp.org/news/web-security-an-introduction-to-http-5fa07140f9b3/"
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"
+---
+
+## What is HTTP?
+
+In one sentence: HTTP is the language that browser and server speak with each other — browser makes a request, server responds.
+
+Imagine you went to a restaurant. You see the menu (website), place an order (HTTP Request), waiter takes it to the kitchen (server), food is prepared and brought to you (HTTP Response). HTTP is exactly this process for the web!
+
+### HTTP Request Structure:
+
+When you open an address, your browser sends a request that includes:
+
+**Method:** Request type (GET for getting data, POST for sending data)
+**URL:** The address you want
+**Headers:** Additional info like browser type, cookies, language
+**Body:** Data you want to send (usually in POST)
+
+### HTTP Response Structure:
+
+Server responds with:
+
+**Status Code:** Request status (200 means success, 404 means not found, 500 means server error)
+**Headers:** Additional info like content type, new cookies
+**Body:** Main content (HTML, JSON, images, etc.)
+
+### Why is it important for security?
+
+Because regular HTTP is not encrypted! Anyone in the path can see what you're sending. That's why HTTPS is important (same HTTP + SSL/TLS). Also many web attacks like XSS, SQL Injection, CSRF all happen through HTTP. When you understand HTTP, you're halfway through web security.

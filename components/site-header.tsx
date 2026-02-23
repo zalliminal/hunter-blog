@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, Search, Github, X, Tag, LayoutGrid, Home, BookOpen } from "lucide-react";
+import { Menu, Search, X, Tag, LayoutGrid, Home, BookOpen, Book } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Locale, NavDictionary } from "@/lib/i18n";
 import { LOCALES } from "@/lib/i18n";
@@ -82,7 +82,6 @@ export function SiteHeader({ locale, dict }: SiteHeaderProps) {
   );
 }
 
-// ─── PrimaryNav — only change: Tags + Search button → NavigationMenu dropdown ─
 function PrimaryNav({
   locale,
   dict,
@@ -94,7 +93,6 @@ function PrimaryNav({
 }) {
   const pathname = usePathname();
 
-  // unchanged active-link helper
   const linkClass = (href: string) => {
     const isHomeActive = href === `/${locale}/` && pathname === href;
     const isActive =
@@ -127,7 +125,8 @@ function PrimaryNav({
                   "text-sm bg-transparent hover:bg-transparent focus:bg-transparent",
                   "data-[state=open]:bg-transparent data-[active]:bg-transparent",
                   (pathname?.startsWith(`/${locale}/tags`) ||
-                    pathname?.startsWith(`/${locale}/blog`) ||
+                    pathname?.startsWith(`/${locale}/glossary`) ||
+                    pathname?.startsWith(`/${locale}/categories`) ||
                     pathname?.startsWith(`/${locale}/search`))
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -137,12 +136,10 @@ function PrimaryNav({
               </NavigationMenuTrigger>
 
               <NavigationMenuContent>
-                {/* wrapper enforces dir for RTL languages */}
-                <div dir={getDirection(locale)} className="w-54 ">
-                  {/* top: compact list (tags + categories + search) */}
+                <div dir={getDirection(locale)} className="w-54">
                   <ul className="grid gap-4">
+                    
                     <li>
-                      {/* move to search page */}
                       <NavigationMenuLink asChild>
                         <Link
                           href={`/${locale}/search`}
@@ -172,6 +169,22 @@ function PrimaryNav({
                       </NavigationMenuLink>
                     </li>
 
+                    {/* Glossary - NEW */}
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={`/${locale}/glossary`}
+                          className={cn(
+                            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                            "text-muted-foreground hover:bg-primary/10 hover:text-primary",
+                          )}
+                        >
+                          <Book className="h-4 w-4 shrink-0" />
+                          <span>{dict.navGlossary}</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
@@ -187,7 +200,6 @@ function PrimaryNav({
                       </NavigationMenuLink>
                     </li>
                   </ul>
-
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -196,7 +208,6 @@ function PrimaryNav({
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Search icon */}
         <button
           type="button"
           onClick={onOpenSearch}
@@ -205,18 +216,13 @@ function PrimaryNav({
         >
           <Search className="h-4 w-4" />
         </button>
-
-        {/* ThemeToggle */}
         <ThemeToggle />
-
-        {/* LanguageSwitcher */}
         <LanguageSwitcher locale={locale} />
       </div>
     </nav>
   );
 }
 
-// ─── LanguageSwitcher — unchanged ─────────────────────────────────────────────
 function LanguageSwitcher({ locale, compact }: { locale: Locale; compact?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -251,7 +257,6 @@ function LanguageSwitcher({ locale, compact }: { locale: Locale; compact?: boole
   );
 }
 
-// ─── MobileMenu — original + two new items (Categories, Advanced Search) ─────
 function MobileMenu({
   locale,
   dict,
@@ -271,7 +276,7 @@ function MobileMenu({
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); }, [pathname, setOpen]);
 
   function handleOverlayClick(e: React.MouseEvent) {
     if (e.target === containerRef.current) setOpen(false);
@@ -291,7 +296,6 @@ function MobileMenu({
           exit={{ opacity: 0 }}
           onClick={handleOverlayClick}
         >
-          {/* Glass Panel */}
           <motion.div
             initial={{ y: -20, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -313,7 +317,6 @@ function MobileMenu({
             </div>
 
             <nav className="mt-6 flex flex-col gap-3 text-sm">
-              {/* original links — now with icons */}
               <Link href={`/${locale}/`} onClick={() => setOpen(false)} className={itemClass}>
                 <span className="flex items-center gap-2">
                   <Home className="h-4 w-4 shrink-0" />
@@ -326,10 +329,10 @@ function MobileMenu({
                   {dict.navBlog}
                 </span>
               </Link>
-              <Link href={`/${locale}/tags`} onClick={() => setOpen(false)} className={itemClass}>
+              <Link href={`/${locale}/search`} onClick={() => setOpen(false)} className={itemClass}>
                 <span className="flex items-center gap-2">
-                  <Tag className="h-4 w-4 shrink-0" />
-                  {dict.navTags}
+                  <Search className="h-4 w-4 shrink-0" />
+                  {dict.navAdvancedSearch}
                 </span>
               </Link>
               <Link href={`/${locale}/categories`} onClick={() => setOpen(false)} className={itemClass}>
@@ -338,10 +341,16 @@ function MobileMenu({
                   {dict.navCategories}
                 </span>
               </Link>
-              <Link href={`/${locale}/search`} onClick={() => setOpen(false)} className={itemClass}>
+              <Link href={`/${locale}/glossary`} onClick={() => setOpen(false)} className={itemClass}>
                 <span className="flex items-center gap-2">
-                  <Search className="h-4 w-4 shrink-0" />
-                  {dict.navAdvancedSearch}
+                  <Book className="h-4 w-4 shrink-0" />
+                  {dict.navGlossary}
+                </span>
+              </Link>
+              <Link href={`/${locale}/tags`} onClick={() => setOpen(false)} className={itemClass}>
+                <span className="flex items-center gap-2">
+                  <Tag className="h-4 w-4 shrink-0" />
+                  {dict.navTags}
                 </span>
               </Link>
             </nav>

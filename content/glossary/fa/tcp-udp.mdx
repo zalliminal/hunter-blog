@@ -1,0 +1,42 @@
+---
+slug: "tcp-udp"
+term: "پروتکل‌های TCP و UDP"
+abbreviation: "TCP/UDP"
+shortDefinition: "دو پروتکل اصلی لایه انتقال که TCP قابل اعتماد و UDP سریع‌تره اما تضمین ارسال نداره."
+category: "پیش‌نیازهای شبکه"
+tags: ["شبکه", "پروتکل", "لایه-انتقال", "osi"]
+relatedTerms: ["osi-model", "ip-address", "port", "http"]
+language: "fa"
+hasTranslation: true
+translationSlug: "tcp-udp"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ddos/glossary/tcp-udp/"
+  - "https://www.geeksforgeeks.org/difference-between-tcp-and-udp/"
+---
+
+## <span dir="ltr">TCP</span> و <span dir="ltr">UDP</span> چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">TCP</span> مثل پست پیشتازه (می‌رسی و مطمئنی)، <span dir="ltr">UDP</span> مثل پیامکه (سریعه ولی شاید نرسه)!
+
+فرض کن می‌خوای یه بسته مهم بفرستی. دو راه داری:
+
+**<span dir="ltr">TCP</span> (<span dir="ltr">Transmission</span> <span dir="ltr">Control</span> <span dir="ltr">Protocol</span>):** بسته رو می‌فرستی، گیره تأیید می‌کنه، اگه نرسه دوباره می‌فرستی. مطمئنی می‌رسه ولی یه کم طول می‌کشه. این برای وب‌سایت‌ها، ایمیل، فایل استفاده می‌شه.
+
+**<span dir="ltr">UDP</span> (<span dir="ltr">User</span> <span dir="ltr">Datagram</span> <span dir="ltr">Protocol</span>):** بسته رو پرت می‌کنی طرف، نمی‌پرسی رسید یا نه. سریعه ولی ممکنه گم بشه. این برای استریم ویدیو، بازی آنلاین، تماس صوتی استفاده می‌شه (اگه یه کم داده گم بشه مهم نیست) .
+
+### تفاوت‌های کلیدی:
+
+| ویژگی | <span dir="ltr">TCP</span> | <span dir="ltr">UDP</span> |
+|--------|-----|-----|
+| قابلیت اطمینان | ✅ داره | ❌ نداره |
+| سرعت | کندتر | سریع‌تر |
+| ترتیب داده‌ها | حفظ می‌شه | حفظ نمی‌شه |
+| کاربرد | وب، ایمیل، فایل | ویدیو، بازی، صوت |
+
+### چرا برای امنیت مهمه؟
+
+چون حملات <span dir="ltr">DDoS</span> معمولاً از <span dir="ltr">UDP</span> استفاده می‌کنن (چون سریع‌تره و راحت‌تر می‌شه حجم بالا فرستاد). همچنین <span dir="ltr">TCP</span> <span dir="ltr">Connection</span> <span dir="ltr">Hijacking</span> وجود داره که مهاجم کنترل ارتباط <span dir="ltr">TCP</span> رو می‌گیره. فهمیدن اینا کمک می‌کنه بفهمی چطور ترافیک شبکه کار می‌کنه و کجا می‌شه حمله کرد.
+
+---

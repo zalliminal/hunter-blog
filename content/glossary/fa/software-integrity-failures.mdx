@@ -1,0 +1,51 @@
+---
+slug: "software-integrity-failures"
+term: "شکست‌های یکپارچگی نرم‌افزار و داده"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری‌هایی که به مهاجمان اجازه می‌دهد کد یا داده‌ها را بدون تأیید اعتبار تغییر دهند یا دستکاری کنند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "یکپارچگی", "امضا", "update"]
+relatedTerms: ["code-signing", "ci-cd", "supply-chain", "hash"]
+language: "fa"
+hasTranslation: true
+translationSlug: "software-integrity-failures"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/"
+  - "https://cwe.mitre.org/data/definitions/345.html"
+---
+
+## شکست‌های یکپارچگی نرم‌افزار چیه؟
+
+خلاصه در یه جمله: وقتی نتونی مطمئن بشی کد یا داده‌ها دستکاری نشدن، هکر می‌تونه کد مخرب تزریق کنه!
+
+فرض کن یه بسته از پست می‌گیری. از کجا مطمئن می‌شی کسی بازش نکرده و چیزی توش نذاشته؟ اگه پلمپ داشته باشه و پلمپ سالم باشه، مطمئنی. تو نرم‌افزار هم همینطوره — باید بتونی چک کنی کد یا داده دستکاری نشده .
+
+### انواع شکست‌های یکپارچگی:
+
+**<span dir="ltr">۱</span>. آپدیت‌های بدون امضا:**
+برنامه‌ت آپدیت رو از سرور می‌گیره بدون اینکه چک کنه واقعاً از طرف تو اومده. هکر سرور رو هک می‌کنه، آپدیت مخرب می‌فرسته، همه کاربرای تو آلوده می‌شن!
+
+**<span dir="ltr">۲</span>. <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">Pipeline</span> ناامن:**
+سیستمی که کد رو <span dir="ltr">Deploy</span> می‌کنه امن نیست. هکر واردش می‌شه، کد مخرب تزریق می‌کنه، کد مخرب <span dir="ltr">Deploy</span> می‌شه روی تولید!
+
+**<span dir="ltr">۳</span>. Dependencyهای تأیید نشده:**
+کتابخانه‌ها رو بدون چک کردن <span dir="ltr">Hash</span> یا امضا نصب می‌کنی. هکر کتابخانه رو آلوده کرده، تو نصب می‌کنی!
+
+**<span dir="ltr">۴</span>. <span dir="ltr">Deserialization</span> ناامن:**
+داده‌های <span dir="ltr">Serialized</span> رو بدون تأیید اعتبار <span dir="ltr">Deserialize</span> می‌کنی. هکر داده مخرب می‌فرسته، کد اجرا می‌شه!
+
+**<span dir="ltr">۵</span>. <span dir="ltr">Trust</span> <span dir="ltr">Boundary</span> اشتباه:**
+به داده‌های خارجی (مثل <span dir="ltr">CDN</span>، APIهای سوم) اعتماد می‌کنی بدون تأیید.
+
+### مثال واقعی:
+
+**<span dir="ltr">SolarWinds</span> (<span dir="ltr">2020</span>):**
+هکرها وارد سیستم <span dir="ltr">Build</span> <span dir="ltr">SolarWinds</span> شدن، کد مخرب به آپدیت‌ها اضافه کردن. هزاران شرکت آپدیت رو نصب کردن و آلوده شدن! چون آپدیت‌ها امضا داشتن و شرکت‌ها فکر می‌کردن امنه .
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۸</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! اگه یکپارچگی کد تأیید نشه، هکر می‌تونه کد مخرب رو به میلیون‌ها کاربر برسونیه. این نوع حملات خیلی خطرناکن چون از طرف منبع معتبر می‌ان و کسی شک نمی‌کنه.
+
+---

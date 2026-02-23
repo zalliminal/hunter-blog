@@ -1,0 +1,52 @@
+---
+slug: "remote-code-execution"
+term: "Remote Code Execution"
+abbreviation: "RCE"
+shortDefinition: "A vulnerability that allows attackers to execute their own code on the target server remotely."
+category: "Attack Types"
+tags: ["code-execution", "server", "control", "exploit"]
+relatedTerms: ["command-injection", "buffer-overflow", "exploit", "shell"]
+language: "en"
+hasTranslation: true
+translationSlug: "remote-code-execution"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.fortinet.com/resources/cyberglossary/remote-code-execution"
+  - "https://cwe.mitre.org/data/definitions/94.html"
+---
+
+## What is Remote Code Execution?
+
+In one sentence: When hacker can execute their own code on your server remotely and take full control!
+
+Imagine you have a server. Hacker through a bug, can give commands to your server. For example, say "send me all files" or "create a new admin user". Hacker now has control of your server, remotely! This is RCE.
+
+### How does it happen?
+
+- Command Injection
+- Buffer Overflow
+- Deserialization Vulnerability
+- File Upload Vulnerability
+- Remote File Inclusion
+
+### RCE Example:
+
+Imagine you have a form that Pings IP:
+```
+ping [user_input]
+```
+
+Hacker puts: `8.8.8.8; cat /etc/passwd`
+
+Server executes:
+```
+ping 8.8.8.8
+cat /etc/passwd
+```
+
+And shows sensitive file!
+
+### Why is it important for security?
+
+Because RCE is the worst type of vulnerability! Hacker takes full control of server. Can steal everything, delete everything, make server part of Botnet.

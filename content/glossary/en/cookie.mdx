@@ -1,0 +1,39 @@
+---
+slug: "cookie"
+term: "Cookie"
+abbreviation: "N/A"
+shortDefinition: "Small pieces of data that websites store on user's browser to maintain information between requests."
+category: "Web Security"
+tags: ["web", "session", "browser", "storage"]
+relatedTerms: ["session", "authentication", "xss", "csrf"]
+language: "en"
+hasTranslation: true
+translationSlug: "cookie"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies"
+  - "https://www.cloudflare.com/learning/privacy/what-are-cookies/"
+---
+
+## What is Cookie?
+
+In one sentence: Cookie is a small piece of code that site stores on your browser to recognize you!
+
+Imagine you went to a café. First time you order, waiter gives you a card. Next times you show the card, waiter understands who you are and brings your order. Cookie is this — site gives your browser a card, next times your browser shows the card, site understands who you are.
+
+### Types of Cookies:
+
+**Session Cookie:** Only stays while browser is open. Close it, gets deleted.
+
+**Persistent Cookie:** Has expiry date. Stays until that date.
+
+**Secure Cookie:** Only sent through HTTPS.
+
+**HttpOnly Cookie:** JavaScript can't read it (protection against XSS).
+
+**SameSite Cookie:** Determines when cookie gets sent (protection against CSRF).
+
+### Why is it important for security?
+
+Because cookies hold Session ID, authentication tokens, and sensitive data. If hacker steals cookie (through XSS, MitM), can get into your account!

@@ -1,0 +1,44 @@
+---
+slug: "cors"
+term: "Cross-Origin Resource Sharing"
+abbreviation: "CORS"
+shortDefinition: "A security mechanism that determines which domains can use resources from a website."
+category: "Web Security"
+tags: ["web", "domain", "policy", "browser"]
+relatedTerms: ["same-origin-policy", "xss", "csrf", "headers"]
+language: "en"
+hasTranslation: true
+translationSlug: "cors"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"
+  - "https://portswigger.net/web-security/cors"
+---
+
+## What is CORS?
+
+In one sentence: CORS determines which sites can use your site's API or resources!
+
+Imagine you have a library. You can make a rule that only library members can borrow books, or say anyone can. CORS is this — your site can say which domains can use its resources.
+
+### How does it work?
+
+When site A wants to use site B's API, browser asks site B: "Do you allow site A to use you?" Site B responds with a Header:
+```
+Access-Control-Allow-Origin: https://site-a.com
+```
+
+If this Header isn't there or domain is wrong, browser doesn't allow!
+
+### CORS Problems:
+
+**Allow-Origin: *:** Means everyone can use! Dangerous if you have sensitive data.
+
+**Wrong Reflection:** You return the domain user sends without checking. Hacker sends their domain, you return it, hacker gets access!
+
+**Credentials with Wildcard:** `Access-Control-Allow-Credentials: true` with `Allow-Origin: *` is a dangerous combination!
+
+### Why is it important for security?
+
+Because wrong CORS can lead to data theft, CSRF, or unauthorized API access.

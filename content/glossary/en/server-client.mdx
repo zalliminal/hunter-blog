@@ -1,0 +1,43 @@
+---
+slug: "server-client"
+term: "Server and Client"
+abbreviation: "N/A"
+shortDefinition: "A communication model where the client (like a browser) makes requests and the server (powerful computer) provides responses."
+category: "Network Prerequisites"
+tags: ["network", "architecture", "web", "communications"]
+relatedTerms: ["http", "tcp-ip", "api", "database"]
+language: "en"
+hasTranslation: true
+translationSlug: "server-client"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/server/what-is-a-server/"
+  - "https://www.ibm.com/topics/client-server"
+---
+
+## What is Server and Client?
+
+In one sentence: Client makes requests, server provides responses — like customer and seller!
+
+Let me put it simply. When you open a post on Instagram, your phone (client) says "give me this post". Instagram servers (which are somewhere else in the world) say "here you go!" and send the post to you. This model is called Client-Server.
+
+### What is Client?
+
+Any device that makes requests:
+- Web browser (Chrome, Firefox)
+- Mobile application
+- Desktop software
+- Even a Python script!
+
+### What is Server?
+
+A powerful computer that's always on and ready to respond:
+- Web server (hosts websites)
+- Database server (stores data)
+- Email server (manages emails)
+- Game server (runs online games)
+
+### Why is it important for security?
+
+Because most attacks either target the server (like SQL Injection, RCE) or exploit the client (like XSS). When you know which side is where, you understand where the attack comes from and where it hits. For example, XSS is client-side, SQL Injection is server-side.

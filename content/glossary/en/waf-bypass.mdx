@@ -1,0 +1,47 @@
+---
+slug: "waf-bypass"
+term: "WAF Bypass"
+abbreviation: "WAF Bypass"
+shortDefinition: "Techniques that attackers use to get past web application firewalls and reach the target server."
+category: "Web Security"
+tags: ["security", "bypass", "web", "attack"]
+relatedTerms: ["waf", "sql-injection", "xss", "obfuscation"]
+language: "en"
+hasTranslation: true
+translationSlug: "waf-bypass"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cybrary.it/blog/part-1-bypass-web-application-firewall-waf"
+  - "https://hacken.io/discover/how-to-bypass-waf-hackenproof-cheat-sheet/"
+---
+
+## What is WAF Bypass?
+
+In one sentence: WAF Bypass means finding a way to trick the guard (WAF) and get inside the party (server)!
+
+Remember I said WAF is like a guard? Well attackers are smarter! They learned how to bypass the guard. For example, guard says "no knives!", attacker wraps the knife in newspaper and says "this is just newspaper!" and guard believes it!
+
+### Common WAF Bypass Techniques:
+
+**1. Encoding:**
+Instead of `<script>` you write `%3Cscript%3E`. Some WAFs don't recognize this!
+
+**2. Case Toggling:**
+Instead of `SELECT` you write `SeLeCt`. Some WAFs only check uppercase!
+
+**3. Comment Injection:**
+Instead of `SELECT` you write `SEL/**/ECT`. WAF thinks it's two words, but database understands it's one!
+
+**4. HTTP Parameter Pollution:**
+You send the same parameter multiple times. WAF gets confused which one to check!
+
+**5. Path Traversal Tricks:**
+Instead of `/etc/passwd` you write `/....//....//etc/passwd`. Some WAFs don't recognize this!
+
+**6. HTTP Verb Tampering:**
+You use POST instead of GET or vice versa. Some WAFs only check one method!
+
+### Why is it important for security?
+
+Because it shows WAF alone is not enough! Your code must be secure too. Also if you know how WAF gets bypassed, you can configure a better WAF that recognizes these tricks.

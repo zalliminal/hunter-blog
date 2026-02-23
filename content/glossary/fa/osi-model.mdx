@@ -1,0 +1,43 @@
+---
+slug: "osi-model"
+term: "مدل OSI"
+abbreviation: "OSI"
+shortDefinition: "مدل هفت لایه‌ای که نحوه ارتباطات شبکه‌ای بین سیستم‌ها رو توصیف می‌کنه و هر لایه وظیفه خاصی داره."
+category: "پیش‌نیازهای شبکه"
+tags: ["شبکه", "پروتکل", "لایه‌بندی", "ارتباطات"]
+relatedTerms: ["tcp-ip", "ip-address", "http", "port"]
+language: "fa"
+hasTranslation: true
+translationSlug: "osi-model"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.imperva.com/learn/application-security/osi-model/"
+  - "https://aws.amazon.com/what-is/osi-model/"
+---
+
+## مدل <span dir="ltr">OSI</span> اصلا چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">OSI</span> یه مدل هفت لایه‌ایه که نشون میده داده‌ها چطور از کامپیوتر تو به کامپیوتر مقصد می‌رسن.
+
+خب بذار با یه مثال باز کنم. فرض کن می‌خوای یه نامه بفرستی برای دوستت. این نامه باید مراحل مختلفی رو طی کنه: اول می‌نویسیش، بعد می‌ذاریش پاکت، آدرس می‌زنی، می‌دی به پست، پست می‌بره به شهر مقصد، اونجا تحویل می‌دن به دوستت، اونم باز می‌کنه و می‌خونه. تو شبکه هم دقیقاً همینطوره! داده‌ها باید از هفت تا مرحله (لایه) رد بشن تا برسن به مقصد.
+
+### هفت لایه <span dir="ltr">OSI</span> از بالا به پایین:
+
+**لایه <span dir="ltr">۷</span> - <span dir="ltr">Application</span> (کاربرد):** این لایه‌ایه که تو مستقیم باهاش کار می‌کنی. مثلاً وقتی داری با مرورگر وب‌سایتی رو باز می‌کنی یا ایمیل می‌فرستی .
+
+**لایه <span dir="ltr">۶</span> - <span dir="ltr">Presentation</span> (نمایش):** اینجا داده‌ها رو آماده می‌کنه برای ارسال. مثل رمزنگاری، فشرده‌سازی، یا تبدیل فرمت .
+
+**لایه <span dir="ltr">۵</span> - <span dir="ltr">Session</span> (نشست):** مدیریت ارتباط بین دو سیستم. این لایه تصمیم می‌گیره کی ارتباط شروع بشه، چقدر طول بکشه و کی تموم بشه .
+
+**لایه <span dir="ltr">۴</span> - <span dir="ltr">Transport</span> (انتقال):** مسئول ارسال سالم داده‌هاست. اینجا تصمیم گرفته می‌شه که از <span dir="ltr">TCP</span> استفاده بشه (قابل اعتماد) یا <span dir="ltr">UDP</span> (سریع) .
+
+**لایه <span dir="ltr">۳</span> - <span dir="ltr">Network</span> (شبکه):** آدرس‌دهی و مسیریابی. اینجا <span dir="ltr">IP</span> Addressها کار می‌کنن و داده‌ها رو از بهترین مسیر می‌فرستن به مقصد .
+
+**لایه <span dir="ltr">۲</span> - <span dir="ltr">Data</span> <span dir="ltr">Link</span> (پیوند داده):** انتقال داده بین دستگاه‌های متصل به هم تو یه شبکه محلی. <span dir="ltr">MAC</span> <span dir="ltr">Address</span> اینجا کار می‌کنه .
+
+**لایه <span dir="ltr">۱</span> - <span dir="ltr">Physical</span> (فیزیکی):** کابل‌ها، فیبر نوری، سیگنال‌های الکتریکی. هر چیزی که فیزیکیه و داده رو منتقل می‌کنه .
+
+### چرا برای امنیت مهمه؟
+
+چون هر لایه آسیب‌پذیری‌های خاص خودش رو داره. مثلاً لایه <span dir="ltr">Application</span> می‌تونه <span dir="ltr">XSS</span> بگیره، لایه <span dir="ltr">Network</span> می‌تونه <span dir="ltr">IP</span> <span dir="ltr">Spoofing</span> بشه، لایه <span dir="ltr">Physical</span> می‌تونه کابل‌ش قطع بشه یا شنود بشه. وقتی بدونی هر حمله تو کدوم لایه اتفاق می‌افته، راحت‌تر می‌تونی درکش کنی و جلوش رو بگیری.

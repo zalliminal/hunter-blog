@@ -1,0 +1,62 @@
+---
+slug: "logging-monitoring-failures"
+term: "Security Logging and Monitoring Failures"
+abbreviation: "N/A"
+shortDefinition: "Failure to log, monitor, and respond to security events which causes attacks to not be detected and stopped."
+category: "OWASP Top 10"
+tags: ["owasp", "logging", "monitoring", "detection"]
+relatedTerms: ["siem", "alert", "incident-response", "audit"]
+language: "en"
+hasTranslation: true
+translationSlug: "logging-monitoring-failures"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/"
+  - "https://cwe.mitre.org/data/definitions/778.html"
+---
+
+## What are Logging and Monitoring Failures?
+
+In one sentence: When you don't know what's happening in your system, hacker can be there for months and you won't understand!
+
+Imagine you have a house. You have no cameras, no alarm, nobody checks who enters. Hacker can come, take whatever they want, leave and you'll never understand! Logging and monitoring is this — you must know what's happening.
+
+### Types of Logging and Monitoring Failures:
+
+**1. You don't log:**
+No events are recorded. If an attack happens, you don't know who, how, from where!
+
+**2. Incomplete Logs:**
+You only log some things. For example, you log successful login, not failed login. Hacker Brute Forces, you don't understand!
+
+**3. You don't check logs:**
+You log but nobody looks at them. Hacker is in your system for 6 months, you have no idea!
+
+**4. No Alerts:**
+When something suspicious happens, you get no warning. You have to go check yourself!
+
+**5. Logs get tampered:**
+Hacker gets in, deletes logs to hide their tracks!
+
+**6. Sensitive info in logs:**
+You log password, token, bank card info. If logs leak, it's a disaster!
+
+### Real Example:
+
+Imagine your site logs like this:
+- You log successful login
+- Not failed login
+- No Alert for 1000 failed logins
+- You check logs once a month
+
+Hacker can:
+1. Brute Force (you don't understand)
+2. Get in
+3. Steal data
+4. Delete logs
+5. Leave and you'll never understand!
+
+### Why is it important for security?
+
+Because it's number 9 in OWASP Top 10 2021! Without logging and monitoring, you're blind! You don't know who attacked, how they attacked, what they stole. You can't respond, can't prevent, can't learn for next time.

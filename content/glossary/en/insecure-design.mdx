@@ -1,0 +1,47 @@
+---
+slug: "insecure-design"
+term: "Insecure Design"
+abbreviation: "N/A"
+shortDefinition: "Vulnerabilities that occur due to flaws in architecture design and program logic, not coding bugs."
+category: "OWASP Top 10"
+tags: ["owasp", "design", "architecture", "logic"]
+relatedTerms: ["threat-modeling", "security-design", "architecture"]
+language: "en"
+hasTranslation: true
+translationSlug: "insecure-design"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A04_2021-Insecure_Design/"
+  - "https://cwe.mitre.org/data/definitions/1114.html"
+---
+
+## What is Insecure Design?
+
+In one sentence: When the system design is wrong from the start, no matter how clean code you write, it's still insecure!
+
+Imagine you want to build a house. If you draw the blueprint wrong from the start (like making the front door face a cliff!), no matter how strong you make the door, it's useless! Insecure design is this — the problem isn't the code, the problem is the blueprint!
+
+### Difference between Code Bug and Insecure Design:
+
+**Code Bug:** Code is written wrong. For example, you forgot to check if user is logged in or not. This can be fixed with a Patch.
+
+**Insecure Design:** The design is wrong from the start. For example, the system is designed so user can access data without login. This can't be fixed with a patch, you need to change the whole design!
+
+### Examples of Insecure Design:
+
+**1. Weak Password Recovery:**
+You put security question "What's your pet's name?" Anyone can find this from social media!
+
+**2. No Rate Limiting:**
+User can test password infinite times. Brute Force happens easily!
+
+**3. Wrong Session Management:**
+Session ID is in URL. Anyone who sees the URL can take your account!
+
+**4. Wrong Trust Boundary:**
+You trust client data. For example, you get price from client, user can change it!
+
+### Why is it important for security?
+
+Because it's number 4 in OWASP Top 10 2021! Insecure design can't be fixed with code. It must be designed with security from the start (Security by Design). That's why Threat Modeling is important — before coding, think about how hacker would attack.

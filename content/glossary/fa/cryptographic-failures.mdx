@@ -1,0 +1,60 @@
+---
+slug: "cryptographic-failures"
+term: "شکست‌های رمزنگاری"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری‌هایی که به دلیل استفاده نادرست یا عدم استفاده از رمزنگاری مناسب برای محافظت از داده‌های حساس رخ می‌دهند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "رمزنگاری", "امنیت-داده", "ssl"]
+relatedTerms: ["https", "encryption", "hash", "tls"]
+language: "fa"
+hasTranslation: true
+translationSlug: "cryptographic-failures"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+  - "https://cwe.mitre.org/data/definitions/311.html"
+---
+
+## شکست‌های رمزنگاری چیه؟
+
+خلاصه در یه جمله: وقتی داده‌های حساس رمزنگاری نشن یا بد رمزنگاری شن، مهاجمان می‌تونن بخوننشون!
+
+فرض کن یه نامه محرمانه داری. دو راه داری بفرستیش: یا تو پاکت معمولی (هر کسی می‌تونه بخونه)، یا تو پاکت ضدسرقت (فقط گیره می‌تونه باز کنه). رمزنگاری همینه! اگه درست انجام نشه، هر کسی تو مسیر می‌تونه داده‌ها رو بخونه .
+
+### انواع شکست‌های رمزنگاری:
+
+**<span dir="ltr">۱</span>. انتقال بدون رمزنگاری:**
+سایت <span dir="ltr">HTTP</span> داره نه <span dir="ltr">HTTPS</span>. هر کسی تو شبکه (مثلاً وای‌فای کافه) می‌تونه ببینه چی می‌فرستی (پسورد، کارت بانکی و...).
+
+**<span dir="ltr">۲</span>. رمزنگاری ضعیف:**
+از الگوریتم‌های قدیمی مثل <span dir="ltr">MD5</span> یا <span dir="ltr">DES</span> استفاده می‌کنی که راحت شکسته می‌شن.
+
+**<span dir="ltr">۳</span>. ذخیره پسورد بدون <span dir="ltr">Hash</span>:**
+پسوردها رو <span dir="ltr">Plain</span> <span dir="ltr">Text</span> ذخیره می‌کنی. اگه دیتابیس لو بره، همه پسوردها لو می‌ره!
+
+**<span dir="ltr">۴</span>. کلیدهای رمزنگاری ضعیف:**
+کلیدهای کوتاه یا قابل حدس استفاده می‌کنی. مهاجم راحت <span dir="ltr">brute</span> <span dir="ltr">force</span> می‌کنه.
+
+**<span dir="ltr">۵</span>. گواهی <span dir="ltr">SSL</span> نامعتبر:**
+از <span dir="ltr">SSL</span> منقضی شده یا خودامضا استفاده می‌کنی. مرورگر هشدار می‌ده ولی کاربرای ناآگاه ادامه می‌دن.
+
+### مثال واقعی:
+
+فرض کن یه سایت داری که پسوردها رو تو دیتابیس همینطوری ذخیره می‌کنه:
+```
+__PROTECTED_15__: __PROTECTED_16__, __PROTECTED_17__: __PROTECTED_18__
+```
+
+هکر دیتابیس رو می‌دزده و همه پسوردها رو داره! ولی اگه <span dir="ltr">10</span> می‌کردی:
+```
+__PROTECTED_20__: __PROTECTED_21__, __PROTECTED_22__: $__PROTECTED_23__$__PROTECTED_24__$__PROTECTED_25__... (غیرقابل برگشت)
+```
+
+هکر پسورد اصلی رو نمی‌تونه بفهمه.
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۲</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! داده‌های حساس مثل پسورد، اطلاعات بانکی، اطلاعات شخصی اگه لو برن، فاجعه‌ست. هم از نظر مالی، هم از نظر اعتباری.
+
+---

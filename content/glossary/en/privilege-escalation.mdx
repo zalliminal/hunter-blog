@@ -1,0 +1,41 @@
+---
+slug: "privilege-escalation"
+term: "Privilege Escalation"
+abbreviation: "N/A"
+shortDefinition: "An attack where attacker elevates their access level from regular user to admin or higher level."
+category: "Attack Types"
+tags: ["access", "admin", "privilege", "escalation"]
+relatedTerms: ["access-control", "admin", "root", "sudo"]
+language: "en"
+hasTranslation: true
+translationSlug: "privilege-escalation"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.fortinet.com/resources/cyberglossary/privilege-escalation"
+  - "https://owasp.org/www-community/attacks/Privilege_Escalation"
+---
+
+## What is Privilege Escalation?
+
+In one sentence: When regular user can do something to become admin and get access to everything!
+
+Imagine you're in a company, you're a regular employee. You only have access to your own files. But you find a bug that you can make yourself admin! Now you have access to all files, all systems. This is Privilege Escalation.
+
+### Types:
+
+**Vertical:** From regular user to admin. More dangerous.
+
+**Horizontal:** From regular user to another regular user (like accessing others' accounts).
+
+### Common Methods:
+
+- Exploiting system bugs
+- Wrong sudo configuration
+- Files with wrong permissions
+- Credential Theft
+- Token Manipulation
+
+### Why is it important for security?
+
+Because if hacker can do Privilege Escalation, they have the whole system. Can steal all data, shut down all services, control everything.

@@ -1,0 +1,121 @@
+---
+slug: "sql-injection"
+term: "SQL Injection"
+abbreviation: "SQLi"
+shortDefinition: "A code injection technique that exploits vulnerabilities in an application's database layer by inserting malicious SQL statements into input fields, allowing attackers to manipulate or retrieve database contents."
+category: "OWASP Top 10"
+tags: ["web-security", "injection", "database", "sql"]
+relatedTerms: ["xss", "command-injection", "prepared-statements"]
+language: "en"
+hasTranslation: true
+translationSlug: "sql-injection"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources: 
+  - "https://owasp.org/www-community/attacks/SQL_Injection"
+  - "https://portswigger.net/web-security/sql-injection"
+---
+
+## What is SQL Injection?
+
+SQL Injection (SQLi) is a web security vulnerability that allows an attacker to interfere with the queries an application makes to its database. It typically allows an attacker to view, modify, or delete data they shouldn't have access to.
+
+## How SQL Injection Works
+
+When user input is directly concatenated into SQL queries without proper sanitization or parameterization:
+
+```python
+# Vulnerable code
+user_input = request.GET['username']
+query = f"SELECT * FROM users WHERE username = '{user_input}'"
+cursor.execute(query)
+```
+
+An attacker can input: `admin' OR '1'='1`
+
+Resulting in: `SELECT * FROM users WHERE username = 'admin' OR '1'='1'`
+
+This bypasses authentication by making the condition always true.
+
+## Types of SQL Injection
+
+### In-band SQLi
+- **Error-based**: Forces database to generate errors containing useful information
+- **Union-based**: Uses UNION operator to combine results from multiple queries
+
+### Blind SQLi
+- **Boolean-based**: Sends queries that return different results based on true/false conditions
+- **Time-based**: Uses database sleep functions to infer information based on response time
+
+### Out-of-band SQLi
+Uses different channels (like DNS or HTTP requests) to retrieve data when in-band techniques aren't possible.
+
+## Common Attack Vectors
+
+```sql
+-- Authentication bypass
+' OR '1'='1' --
+
+-- Data extraction
+' UNION SELECT username, password FROM users --
+
+-- Database enumeration
+' AND 1=2 UNION SELECT table_name FROM information_schema.tables --
+
+-- Time-based detection
+' AND SLEEP(5) --
+```
+
+## Impact
+
+Successful SQL injection can lead to:
+- Unauthorized data access (reading sensitive data)
+- Data modification or deletion
+- Authentication bypass
+- Remote code execution (in some cases)
+- Complete server compromise
+
+## Prevention
+
+### Use Prepared Statements
+
+```python
+# Secure code with parameterized query
+user_input = request.GET['username']
+query = "SELECT * FROM users WHERE username = ?"
+cursor.execute(query, (user_input,))
+```
+
+### Input Validation
+
+```python
+import re
+
+def validate_username(username):
+    if not re.match(r'^[a-zA-Z0-9_]{3,20}$', username):
+        raise ValueError("Invalid username format")
+    return username
+```
+
+### Least Privilege Principle
+Database users should only have permissions they absolutely need.
+
+### Web Application Firewall (WAF)
+Deploy WAF rules to detect and block SQL injection attempts.
+
+### ORM Usage
+Modern ORMs like SQLAlchemy, Hibernate, or Django ORM provide built-in protection:
+
+```python
+# Django ORM - automatically parameterized
+User.objects.filter(username=user_input)
+```
+
+## Detection and Testing
+
+Tools for testing SQL injection vulnerabilities:
+- **SQLMap**: Automated SQL injection and database takeover tool
+- **Burp Suite**: Manual testing and scanning
+- **OWASP ZAP**: Free security scanner
+
+Always test with proper authorization and in controlled environments.

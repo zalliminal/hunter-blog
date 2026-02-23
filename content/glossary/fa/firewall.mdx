@@ -1,0 +1,49 @@
+---
+slug: "firewall"
+term: "دیوار آتش"
+abbreviation: "N/A"
+shortDefinition: "سیستم امنیتی که ترافیک شبکه را بر اساس قوانین از پیش تعیین شده بررسی و کنترل می‌کند."
+category: "دفاعی"
+tags: ["امنیت", "شبکه", "فیلتر", "محافظت"]
+relatedTerms: ["waf", "network", "port", "rules"]
+language: "fa"
+hasTranslation: true
+translationSlug: "firewall"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-a-firewall/"
+  - "https://www.fortinet.com/resources/cyberglossary/firewall"
+---
+
+## فایروال چیه؟
+
+خلاصه در یه جمله: فایروال مثل نگهبان مرزه — تصمیم می‌گیره کی می‌تونه وارد شبکه بشه و کی نه!
+
+فرض کن یه کشور داری. مرز داری، گمرک داری، نگهبان داری. هر کسی نمی‌تونه وارد بشه. باید چک بشه، مجوز داشته باشه. فایروال همینه برای شبکه تو — ترافیک رو چک می‌کنه، اگه مجاز بود راه می‌ده، اگه نه، بلاک می‌کنه.
+
+### انواع فایروال:
+
+**<span dir="ltr">Packet</span> <span dir="ltr">Filtering</span>:** بسته‌ها رو چک می‌کنه (<span dir="ltr">IP</span>، پورت). ساده‌ست.
+
+**<span dir="ltr">Stateful</span> <span dir="ltr">Inspection</span>:** وضعیت ارتباط رو هم چک می‌کنه. هوشمندتره.
+
+**<span dir="ltr">Proxy</span> <span dir="ltr">Firewall</span>:** مثل واسطه عمل می‌کنه. ترافیک از طریق اون رد می‌شه.
+
+**<span dir="ltr">Next-Gen</span> <span dir="ltr">Firewall</span>:** بازرسی عمیق بسته، تشخیص نفوذ، آنتی‌ویروس داره.
+
+### فایروال چطور کار می‌کنه؟
+
+یه سری <span dir="ltr">Rule</span> (قانون) داری:
+- اجازه بده پورت <span dir="ltr">۸۰</span> (<span dir="ltr">HTTP</span>)
+- اجازه بده پورت <span dir="ltr">۴۴۳</span> (<span dir="ltr">HTTPS</span>)
+- بلاک کن پورت <span dir="ltr">۲۲</span> (<span dir="ltr">SSH</span>) از بیرون
+- بلاک کن تمام ترافیک از <span dir="ltr">IP</span> <span dir="ltr">X</span>
+
+هر بسته‌ای که میاد یا می‌ره، با این قوانین چک می‌شه.
+
+### چرا برای امنیت مهمه؟
+
+چون فایروال خط اول دفاعیه! جلوی خیلی از حملات شبکه‌ای رو می‌گیره، پورت‌های غیرضروری رو می‌بنده، ترافیک مشکوک رو بلاک می‌کنه.
+
+---

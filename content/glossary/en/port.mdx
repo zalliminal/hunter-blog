@@ -1,0 +1,49 @@
+---
+slug: "port"
+term: "Network Port"
+abbreviation: "Port"
+shortDefinition: "A virtual endpoint in network through which different services communicate."
+category: "Network Prerequisites"
+tags: ["network", "communications", "service", "firewall"]
+relatedTerms: ["tcp-udp", "ip-address", "firewall", "nmap"]
+language: "en"
+hasTranslation: true
+translationSlug: "port"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/network-layer/what-is-a-port/"
+  - "https://www.fortinet.com/resources/cyberglossary/what-is-a-port"
+---
+
+## What is a Port?
+
+In one sentence: Port is like room number in a building — IP is the building address, port is the room number where a specific service is!
+
+Let me explain with an example. Imagine you have a big building (this is your IP Address). Inside this building you have different rooms (ports). Each room does a specific job:
+
+- Room 80: Website (HTTP)
+- Room 443: Secure website (HTTPS)
+- Room 22: SSH (remote access)
+- Room 21: FTP (file transfer)
+- Room 3306: MySQL (database)
+
+When someone wants to connect to a service, they need both IP and port. For example `192.168.1.1:80` means go to this address, room 80.
+
+### Common Ports:
+
+| Port | Service |
+|------|---------|
+| 20, 21 | FTP |
+| 22 | SSH |
+| 23 | Telnet |
+| 25 | SMTP (email) |
+| 53 | DNS |
+| 80 | HTTP |
+| 443 | HTTPS |
+| 3306 | MySQL |
+| 3389 | RDP |
+
+### Why is it important for security?
+
+Because hackers' first job is Port Scanning — they check all ports to see which ones are open. Every open port means a service is listening and might be vulnerable. That's why firewalls close unnecessary ports.

@@ -1,0 +1,41 @@
+---
+slug: "cookie"
+term: "کوکی"
+abbreviation: "N/A"
+shortDefinition: "تکه‌های کوچکی از داده که وب‌سایت‌ها روی مرورگر کاربر ذخیره می‌کنند تا اطلاعات را بین درخواست‌ها حفظ کنند."
+category: "امنیت وب"
+tags: ["وب", "session", "مرورگر", "ذخیره‌سازی"]
+relatedTerms: ["session", "authentication", "xss", "csrf"]
+language: "fa"
+hasTranslation: true
+translationSlug: "cookie"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies"
+  - "https://www.cloudflare.com/learning/privacy/what-are-cookies/"
+---
+
+## کوکی چیه؟
+
+خلاصه در یه جمله: کوکی یه تکه کد کوچیکه که سایت روی مرورگرت ذخیره می‌کنه تا تو رو بشناسه!
+
+فرض کن رفتی کافه. بار اول سفارش می‌دی، گارسون یه کارت بهت می‌ده. دفعات بعد کارت رو نشون می‌دی، گارسون می‌فهمه تو کی هستی و سفارشت رو میاره. کوکی همینه — سایت به مرورگرت یه کارت می‌ده، دفعات بعد مرورگرت کارت رو نشون می‌ده، سایت می‌فهمه تو کی هستی.
+
+### انواع کوکی:
+
+**<span dir="ltr">Session</span> <span dir="ltr">Cookie</span>:** فقط تا وقتی مرورگر بازه می‌مونه. بستیش، پاک می‌شه.
+
+**<span dir="ltr">Persistent</span> <span dir="ltr">Cookie</span>:** تاریخ انقضا داره. می‌مونه تا اون تاریخ.
+
+**<span dir="ltr">Secure</span> <span dir="ltr">Cookie</span>:** فقط از طریق <span dir="ltr">HTTPS</span> فرستاده می‌شه.
+
+**<span dir="ltr">HttpOnly</span> <span dir="ltr">Cookie</span>:** <span dir="ltr">JavaScript</span> نمی‌تونه بخونهش (محافظت در برابر <span dir="ltr">XSS</span>).
+
+**<span dir="ltr">SameSite</span> <span dir="ltr">Cookie</span>:** تعیین می‌کنه کوکی کی فرستاده بشه (محافظت در برابر <span dir="ltr">CSRF</span>).
+
+### چرا برای امنیت مهمه؟
+
+چون کوکی‌ها <span dir="ltr">Session</span> <span dir="ltr">ID</span>، توکن‌های احراز هویت، و داده‌های حساس رو نگه می‌دارن. اگه هکر کوکی رو بدزده (از طریق <span dir="ltr">XSS</span>، <span dir="ltr">MitM</span>)، می‌تونه وارد اکانتت بشه!
+
+---

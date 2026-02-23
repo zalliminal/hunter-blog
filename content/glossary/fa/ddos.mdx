@@ -1,0 +1,41 @@
+---
+slug: "ddos"
+term: "حمله رد سرویس توزیع‌شده"
+abbreviation: "DDoS"
+shortDefinition: "حمله‌ای که با ارسال حجم عظیمی از ترافیک از چندین منبع، سرویس هدف را از دسترس خارج می‌کند."
+category: "انواع حملات"
+tags: ["حمله", "ترافیک", "سرویس", "botnet"]
+relatedTerms: ["dos", "botnet", "traffic", "availability"]
+language: "fa"
+hasTranslation: true
+translationSlug: "ddos"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/"
+  - "https://www.fortinet.com/resources/cyberglossary/ddos-attack"
+---
+
+## حمله <span dir="ltr">DDoS</span> چیه؟
+
+خلاصه در یه جمله: وقتی هزاران کامپیوتر همزمان به یه سایت حمله کنن و اونقدر ترافیک بفرستن که سایت از کار بیفته!
+
+فرض کن یه مغازه داری. یه نفر میاد خرید، مشکلی نیست. صد نفر بیان، باز هم اوکیه. ولی اگه یه دفعه <span dir="ltr">۱۰</span> هزار نفر بیان همزمان، مغازه قفل می‌شه، هیچکس نمی‌تونه وارد بشه، فروش نمی‌کنی! <span dir="ltr">DDoS</span> همینه — هزاران درخواست همزمان، سرور کم میاره، سایت دان می‌شه.
+
+### چطور کار می‌کنه؟
+
+هکر یه <span dir="ltr">Botnet</span> داره (هزاران کامپیوتر آلوده). به همه‌شون می‌گه "همزمان بفرستید به این سایت!". همه همزمان درخواست می‌فرستن. سرور نمی‌تونه جواب بده، دان می‌شه.
+
+### انواع <span dir="ltr">DDoS</span>:
+
+**<span dir="ltr">Volumetric</span>:** حجم بالای ترافیک. مثل <span dir="ltr">UDP</span> <span dir="ltr">Flood</span>.
+
+**<span dir="ltr">Protocol</span>:** لایه‌های پایین‌تر رو هدف می‌گیره. مثل <span dir="ltr">SYN</span> <span dir="ltr">Flood</span>.
+
+**<span dir="ltr">Application</span> <span dir="ltr">Layer</span>:** لایه <span dir="ltr">۷</span> (<span dir="ltr">HTTP</span>). درخواست‌های سنگین می‌فرسته. مثل <span dir="ltr">HTTP</span> <span dir="ltr">Flood</span>.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">DDoS</span> می‌تونه کسب‌وکار رو فلج کنه. هر دقیقه سایت دان باشه، ضرر مالی، ضرر اعتباری. بعضی شرکت‌ها باج می‌دن که حمله قطع بشه!
+
+---

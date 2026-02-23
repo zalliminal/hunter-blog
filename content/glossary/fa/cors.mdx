@@ -1,0 +1,44 @@
+---
+slug: "cors"
+term: "اشتراک‌گذاری منابع بین مبدا"
+abbreviation: "CORS"
+shortDefinition: "مکانیزمی امنیتی که تعیین می‌کند کدام دامنه‌ها می‌توانند از منابع یک وب‌سایت استفاده کنند."
+category: "امنیت وب"
+tags: ["وب", "دامنه", "سیاست", "مرورگر"]
+relatedTerms: ["same-origin-policy", "xss", "csrf", "headers"]
+language: "fa"
+hasTranslation: true
+translationSlug: "cors"
+difficulty: "intermediate"
+lastUpdated: "2024-01-15"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"
+  - "https://portswigger.net/web-security/cors"
+---
+
+## <span dir="ltr">CORS</span> چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">CORS</span> تعیین می‌کنه کدوم سایت‌ها می‌تونن از <span dir="ltr">API</span> یا منابع سایت تو استفاده کنن!
+
+فرض کن یه کتابخونه داری. می‌تونی قانون بذاری که فقط اعضای کتابخونه می‌تونن کتاب قرض بگیرن، یا بگی هر کسی می‌تونه. <span dir="ltr">CORS</span> همینه — سایت تو می‌تونه بگه کدوم دامنه‌ها می‌تونن از منابعش استفاده کنن.
+
+### چطور کار می‌کنه؟
+
+وقتی سایت <span dir="ltr">A</span> می‌خواد از <span dir="ltr">API</span> سایت <span dir="ltr">B</span> استفاده کنه، مرورگر می‌پرسه از سایت <span dir="ltr">B</span>: "آیا اجازه می‌دی سایت <span dir="ltr">A</span> ازت استفاده کنه؟" سایت <span dir="ltr">B</span> با یه <span dir="ltr">Header</span> جواب می‌ده:
+```
+Access-Control-Allow-Origin: https://site-a.com
+```
+
+اگه این <span dir="ltr">Header</span> نباشه یا دامنه اشتباه باشه، مرورگر اجازه نمی‌ده!
+
+### مشکلات <span dir="ltr">CORS</span>:
+
+**<span dir="ltr">Allow-Origin</span>: *:** یعنی همه می‌تونن استفاده کنن! خطرناکه اگه داده‌های حساس داری.
+
+**<span dir="ltr">Reflection</span> غلط:** دامنه‌ای که کاربر می‌فرسته رو بدون چک برمی‌گردونی. هکر دامنه خودش رو می‌فرسته، تو برمی‌گردونی، هکر دسترسی می‌گیره!
+
+**<span dir="ltr">Credentials</span> با <span dir="ltr">Wildcard</span>:** `<span dir="ltr">Access-Control-Allow-Credentials</span>: <span dir="ltr">true</span>` با `<span dir="ltr">Allow-Origin</span>: *` ترکیب خطرناکیه!
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">CORS</span> غلط می‌تونه منجر به دزدی داده، <span dir="ltr">CSRF</span>، یا دسترسی غیرمجاز به <span dir="ltr">API</span> بشه.

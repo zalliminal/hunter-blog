@@ -1,0 +1,55 @@
+---
+slug: "injection"
+term: "Injection"
+abbreviation: "N/A"
+shortDefinition: "A vulnerability that allows attackers to send malicious data as code or commands to the system."
+category: "OWASP Top 10"
+tags: ["owasp", "injection", "sql", "command"]
+relatedTerms: ["sql-injection", "xss", "command-injection", "ldap-injection"]
+language: "en"
+hasTranslation: true
+translationSlug: "injection"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A03_2021-Injection/"
+  - "https://portswigger.net/web-security/injection"
+---
+
+## What is Injection?
+
+In one sentence: When you can send your own malicious code instead of regular data to the system and the system executes it!
+
+Imagine you went to a restaurant and tell the waiter "bring my food". Waiter goes to kitchen and says "bring customer's food". Now imagine you said "bring my food and throw away all other food!" Waiter without thinking tells this to kitchen and kitchen executes it! This is Injection.
+
+### Types of Injection:
+
+**SQL Injection:** You send malicious SQL code to database. For example, instead of password you put `' OR '1'='1` and login without password!
+
+**XSS (Cross-Site Scripting):** You inject malicious JavaScript code into the site. When another user opens the site, your code executes.
+
+**Command Injection:** You send system command to server. For example `; rm -rf /` and whole server gets deleted!
+
+**LDAP Injection:** You send malicious code to LDAP directory.
+
+**XML Injection:** You send malicious data to XML Parser.
+
+### SQL Injection Example:
+
+Imagine you have login form:
+```sql
+SELECT * FROM users WHERE username = 'ali' AND password = '123456'
+```
+
+Hacker puts instead of password: `' OR '1'='1`
+
+Query becomes:
+```sql
+SELECT * FROM users WHERE username = 'ali' AND password = '' OR '1'='1'
+```
+
+`'1'='1'` is always true! So hacker logs in without password!
+
+### Why is it important for security?
+
+Because it's number 3 in OWASP Top 10 2021! Injection can lead to data theft, data deletion, full server access, or even taking over the whole system.

@@ -1,0 +1,62 @@
+---
+slug: "authentication-failures"
+term: "شکست‌های احراز هویت"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری‌هایی که به مهاجمان اجازه می‌دهد هویت کاربران دیگر را جعل کنند یا به حساب‌های آن‌ها دسترسی پیدا کنند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "احراز-هویت", "لاگین", "پسورد"]
+relatedTerms: ["2fa", "session", "password", "brute-force"]
+language: "fa"
+hasTranslation: true
+translationSlug: "authentication-failures"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/"
+  - "https://cwe.mitre.org/data/definitions/287.html"
+---
+
+## شکست‌های احراز هویت چیه؟
+
+خلاصه در یه جمله: وقتی سیستم لاگین ضعیف باشه، هکر می‌تونه خودش رو جای تو جا بزنه و وارد اکانتت بشه!
+
+فرض کن یه ساختمان امن داری. نگهبان باید چک کنه کی وارد می‌شه. اگه نگهبان خواب باشه، یا کارت‌ها رو چک نکنه، هر کسی می‌تونه وارد بشه! احراز هویت همینه — باید مطمئن بشی کاربر واقعاً همونیه که می‌گه .
+
+### انواع شکست‌های احراز هویت:
+
+**<span dir="ltr">۱</span>. پسوردهای ضعیف:**
+اجازه می‌دی کاربر پسورد `__PROTECTED_1__` بذاره. هکر راحت حدس می‌زنه!
+
+**<span dir="ltr">۲</span>. <span dir="ltr">Brute</span> <span dir="ltr">Force</span> <span dir="ltr">Protection</span> نداره:**
+کاربر می‌تونه بی‌نهایت بار پسورد رو تست کنه. هکر با ابزار تمام ترکیب‌ها رو تست می‌کنه!
+
+**<span dir="ltr">۳</span>. <span dir="ltr">Session</span> <span dir="ltr">Management</span> غلط:**
+<span dir="ltr">Session</span> <span dir="ltr">ID</span> بعد از لاگین عوض نمی‌شه. هکر <span dir="ltr">Session</span> <span dir="ltr">ID</span> تو رو می‌دزد و وارد اکانتت می‌شه!
+
+**<span dir="ltr">۴</span>. <span dir="ltr">Credential</span> <span dir="ltr">Stuffing</span>:**
+پسوردای دزدیده شده از یه سایت رو روی سایت تو تست می‌کنن. خیلیا همین پسورد رو همه جا استفاده می‌کنن!
+
+**<span dir="ltr">۵</span>. <span dir="ltr">2FA</span> نداره:**
+فقط پسورد کافیه. اگه پسورد لو بره، اکانت لو رفته!
+
+**<span dir="ltr">۶</span>. بازیابی پسورد ضعیف:**
+لینک ریست پسورد انقضای طولانی داره، یا تو <span dir="ltr">URL</span> هست، یا سوال امنیتی ضعیفه.
+
+### مثال واقعی:
+
+فرض کن سایتت اینطوری لاگین می‌کنه:
+- کاربر پسورد رو می‌زنه
+- اگه درست بود، <span dir="ltr">Session</span> <span dir="ltr">ID</span> می‌ده
+- <span dir="ltr">Session</span> <span dir="ltr">ID</span> بعد از لاگین عوض نمی‌شه
+- <span dir="ltr">Rate</span> <span dir="ltr">Limiting</span> نداره
+
+هکر می‌تونه:
+<span dir="ltr">۱</span>. <span dir="ltr">Brute</span> <span dir="ltr">Force</span> کنه (چون <span dir="ltr">Rate</span> <span dir="ltr">Limiting</span> نداری)
+<span dir="ltr">۲</span>. <span dir="ltr">Session</span> <span dir="ltr">ID</span> رو بدزده (چون عوض نمی‌شه)
+<span dir="ltr">۳</span>. وارد اکانت کاربر بشه
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۷</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! اگه احراز هویت ضعیف باشه، هکر می‌تونه وارد اکانت کاربرای دیگه بشه، داده‌هاشون رو بدزده، یا به نام اون‌ها کارای بد بکنه.
+
+---

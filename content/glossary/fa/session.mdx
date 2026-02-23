@@ -1,0 +1,39 @@
+---
+slug: "session"
+term: "نشست"
+abbreviation: "N/A"
+shortDefinition: "دوره‌ای از تعامل بین کاربر و وب‌سایت که از زمان ورود تا خروج کاربر ادامه دارد."
+category: "امنیت وب"
+tags: ["session", "احراز-هویت", "کوکی", "token"]
+relatedTerms: ["cookie", "authentication", "token", "session-fixation"]
+language: "fa"
+hasTranslation: true
+translationSlug: "session"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/access-management/what-is-a-session/"
+  - "https://owasp.org/www-community/attacks/Session_management"
+---
+
+## نشست (<span dir="ltr">Session</span>) چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">Session</span> یعنی از وقتی لاگین می‌کنی تا وقتی لاگ‌اوت می‌کنی، سایت تو رو می‌شناسه!
+
+فرض کن وارد یه ساختمان شدی. نگهبان بهت یه کارت می‌ده. تا وقتی کارت رو داری، می‌تونی بری هر جا. وقتی می‌ری بیرون، کارت رو می‌دی. <span dir="ltr">Session</span> همینه — لاگین می‌کنی، سایت یه <span dir="ltr">Session</span> <span dir="ltr">ID</span> بهت می‌ده، تا وقتی لاگ‌اوت نکردی یا <span dir="ltr">Session</span> منقضی نشده، سایت تو رو می‌شناسه.
+
+### مشکلات <span dir="ltr">Session</span>:
+
+**<span dir="ltr">Session</span> <span dir="ltr">Fixation</span>:** هکر <span dir="ltr">Session</span> <span dir="ltr">ID</span> بهت می‌ده، تو لاگین می‌کنی، هکر با همون <span dir="ltr">Session</span> <span dir="ltr">ID</span> وارد اکانتت می‌شه!
+
+**<span dir="ltr">Session</span> <span dir="ltr">Hijacking</span>:** هکر <span dir="ltr">Session</span> <span dir="ltr">ID</span> تو رو می‌دزده (از طریق <span dir="ltr">XSS</span>، <span dir="ltr">MitM</span>) و وارد اکانتت می‌شه.
+
+**<span dir="ltr">Session</span> <span dir="ltr">Timeout</span> نداره:** <span dir="ltr">Session</span> هیچوقت منقضی نمی‌شه. هکر اگه بدزدش، همیشه می‌تونه استفاده کنه.
+
+**<span dir="ltr">Session</span> <span dir="ltr">ID</span> قابل حدس:** <span dir="ltr">Session</span> IDها الگو دارن. هکر می‌تونه حدس بزنه.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">Session</span> یعنی دسترسی به اکانت کاربر. اگه <span dir="ltr">Session</span> لو بره، هکر وارد اکانت می‌شه بدون پسورد!
+
+---

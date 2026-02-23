@@ -1,0 +1,41 @@
+---
+slug: "privilege-escalation"
+term: "ارتقای سطح دسترسی"
+abbreviation: "N/A"
+shortDefinition: "حمله‌ای که مهاجم سطح دسترسی خود را از کاربر عادی به ادمین یا سطح بالاتر ارتقا می‌دهد."
+category: "انواع حملات"
+tags: ["دسترسی", "ادمین", "privilege", "escalation"]
+relatedTerms: ["access-control", "admin", "root", "sudo"]
+language: "fa"
+hasTranslation: true
+translationSlug: "privilege-escalation"
+difficulty: "advanced"
+lastUpdated: "2024-01-15"
+sources:
+  - "https://www.fortinet.com/resources/cyberglossary/privilege-escalation"
+  - "https://owasp.org/www-community/attacks/Privilege_Escalation"
+---
+
+## ارتقای سطح دسترسی چیه؟
+
+خلاصه در یه جمله: وقتی کاربر عادی بتونه کاری کنه که بشه ادمین و به همه چیز دسترسی پیدا کنه!
+
+فرض کن تو یه شرکتی، تو کارمند عادی هستی. فقط به فایل‌های خودت دسترسی داری. ولی یه باگ پیدا می‌کنی که می‌تونی خودت رو ادمین کنی! حالا به همه فایل‌ها، همه سیستم‌ها دسترسی داری. این یعنی <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span>.
+
+### انواع:
+
+**<span dir="ltr">Vertical</span>:** از کاربر عادی به ادمین. خطرناک‌تره.
+
+**<span dir="ltr">Horizontal</span>:** از کاربر عادی به کاربر عادی دیگه (مثلاً دسترسی به اکانت بقیه).
+
+### روش‌های رایج:
+
+- سوءاستفاده از باگ‌های سیستمی
+- کانفیگ غلط <span dir="ltr">sudo</span>
+- فایل‌های با مجوز غلط
+- <span dir="ltr">Credential</span> <span dir="ltr">Theft</span>
+- <span dir="ltr">Token</span> <span dir="ltr">Manipulation</span>
+
+### چرا برای امنیت مهمه؟
+
+چون اگه هکر بتونه <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span> بزنه، کل سیستم دستشه. می‌تونه همه داده‌ها رو بدزده، همه سرویس‌ها رو از کار بندازه، همه چیز رو کنترل کنه.

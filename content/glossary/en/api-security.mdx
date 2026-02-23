@@ -1,0 +1,44 @@
+---
+slug: "api-security"
+term: "API Security"
+abbreviation: "API"
+shortDefinition: "A set of best practices for protecting APIs against attacks and unauthorized access."
+category: "Web Security"
+tags: ["api", "web", "authentication", "rate-limit"]
+relatedTerms: ["rest", "graphql", "authentication", "rate-limiting"]
+language: "en"
+hasTranslation: true
+translationSlug: "api-security"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-project-api-security/"
+  - "https://www.fortinet.com/resources/cyberglossary/api-security"
+---
+
+## What is API Security?
+
+In one sentence: APIs are communication gateways for applications, if not secure hacker can access data and services through them!
+
+Imagine you have a restaurant. You don't let everyone enter the kitchen (server). You have an order window (API). Customer orders from there. If that window isn't secure, hacker can come place fake orders, get free food, or even go into the kitchen!
+
+### Common API Problems:
+
+**1. Weak Authentication:**
+API Key easily stolen, Token not checked.
+
+**2. No Rate Limiting:**
+Hacker can send infinite requests (Brute Force, DDoS).
+
+**3. Returns too much **
+API returns all data, client only shows a part. Hacker goes directly to API and gets all data!
+
+**4. Injection:**
+API doesn't check inputs. SQL Injection, Command Injection.
+
+**5. Mass Assignment:**
+Hacker sends fields they shouldn't (like `is_admin=true`).
+
+### Why is it important for security?
+
+Because everything is API today! Mobile, web, third-party services. If API isn't secure, the whole system is at risk.

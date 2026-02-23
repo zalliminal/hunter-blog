@@ -1,0 +1,45 @@
+---
+slug: "csrf"
+term: "Cross-Site Request Forgery"
+abbreviation: "CSRF"
+shortDefinition: "An attack that tricks a deceived user into sending unwanted requests to a website."
+category: "OWASP Top 10"
+tags: ["owasp", "forgery", "request", "session"]
+relatedTerms: ["xss", "session", "token", "same-site"]
+language: "en"
+hasTranslation: true
+translationSlug: "csrf"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/attacks/csrf"
+  - "https://portswigger.net/web-security/csrf"
+---
+
+## What is CSRF?
+
+In one sentence: When hacker can make you unconsciously do something on a website (like transfer money, change password) while you have no idea!
+
+Imagine you logged into your bank and went to another site. That site has a malicious code that automatically sends a money transfer request to the hacker's account to the bank. The bank thinks you made the request (because you're logged in) and transfers the money! This is CSRF.
+
+### How does it work?
+
+1. You log into the bank website (you login)
+2. Session Cookie gets saved in your browser
+3. You go to another site (that the hacker controls)
+4. That site sends a malicious request to the bank
+5. Your browser automatically attaches the Cookie
+6. The bank thinks you made the request and executes it!
+
+### CSRF Example:
+
+Hacker creates a page with this code:
+```html
+<img src="https://bank.com/transfer?to=hacker&amount=1000" style="display:none">
+```
+
+When you (who is logged into the bank) open this page, your browser sends this request to the bank and money gets transferred!
+
+### Why is it important for security?
+
+Because CSRF can lead to doing anything on behalf of the user — money transfer, password change, email change, account deletion. The user never understands what happened!

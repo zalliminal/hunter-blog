@@ -1,0 +1,45 @@
+---
+slug: "encryption"
+term: "رمزنگاری"
+abbreviation: "N/A"
+shortDefinition: "فرآیند تبدیل داده‌ها به فرمتی که فقط با کلید مناسب قابل خواندن باشد."
+category: "رمزنگاری"
+tags: ["رمزنگاری", "امنیت-داده", "کلید", "privacy"]
+relatedTerms: ["decryption", "hash", "ssl", "aes"]
+language: "fa"
+hasTranslation: true
+translationSlug: "encryption"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ssl/what-is-encryption/"
+  - "https://www.ibm.com/topics/encryption"
+---
+
+## رمزنگاری چیه؟
+
+خلاصه در یه جمله: رمزنگاری یعنی داده‌ها رو قفل کنی که فقط کسی که کلید داره بتونه بازشون کنه!
+
+فرض کن یه نامه محرمانه داری. می‌ذاریش تو یه صندوق قفل‌دار. فقط کسی که کلید رو داره می‌تونه بازش کنه. رمزنگاری همینه — داده‌ها رو تبدیل می‌کنی به یه چیز بی‌معنی، فقط با کلید درست برمی‌گرده به حالت اول.
+
+### انواع رمزنگاری:
+
+**<span dir="ltr">Symmetric</span> (متقارن):** یه کلید برای قفل و باز کردن. سریعه ولی باید کلید رو امن منتقل کنی.
+
+**<span dir="ltr">Asymmetric</span> (نامتقارن):** دو تا کلید — <span dir="ltr">Public</span> (برای قفل)، <span dir="ltr">Private</span> (برای باز کردن). امن‌تره ولی کندتره.
+
+### کاربردها:
+
+**<span dir="ltr">HTTPS</span>:** ارتباط مرورگر و سرور رمزنگاری می‌شه.
+
+**<span dir="ltr">Disk</span> <span dir="ltr">Encryption</span>:** هاردت رو رمزنگاری می‌کنی. اگه دزدیده بشه، داده‌ها قابل خواندن نیستن.
+
+**<span dir="ltr">Password</span> <span dir="ltr">Hashing</span>:** پسوردها رو <span dir="ltr">Hash</span> می‌کنی (یه طرفه). اگه دیتابیس لو بره، پسوردها امن می‌مونن.
+
+**<span dir="ltr">Messaging</span>:** پیام‌هات رمزنگاری می‌شن (مثل <span dir="ltr">Signal</span>، <span dir="ltr">WhatsApp</span>).
+
+### چرا برای امنیت مهمه؟
+
+چون بدون رمزنگاری، هر کسی تو مسیر می‌تونه داده‌هات رو بخونه. پسوردها، پیام‌ها، اطلاعات بانکی، همه لو می‌رن.
+
+---

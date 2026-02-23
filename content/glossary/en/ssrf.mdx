@@ -1,0 +1,35 @@
+---
+slug: "ssrf"
+term: "Server-Side Request Forgery"
+abbreviation: "SSRF"
+shortDefinition: "A vulnerability that allows attackers to force the server to send requests to internal or external addresses."
+category: "OWASP Top 10"
+tags: ["owasp", "server", "request", "internal-network"]
+relatedTerms: ["firewall", "internal-network", "cloud-metadata", "request"]
+language: "en"
+hasTranslation: true
+translationSlug: "ssrf"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery/"
+  - "https://portswigger.net/web-security/ssrf"
+---
+
+## What is SSRF?
+
+In one sentence: This attack happens when an attacker can force your server to send requests to arbitrary addresses (internal or external).
+
+Well SSRF means Server-Side Request Forgery. This Request Forgery means faking a request — you're creating a fake request. **Server-Side** means this fake request is sent by the server on your behalf, not your browser. Normally we can't access internal servers, that's what we use for this.
+
+### Story Example for Better Understanding:
+
+Imagine you're outside an office building. You're only allowed to send letters to the public relations room but you want to send a letter to the manager's room. But what's the solution? Fortunately there's a weakness here and they just set the law, nobody really sees where the letter came from and where it's going, they trusted that the user — which would be us — are well-behaved people who follow the rules but they were wrong.
+
+We exploit the mail delivery section here. The mail carriers' job is to take letters from the mailbox and deliver them to their destination, that's it, no questions or checks. In other words, if your letter reaches the mail carriers without them seeing where it came from, they directly do their job and take it to the intended destination, so the only thing needed is to go and put the letter in the mailbox.
+
+I know it's a very simple and childish example, but in the real world it's almost the same, you exploit the server as the mail carrier to access places you shouldn't normally have access to, meaning internal servers, when you give the server a URL and it sends the request without sufficient checks.
+
+### Why is it important for security?
+
+Because it's number 10 in OWASP Top 10 2021! SSRF can allow attackers to access the company's internal network, scan internal services, or even access Cloud services Metadata and take over the entire Cloud environment!

@@ -1,0 +1,55 @@
+---
+slug: "broken-access-control"
+term: "کنترل دسترسی شکسته"
+abbreviation: "BAC"
+shortDefinition: "آسیب‌پذیری که به کاربران اجازه می‌دهد به منابع یا عملیاتی دسترسی پیدا کنند که نباید به آن‌ها دسترسی داشته باشند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "دسترسی", "احراز-هویت", "مجوز"]
+relatedTerms: ["authentication", "authorization", "privilege-escalation", "jwt"]
+language: "fa"
+hasTranslation: true
+translationSlug: "broken-access-control"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+  - "https://portswigger.net/web-security/access-control"
+---
+
+## کنترل دسترسی شکسته چیه؟
+
+خلاصه در یه جمله: وقتی کاربر عادی بتونه کارهای ادمین رو انجام بده، یعنی کنترل دسترسی شکسته!
+
+فرض کن تو یه ساختمانی، هر کس یه کارت دسترسی داره. کارت تو فقط در اتاق خودت رو باز می‌کنه. ولی یه باگ هست و کارت تو در اتاق مدیر رو هم باز می‌کنه! این یعنی کنترل دسترسی شکسته .
+
+### انواع کنترل دسترسی شکسته:
+
+**<span dir="ltr">Vertical</span> <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span>:** کاربر عادی دسترسی ادمین می‌گیره. مثلاً با تغییر یه عدد تو <span dir="ltr">URL</span> از `__PROTECTED_4__=__PROTECTED_5__` به `__PROTECTED_6__=__PROTECTED_7__` می‌شی ادمین!
+
+**<span dir="ltr">Horizontal</span> <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span>:** دسترسی به داده‌های کاربر دیگه. مثلاً تو اکانت خودتی، ولی با تغییر <span dir="ltr">ID</span> می‌تونی پروفایل بقیه رو ببینی.
+
+**<span dir="ltr">Directory</span> <span dir="ltr">Traversal</span>:** دسترسی به فایل‌هایی که نباید. مثلاً به جای `__PROTECTED_14__=__PROTECTED_15__.__PROTECTED_16__` می‌زنی `__PROTECTED_17__=../../__PROTECTED_18__/__PROTECTED_19__`.
+
+**<span dir="ltr">CORS</span> <span dir="ltr">Misconfiguration</span>:** سایت تو به همه دامنه‌ها اجازه می‌ده درخواست بفرستن. مهاجم از این سوءاستفاده می‌کنه.
+
+### مثال واقعی:
+
+فرض کن یه سایت فروشگاهی داری. <span dir="ltr">URL</span> پروفایل کاربر اینه:
+```
+__PROTECTED_23__://__PROTECTED_24__.`__PROTECTED_13__=__PROTECTED_14__`/```
+__PROTECTED_31__://__PROTECTED_32__.__PROTECTED_33__/__PROTECTED_34__/__PROTECTED_35__?__PROTECTED_36__=__PROTECTED_37__
+```?__PROTECTED_27__=__PROTECTED_28__
+```
+
+کاربر می‌تونه بزنه `__PROTECTED_13__=__PROTECTED_14__` و پروفایل ادمین رو ببینه! یا حتی:
+```
+__PROTECTED_31__://__PROTECTED_32__.__PROTECTED_33__/__PROTECTED_34__/__PROTECTED_35__?__PROTECTED_36__=__PROTECTED_37__
+```
+
+و کاربر عادی بتونه کاربرای دیگه رو حذف کنه! این یعنی کنترل دسترسی شکسته.
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۱</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! بیشترین آسیب رو این می‌زنه. مهاجمان راحت می‌تونن به داده‌های حساس دسترسی پیدا کنن، ادمین بشن، یا کل سیستم رو بردارن.
+
+---

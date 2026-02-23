@@ -1,0 +1,49 @@
+---
+slug: "software-integrity-failures"
+term: "Software and Data Integrity Failures"
+abbreviation: "N/A"
+shortDefinition: "Vulnerabilities that allow attackers to modify or tamper with code or data without verification."
+category: "OWASP Top 10"
+tags: ["owasp", "integrity", "signature", "update"]
+relatedTerms: ["code-signing", "ci-cd", "supply-chain", "hash"]
+language: "en"
+hasTranslation: true
+translationSlug: "software-integrity-failures"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/"
+  - "https://cwe.mitre.org/data/definitions/345.html"
+---
+
+## What are Software Integrity Failures?
+
+In one sentence: When you can't make sure code or data wasn't tampered with, hacker can inject malicious code!
+
+Imagine you get a package from post. How do you make sure nobody opened it and put something inside? If it has a seal and the seal is intact, you're sure. In software it's the same — you must be able to check code or data wasn't tampered with.
+
+### Types of Integrity Failures:
+
+**1. Unsigned Updates:**
+Your program gets update from server without checking it really came from you. Hacker hacks server, sends malicious update, all your users get infected!
+
+**2. Insecure CI/CD Pipeline:**
+The system that Deploys code isn't secure. Hacker gets in, injects malicious code, malicious code gets Deployed to production!
+
+**3. Unverified Dependencies:**
+You install libraries without checking Hash or signature. Hacker infected the library, you install it!
+
+**4. Insecure Deserialization:**
+You Deserialize Serialized data without verification. Hacker sends malicious data, code executes!
+
+**5. Wrong Trust Boundary:**
+You trust external data (like CDN, third-party APIs) without verification.
+
+### Real Example:
+
+**SolarWinds (2020):**
+Hackers got into SolarWinds Build system, added malicious code to updates. Thousands of companies installed updates and got infected! Because updates had signatures and companies thought they were secure.
+
+### Why is it important for security?
+
+Because it's number 8 in OWASP Top 10 2021! If code integrity isn't verified, hacker can send malicious code to millions of users. These attacks are very dangerous because they come from trusted source and nobody suspects.

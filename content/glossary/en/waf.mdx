@@ -1,0 +1,46 @@
+---
+slug: "waf"
+term: "Web Application Firewall"
+abbreviation: "WAF"
+shortDefinition: "A security system that inspects web traffic and blocks malicious requests before they reach the server."
+category: "Web Security"
+tags: ["security", "firewall", "web", "protection"]
+relatedTerms: ["firewall", "sql-injection", "xss", "waf-bypass"]
+language: "en"
+hasTranslation: true
+translationSlug: "waf"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/ddos/glossary/web-application-firewall-waf/"
+  - "https://owasp.org/www-community/Web_Application_Firewall"
+---
+
+## What is WAF?
+
+In one sentence: WAF is like a guard in front of your website's door — checks requests and if they're suspicious, doesn't let them in.
+
+Imagine you're having a party. You put a guard at the door to check guests. If someone is suspicious (like drunk or wants to start a fight) they don't let them in. WAF is exactly this for your website!
+
+### How does WAF work?
+
+When a request comes to your server, it first reaches WAF. WAF inspects the request:
+
+- Does it have malicious code? (like SQL Injection)
+- Does it have suspicious scripts? (like XSS)
+- Does it have attack patterns?
+- Did it come from a suspicious IP?
+
+If it's clean, sends to server. If it's dirty, blocks and shows an error.
+
+### Types of WAF:
+
+**Cloud-based:** Like Cloudflare. No installation needed, traffic goes to them first, then comes to you.
+
+**Host-based:** Installed on your own server. Like ModSecurity.
+
+**Hardware-based:** A physical device you put in front of your server. Expensive but powerful.
+
+### Why is it important for security?
+
+Because it's the first line of defense! Even if your code has bugs, WAF can block many attacks. But... it's not complete! Attackers learned ways to bypass it (WAF Bypass) which I'll talk about later.

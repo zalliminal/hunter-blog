@@ -1,0 +1,60 @@
+---
+slug: "authentication-failures"
+term: "Identification and Authentication Failures"
+abbreviation: "N/A"
+shortDefinition: "Vulnerabilities that allow attackers to impersonate other users or gain access to their accounts."
+category: "OWASP Top 10"
+tags: ["owasp", "authentication", "login", "password"]
+relatedTerms: ["2fa", "session", "password", "brute-force"]
+language: "en"
+hasTranslation: true
+translationSlug: "authentication-failures"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/"
+  - "https://cwe.mitre.org/data/definitions/287.html"
+---
+
+## What are Authentication Failures?
+
+In one sentence: When login system is weak, hacker can pretend to be you and get into your account!
+
+Imagine you have a secure building. Guard should check who enters. If guard is asleep, or doesn't check cards, anyone can get in! Authentication is this — you must make sure the user is really who they say they are.
+
+### Types of Authentication Failures:
+
+**1. Weak Passwords:**
+You allow user to put password `123456`. Hacker easily guesses!
+
+**2. No Brute Force Protection:**
+User can test password infinite times. Hacker tests all combinations with tools!
+
+**3. Wrong Session Management:**
+Session ID doesn't change after login. Hacker steals your Session ID and gets into your account!
+
+**4. Credential Stuffing:**
+They test stolen passwords from one site on your site. Many people use the same password everywhere!
+
+**5. No 2FA:**
+Only password is enough. If password leaks, account is lost!
+
+**6. Weak Password Recovery:**
+Reset link has long expiry, or is in URL, or security question is weak.
+
+### Real Example:
+
+Imagine your site logs in like this:
+- User enters password
+- If correct, gives Session ID
+- Session ID doesn't change after login
+- No Rate Limiting
+
+Hacker can:
+1. Brute Force (because you have no Rate Limiting)
+2. Steal Session ID (because it doesn't change)
+3. Get into user's account
+
+### Why is it important for security?
+
+Because it's number 7 in OWASP Top 10 2021! If authentication is weak, hacker can get into other users' accounts, steal their data, or do bad things in their name.

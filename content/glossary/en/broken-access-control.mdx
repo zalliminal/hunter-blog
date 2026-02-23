@@ -1,0 +1,51 @@
+---
+slug: "broken-access-control"
+term: "Broken Access Control"
+abbreviation: "BAC"
+shortDefinition: "A vulnerability that allows users to access resources or operations they shouldn't have access to."
+category: "OWASP Top 10"
+tags: ["owasp", "access", "authentication", "authorization"]
+relatedTerms: ["authentication", "authorization", "privilege-escalation", "jwt"]
+language: "en"
+hasTranslation: true
+translationSlug: "broken-access-control"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
+  - "https://portswigger.net/web-security/access-control"
+---
+
+## What is Broken Access Control?
+
+In one sentence: When a regular user can do admin things, that means access control is broken!
+
+Imagine you're in a building, everyone has an access card. Your card only opens your room's door. But there's a bug and your card also opens the manager's room! This is broken access control.
+
+### Types of Broken Access Control:
+
+**Vertical Privilege Escalation:** Regular user gets admin access. For example, by changing a number in URL from `user_id=100` to `user_id=1` you become admin!
+
+**Horizontal Privilege Escalation:** Access to other user's data. For example, you're in your account, but by changing ID you can see others' profiles.
+
+**Directory Traversal:** Access to files you shouldn't. For example, instead of `file=report.pdf` you put `file=../../etc/passwd`.
+
+**CORS Misconfiguration:** Your site allows all domains to send requests. Attacker exploits this.
+
+### Real Example:
+
+Imagine you have an e-commerce site. User profile URL is:
+```
+https://shop.com/profile?user_id=123
+```
+
+User can put `user_id=1` and see admin's profile! Or even:
+```
+https://shop.com/admin/delete_user?id=5
+```
+
+And regular user can delete other users! This is broken access control.
+
+### Why is it important for security?
+
+Because it's number 1 in OWASP Top 10 2021! Most damage comes from this. Attackers can easily access sensitive data, become admin, or take over the whole system.

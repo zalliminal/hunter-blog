@@ -1,0 +1,46 @@
+---
+slug: "http"
+term: "پروتکل انتقال ابرمتن"
+abbreviation: "HTTP"
+shortDefinition: "پروتکلی که برای انتقال داده بین مرورگر و سرور استفاده می‌شه و پایه و اساس ارتباطات وبه."
+category: "پیش‌نیازهای شبکه"
+tags: ["وب", "پروتکل", "درخواست-پاسخ", "کلاینت-سرور"]
+relatedTerms: ["https", "tcp-ip", "request-response", "headers"]
+language: "fa"
+hasTranslation: true
+translationSlug: "http"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.freecodecamp.org/news/web-security-an-introduction-to-http-5fa07140f9b3/"
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"
+---
+
+## <span dir="ltr">HTTP</span> چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">HTTP</span> زبونیه که مرورگر و سرور با هم حرف می‌زنن — مرورگر درخواست می‌ده، سرور جواب می‌ده.
+
+فرض کن رفتی رستوران. تو منو رو می‌بینی (وب‌سایت)، سفارش می‌دی (<span dir="ltr">HTTP</span> <span dir="ltr">Request</span>)، گارسون می‌بره به آشپزخونه (سرور)، غذا آماده می‌شه و برات میارن (<span dir="ltr">HTTP</span> <span dir="ltr">Response</span>). <span dir="ltr">HTTP</span> دقیقاً همین فرآینده برای وب!
+
+### ساختار <span dir="ltr">HTTP</span> <span dir="ltr">Request</span>:
+
+وقتی یه آدرس رو باز می‌کنی، مرورگرت یه درخواست می‌فرسته که شامل:
+
+**<span dir="ltr">Method</span>:** نوع درخواست (<span dir="ltr">GET</span> برای گرفتن داده، <span dir="ltr">POST</span> برای فرستادن داده)
+**<span dir="ltr">URL</span>:** آدرسی که می‌خوای
+**<span dir="ltr">Headers</span>:** اطلاعات اضافی مثل نوع مرورگر، کوکی‌ها، زبان
+**<span dir="ltr">Body</span>:** داده‌ای که می‌خوای بفرستی (معمولاً تو <span dir="ltr">POST</span>)
+
+### ساختار <span dir="ltr">HTTP</span> <span dir="ltr">Response</span>:
+
+سرور جواب می‌ده با:
+
+**<span dir="ltr">Status</span> <span dir="ltr">Code</span>:** وضعیت درخواست (<span dir="ltr">200</span> یعنی موفق، <span dir="ltr">404</span> یعنی پیدا نشد، <span dir="ltr">500</span> یعنی خطای سرور)
+**<span dir="ltr">Headers</span>:** اطلاعات اضافی مثل نوع محتوا، کوکی‌های جدید
+**<span dir="ltr">Body</span>:** محتوای اصلی (<span dir="ltr">HTML</span>، <span dir="ltr">JSON</span>، عکس و...)
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">HTTP</span> معمولی رمزنگاری نشده! هر کسی تو مسیر می‌تونه ببینه چی داری می‌فرستی. برای همین <span dir="ltr">HTTPS</span> مهمه (همون <span dir="ltr">HTTP</span> + <span dir="ltr">SSL</span>/<span dir="ltr">TLS</span>). همچنین خیلی از حملات وب مثل <span dir="ltr">XSS</span>، <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>، <span dir="ltr">CSRF</span> همه از طریق <span dir="ltr">HTTP</span> انجام می‌شن. وقتی <span dir="ltr">HTTP</span> رو بفهمی، نصف راه امنیت وب رو رفتی .
+
+---

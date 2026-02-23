@@ -1,0 +1,41 @@
+---
+slug: "two-factor-authentication"
+term: "احراز هویت دو مرحله‌ای"
+abbreviation: "2FA"
+shortDefinition: "روشی امنیتی که برای ورود نیاز به دو نوع تأییدیه مختلف دارد — معمولاً پسورد و کد موقت."
+category: "احراز هویت"
+tags: ["احراز-هویت", "امنیت", "تأیید-دو-مرحله‌ای", "otp"]
+relatedTerms: ["authentication", "password", "otp", "totp"]
+language: "fa"
+hasTranslation: true
+translationSlug: "two-factor-authentication"
+difficulty: "beginner"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.microsoft.com/en-us/security/business/security-101/what-is-two-factor-authentication-2fa"
+  - "https://auth0.com/docs/secure/multi-factor-authentication"
+---
+
+## احراز هویت دو مرحله‌ای چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">2FA</span> یعنی برای ورود دو تا چیز لازم باشه — چیزی که می‌دونی (پسورد) و چیزی که داری (گوشی)!
+
+فرض کن خونه‌ت دو تا قفل داره. یکی با کلید باز می‌شه، یکی با اثر انگشت. هکر اگه کلیدت رو هم بدزده، باز نمی‌تونه وارد بشه چون اثر انگشتت رو نداره! <span dir="ltr">2FA</span> همینه — اگه پسوردت لو بره، هکر باز نمی‌تونه وارد بشه چون کد دوم رو نداره.
+
+### انواع <span dir="ltr">2FA</span>:
+
+**<span dir="ltr">SMS</span> <span dir="ltr">Code</span>:** کد میاد به گوشیت. رایجه ولی امن نیست (<span dir="ltr">SIM</span> <span dir="ltr">Swap</span>).
+
+**<span dir="ltr">Authenticator</span> <span dir="ltr">App</span>:** اپلیکیشن‌هایی مثل <span dir="ltr">Google</span> <span dir="ltr">Authenticator</span>. کد هر <span dir="ltr">۳۰</span> ثانیه عوض می‌شه. امن‌تره.
+
+**<span dir="ltr">Hardware</span> <span dir="ltr">Token</span>:** یه دستگاه فیزیکی. مثل <span dir="ltr">YubiKey</span>. امن‌ترین نوعه.
+
+**<span dir="ltr">Push</span> <span dir="ltr">Notification</span>:** یه نوتیفیکیشن میاد به گوشیت، تأیید می‌کنی.
+
+**<span dir="ltr">Biometric</span>:** اثر انگشت، چهره، عنبیه.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">۸۱</span>٪ نفوذهای هکری به خاطر پسوردای ضعیف یا دزدیده شده‌ست! با <span dir="ltr">2FA</span>، حتی اگه پسورد لو بره، هکر نمی‌تونه وارد بشه.
+
+---

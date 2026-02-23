@@ -1,0 +1,49 @@
+---
+slug: "insecure-design"
+term: "طراحی ناامن"
+abbreviation: "N/A"
+shortDefinition: "آسیب‌پذیری‌هایی که به دلیل نقص در طراحی معماری و منطق برنامه ایجاد می‌شوند، نه باگ‌های کدنویسی."
+category: "OWASP Top 10"
+tags: ["اوسپ", "طراحی", "معماری", "منطق"]
+relatedTerms: ["threat-modeling", "security-design", "architecture"]
+language: "fa"
+hasTranslation: true
+translationSlug: "insecure-design"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/Top10/A04_2021-Insecure_Design/"
+  - "https://cwe.mitre.org/data/definitions/1114.html"
+---
+
+## طراحی ناامن چیه؟
+
+خلاصه در یه جمله: وقتی از اول طرح سیستم غلط باشه، هر چقدر هم کد تمیز بنویسی، بازم ناامنه!
+
+فرض کن می‌خوای یه خونه بسازی. اگه از اول نقشه رو غلط بکشی (مثلاً در ورودی رو رو به دره بزنی!)، هر چقدر هم در رو محکم کنی، فایده نداره! طراحی ناامن همینه — مشکل از کد نیست، مشکل از نقشه‌ست .
+
+### تفاوت باگ کد و طراحی ناامن:
+
+**باگ کد:** کد اشتباه نوشته شده. مثلاً فراموش کردی چک کنی کاربر لاگین کرده یا نه. این رو می‌شه با <span dir="ltr">Patch</span> درست کرد.
+
+**طراحی ناامن:** از اول طرح غلطه. مثلاً سیستم طوری طراحی شده که کاربر می‌تونه بدون لاگین به داده‌ها دسترسی داشته باشه. این رو نمی‌شه با <span dir="ltr">Patch</span> درست کرد، باید کل طراحی رو عوض کرد!
+
+### مثال‌های طراحی ناامن:
+
+**<span dir="ltr">۱</span>. بازیابی پسورد ضعیف:**
+سوال امنیتی می‌ذاری "نام حیوان خانگی تو چیه؟" این رو هر کسی می‌تونه از شبکه‌های اجتماعی پیدا کنه!
+
+**<span dir="ltr">۲</span>. <span dir="ltr">Rate</span> <span dir="ltr">Limiting</span> نداره:**
+کاربر می‌تونه بی‌نهایت بار پسورد رو تست کنه. <span dir="ltr">Brute</span> <span dir="ltr">Force</span> راحت انجام می‌شه!
+
+**<span dir="ltr">۳</span>. <span dir="ltr">Session</span> <span dir="ltr">Management</span> غلط:**
+<span dir="ltr">Session</span> <span dir="ltr">ID</span> تو <span dir="ltr">URL</span> هست. هر کسی <span dir="ltr">URL</span> رو ببینه، می‌تونه اکانت تو رو برداره!
+
+**<span dir="ltr">۴</span>. <span dir="ltr">Trust</span> <span dir="ltr">Boundary</span> اشتباه:**
+به داده‌های کلاینت اعتماد می‌کنی. مثلاً قیمت رو از کلاینت می‌گیری، کاربر می‌تونه تغییرش بده!
+
+### چرا برای امنیت مهمه؟
+
+چون شماره <span dir="ltr">۴</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! طراحی ناامن رو نمی‌شه با کد درست کرد. باید از اول با امنیت طراحی بشه (<span dir="ltr">Security</span> <span dir="ltr">by</span> <span dir="ltr">Design</span>). برای همین <span dir="ltr">Threat</span> <span dir="ltr">Modeling</span> مهمه — قبل از کد زدن، فکر کنی هکر چطور حمله می‌کنه.
+
+---

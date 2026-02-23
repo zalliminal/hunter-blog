@@ -1,0 +1,53 @@
+---
+slug: "sql-injection"
+term: "تزریق اس‌کیو‌ال"
+abbreviation: "SQLi"
+shortDefinition: "آسیب‌پذیری که به مهاجمان اجازه می‌دهد دستورات SQL مخرب را به دیتابیس ارسال کنند و داده‌ها را دستکاری یا سرقت کنند."
+category: "OWASP Top 10"
+tags: ["اوسپ", "تزریق", "دیتابیس", "sql"]
+relatedTerms: ["injection", "database", "orm", "prepared-statements"]
+language: "fa"
+hasTranslation: true
+translationSlug: "sql-injection"
+difficulty: "intermediate"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://owasp.org/www-community/attacks/SQL_Injection"
+  - "https://portswigger.net/web-security/sql-injection"
+---
+
+## تزریق <span dir="ltr">SQL</span> چیه؟
+
+خلاصه در یه جمله: وقتی هکر بتونه کد <span dir="ltr">SQL</span> خودش رو به دیتابیس تو بفرسته و داده‌ها رو بخونه، تغییر بده، یا حذف کنه!
+
+فرض کن یه فرم لاگین داری. کاربر یوزرنیم و پسورد رو می‌زنه، تو می‌فرستی به دیتابیس که چک کنه درسته یا نه. هکر به جای پسورد یه کد <span dir="ltr">SQL</span> می‌فرسته که می‌گه "همیشه درست در نظر بگیر!" و بدون پسورد وارد می‌شه!
+
+### مثال <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>:
+
+کوئری عادی:
+```__PROTECTED_5__
+__PROTECTED_6__ * __PROTECTED_7__ __PROTECTED_8__ __PROTECTED_9__ __PROTECTED_10__ = '__PROTECTED_11__' __PROTECTED_12__ __PROTECTED_13__ = '__PROTECTED_14__'
+```
+
+هکر به جای پسورد می‌زنه: `' __PROTECTED_5__ '__PROTECTED_6__'='__PROTECTED_7__`
+
+کوئری می‌شه:
+```__PROTECTED_18__
+__PROTECTED_19__ * __PROTECTED_20__ __PROTECTED_21__ __PROTECTED_22__ __PROTECTED_23__ = '__PROTECTED_24__' __PROTECTED_25__ `'__PROTECTED_8__'='__PROTECTED_9__'` = '' __PROTECTED_27__ '__PROTECTED_28__'='__PROTECTED_29__'
+```
+
+چون `'__PROTECTED_8__'='__PROTECTED_9__'` همیشه درسته، شرط درست می‌شه و هکر وارد می‌شه!
+
+### انواع <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>:
+
+**<span dir="ltr">In-band</span>:** داده‌ها رو مستقیم می‌بینه (مثل <span dir="ltr">Error-based</span>، <span dir="ltr">Union-based</span>)
+
+**<span dir="ltr">Blind</span>:** داده‌ها رو نمی‌بینه، ولی از روی رفتار سیستم حدس می‌زنه (<span dir="ltr">True</span>/<span dir="ltr">False</span>، <span dir="ltr">Time-based</span>)
+
+**<span dir="ltr">Out-of-band</span>:** داده‌ها رو از طریق یه کانال دیگه می‌گیره (مثل <span dir="ltr">DNS</span>)
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">SQL</span> <span dir="ltr">Injection</span> می‌تونه منجر به دزدی تمام داده‌های دیتابیس، تغییر داده‌ها، حذف داده‌ها، یا حتی دسترسی به سرور بشه (اگه تنظیمات اجازه بده).
+
+---

@@ -1,0 +1,46 @@
+---
+slug: "zero-day"
+term: "آسیب‌پذیری روز صفر"
+abbreviation: "Zero-Day"
+shortDefinition: "آسیب‌پذیری امنیتی که هنوز توسط سازنده شناخته یا رفع نشده و مهاجمان می‌توانند از آن سوءاستفاده کنند."
+category: "انواع حملات"
+tags: ["آسیب‌پذیری", "ناشناخته", "patch", "exploit"]
+relatedTerms: ["exploit", "patch", "vulnerability", "disclosure"]
+language: "fa"
+hasTranslation: true
+translationSlug: "zero-day"
+difficulty: "advanced"
+lastUpdated: "2026-02-23"
+sources:
+  - "https://www.cloudflare.com/learning/security/what-is-a-zero-day-attack/"
+  - "https://www.fortinet.com/resources/cyberglossary/zero-day"
+---
+
+## آسیب‌پذیری روز صفر چیه؟
+
+خلاصه در یه جمله: وقتی یه باگ امنیتی وجود داره که سازنده نمی‌دونه، ولی هکرها می‌دونن و ازش استفاده می‌کنن!
+
+فرض کن یه قفل ساختی. فکر می‌کنی امنه. ولی یه راهی پیدا شده که بدون کلید باز می‌شه. تو نمی‌دونی، ولی هکرها می‌دونن! تا وقتی تو نفهمی و <span dir="ltr">Patch</span> ندی، هکرها راحت وارد می‌شن. به روزی که تو می‌فهمی می‌گن "روز صفر" — چون از اون روز باید بدوی <span dir="ltr">Patch</span> بدی!
+
+### چرخه <span dir="ltr">Zero-Day</span>:
+
+<span dir="ltr">۱</span>. باگ کشف می‌شه (توسط هکر یا محقق)
+<span dir="ltr">۲</span>. هکر <span dir="ltr">Exploit</span> می‌سازه
+<span dir="ltr">۳</span>. حمله شروع می‌شه
+<span dir="ltr">۴</span>. سازنده می‌فهمه (روز صفر)
+<span dir="ltr">۵</span>. <span dir="ltr">Patch</span> منتشر می‌شه
+<span dir="ltr">۶</span>. کاربرای آپدیت می‌کنن
+
+بین مرحله <span dir="ltr">۳</span> تا <span dir="ltr">۶</span>، همه در خطرن!
+
+### مثال <span dir="ltr">Zero-Day</span>:
+
+**<span dir="ltr">Stuxnet</span> (<span dir="ltr">2010</span>):** از چندین <span dir="ltr">Zero-Day</span> استفاده کرد برای حمله به تأسیسات هسته‌ای ایران.
+
+**<span dir="ltr">Log4Shell</span> (<span dir="ltr">2021</span>):** اول هکرها استفاده می‌کردن، بعد کشف شد.
+
+### چرا برای امنیت مهمه؟
+
+چون <span dir="ltr">Zero-Day</span> رو نمی‌شه دفاع کرد! هنوز <span dir="ltr">Patch</span> نیست. فقط می‌شه با لایه‌های دفاعی دیگر (مثل <span dir="ltr">WAF</span>، <span dir="ltr">Segmentation</span>) ریسک رو کم کرد.
+
+---
