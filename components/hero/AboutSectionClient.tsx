@@ -236,7 +236,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
     contactTitle:  isFa ? "در تماس باشید"                  : "Stay in touch",
     contactBody:   isFa ? "اگر روی تحقیق، همکاری یا ایده‌ای امنیتی فکر می‌کنید، یک ایمیل کوتاه کافی است." : "If you're thinking about research, collaboration or a strange security idea, a short email is enough to start.",
     emailCta:      isFa ? "فرستادن ایمیل"                   : "Send an email",
-    contactEmail:  "hello@kavlabs.dev", // Update with real email
+    contactEmail:  "kavlabs_official@proton.me", // Update with real email
   } as const;
 
   const socialCards: Array<{
@@ -246,10 +246,10 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
     icon: ReactNode;
     brand: (typeof socialBrands)[keyof typeof socialBrands];
   }> = [
-    { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/kavlabs",              icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
-    { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@kavlabs@infosec.exchange", icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
-    { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@kavlabs</Ltr>,      icon: <SiX        size={17} />, brand: socialBrands.twitter  },
-    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
+    { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/kavlabs_official",              icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
+    { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@kavlabs_official@infosec.exchange", icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
+    { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@kavlabs_official</Ltr>,      icon: <SiX        size={17} />, brand: socialBrands.twitter  },
+    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs_official</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
   ];
 
   const chips = [

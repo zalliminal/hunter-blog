@@ -187,9 +187,9 @@ export const AUTHORS: Record<AuthorId, Author> = {
     avatar: "/profiles/zal_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/kavlabs",
+      twitter: "https://x.com/kavlabs_official",
       github: "https://github.com/zalliminal",
-      telegram: "https://t.me/kavlabs",
+      telegram: "https://t.me/kavlabs_official",
     },
     signature: {
       tagline: {
@@ -234,9 +234,9 @@ export const AUTHORS: Record<AuthorId, Author> = {
     avatar: "/profiles/parhamf_profile.png",
     isAnonymous: false,
     links: {
-      twitter: "https://x.com/kavlabs",
+      twitter: "https://x.com/kavlabs_official",
       github: "https://github.com/parhamf6",
-      telegram: "https://t.me/kavlabs",
+      telegram: "https://t.me/kavlabs_official",
     },
     signature: {
       tagline: {

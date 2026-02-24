@@ -8,8 +8,9 @@ export function slugify(text: string): string {
   return text
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "") // remove non-word chars
-    .replace(/[\s_-]+/g, "-") // replace spaces/underscores with dash
+    .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFFa-z0-9\s-]/gi, "")
+    .replace(/[\s_]+/g, "-") // replace spaces/underscores with dash
+    .replace(/-+/g, "-") // replace multiple dashes with single dash
     .replace(/^-+|-+$/g, ""); // trim dashes from ends
 }
 
@@ -31,8 +32,10 @@ export function generateTocFromContent(content: string): TocItem[] {
         title = title.replace(/\{#([^}]+)\}$/, "").trim();
       }
 
+      const id = idMatch ? idMatch[1] : slugify(title);
+      
       toc.push({
-        id: idMatch ? idMatch[1] : slugify(title),
+        id,
         title,
         level,
       });

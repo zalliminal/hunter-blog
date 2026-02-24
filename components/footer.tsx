@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Rss, Mail, Shield, FileText, Search, Map, Github, Heart } from "lucide-react";
+import { Rss, Mail, Shield, FileText, Search, Map, Github, Heart,LogsIcon  } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 
 type SiteFooterProps = {
@@ -46,11 +46,13 @@ const NAV = {
     { href: "/en/blog", icon: FileText, label: "Blog" },
     { href: "/en/categories", icon: Map, label: "Categories" },
     { href: "/en/search", icon: Search, label: "Advanced Search" },
+    { href: "/en/changelog", icon: LogsIcon, label: "changelog" },
   ],
   fa: [
     { href: "/fa/blog", icon: FileText, label: "نوشته‌ها" },
     { href: "/fa/categories", icon: Map, label: "دسته‌بندی‌ها" },
     { href: "/fa/search", icon: Search, label: "جستجوی پیشرفته" },
+    { href: "/fa/changelog", icon: LogsIcon, label: "لاگ تغییرات" },
   ],
 } as const;
 

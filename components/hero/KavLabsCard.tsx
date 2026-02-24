@@ -39,6 +39,9 @@ export default function KavLabsCard({ isFa, locale }: { isFa: boolean; locale: L
         <a href="/rss.xml" className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
           RSS
         </a>
+        <Link href={`/${locale}/glossary`} className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
+          {isFa ? "آناتومی امنیت" : "Anatomy Of Security"}
+        </Link>
       </div>
     </div>
   );
