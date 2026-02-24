@@ -26,12 +26,14 @@ type Filters = {
 
 const i18n = {
   en: {
-    title: "Security Glossary",
-    subtitle: "Comprehensive guide to cybersecurity concepts, terms, and techniques.",
+    title: "Anatomy of Cybersecurity",
+    subtitle:
+      "Dissecting the culture of cybersecurity — a comprehensive guide to concepts, terms, and techniques.",
   },
   fa: {
-    title: "واژه‌نامه امنیت",
-    subtitle: "راهنمای جامع مفاهیم، اصطلاحات و تکنیک‌های امنیت سایبری.",
+    title: "آناتومی امنیت سایبری",
+    subtitle:
+      "کالبدشکافی فرهنگ امنیت سایبری — راهنمای جامع مفاهیم، اصطلاحات و تکنیک‌های امنیت سایبری.",
   },
 };
 

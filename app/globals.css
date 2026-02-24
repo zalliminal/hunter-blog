@@ -37,7 +37,6 @@
   --font-sans: 'Geist Sans', 'Inter', sans-serif;
   --font-serif: 'Charter', 'Georgia', serif;
   --font-mono: 'Geist Mono', 'Fira Code', monospace;
-  /* 🔥 FARSI FONT - Add your chosen Farsi font here */
   --font-farsi: 'Vazirmatn', 'Estedad', 'Vazir', sans-serif;
 
   --shadow-x: 0px;
@@ -79,10 +78,10 @@
   --input: oklch(0.2178 0 0);
   --ring: oklch(0.8686 0.2776 144.4661);
   --chart-1: oklch(0.8686 0.2776 144.4661);
-  --chart-2: oklch(0.7342 0.2341 144.5412);
-  --chart-3: oklch(0.5638 0.1872 143.2450);
-  --chart-4: oklch(0.3053 0.1039 142.4953);
-  --chart-5: oklch(0.7058 0 0);
+  --chart-2: oklch(0.7656 0.2100 162.4796);
+  --chart-3: oklch(0.7520 0.1890 259.8145);
+  --chart-4: oklch(0.8265 0.1800 70.0804);
+  --chart-5: oklch(0.7686 0.1900 25.3313);
   --sidebar: oklch(0.1448 0 0);
   --sidebar-foreground: oklch(0.9551 0 0);
   --sidebar-primary: oklch(0.8686 0.2776 144.4661);
@@ -244,7 +243,19 @@ code {
   line-height: 1.2;
 }
 
-.prose h2 {
+.prose h2 {/* In your globals.css */
+.font-farsi {
+  font-family: var(--font-farsi), var(--font-sans);
+}
+
+/* Ensure RTL elements automatically use Farsi font */
+[dir="rtl"] .font-farsi,
+[lang="fa"] .font-farsi,
+[data-locale="fa"] .font-farsi {
+  font-family: var(--font-farsi), sans-serif;
+  direction: rtl;
+  text-align: right;
+}
   font-size: var(--text-2xl);
   margin-top: 2.5rem; /* INCREASED */
   margin-bottom: 1.25rem; /* INCREASED */
@@ -368,4 +379,35 @@ code {
   .prose h2 {
     font-size: 1.625rem;
   }
+}
+
+
+/* Farsi Font Utility */
+.font-farsi {
+  font-family: var(--font-farsi), var(--font-sans);
+}
+
+/* RTL Direction Support */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .font-farsi {
+  font-family: var(--font-farsi), sans-serif;
+}
+
+/* Drawer RTL Specific Fixes */
+[dir="rtl"] .drawer-content {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .drawer-content nav {
+  direction: rtl;
+}
+
+[dir="rtl"] .drawer-content button {
+  direction: rtl;
+  text-align: right;
 }

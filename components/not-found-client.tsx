@@ -1,299 +1,276 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Terminal, RotateCcw, Home, FileText } from "lucide-react";
+import { Radar, Home, Search, ArrowLeft } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import { getDirection } from "@/lib/i18n";
+import { useState, useEffect } from "react";
 
-type NotFoundClientProps = {
-  locale: Locale;
-};
+type Props = { locale: Locale };
 
-// ── i18n dictionary ─────────────────────────────────────────────────
-const dict = {
-  en: {
-    windowTitle: "zsh — traceroute",
-    errorLine: "ERROR 404 :: this path does not exist in the archive",
-    homeLabel: "~/home",
-    blogLabel: "~/blog",
-    retryLabel: "retry",
-    bottomHint: "// node lost at the threshold — path does not resolve",
-  },
-  fa: {
-    windowTitle: "zsh — مسیریابی",
-    errorLine: "خطای ۴۰۴ :: این مسیر در آرشیو وجود ندارد",
-    homeLabel: "~/خانه",
-    blogLabel: "~/نوشته‌ها",
-    retryLabel: "تلاش دوباره",
-    bottomHint: "// گره در آستانه گم شد — مسیر یافت نشد",
+// Apply Farsi font class conditionally
+const FA_FONT_CLASS = "font-[family-name:var(--font-farsi)]";
+
+// ── Background orbs with enhanced animation ──────────────────────────────────
+function NotFoundBackgroundOrbs({ prefersReduced }: { prefersReduced: boolean | null }) {
+  if (prefersReduced) return null;
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <motion.div
+        className="absolute -top-32 -right-16 h-72 w-72 rounded-full bg-primary/15 blur-3xl"
+        initial={{ opacity: 0, scale: 0.8, x: 20, y: -20 }}
+        animate={{ 
+          opacity: [0.4, 0.6, 0.4], 
+          scale: [1, 1.05, 1],
+          x: [0, -10, 0],
+          y: [0, 10, 0]
+        }}
+        transition={{ 
+          duration: 4, 
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      <motion.div
+        className="absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-secondary/25 dark:bg-secondary/10 blur-3xl"
+        initial={{ opacity: 0, scale: 0.8, x: -20, y: 20 }}
+        animate={{ 
+          opacity: [0.3, 0.5, 0.3], 
+          scale: [1, 1.08, 1],
+          x: [0, 10, 0],
+          y: [0, -10, 0]
+        }}
+        transition={{ 
+          duration: 5, 
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "reverse",
+          delay: 0.5
+        }}
+      />
+    </div>
+  );
+}
+
+// ── Framer variants ──────────────────────────────────────────────────────────
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { 
+    opacity: 1, 
+    transition: { 
+      duration: 0.5, 
+      ease: "easeOut", 
+      staggerChildren: 0.08,
+      delayChildren: 0.15
+    } 
   },
 } as const;
 
-// ── traceroute lines (technical – kept in English) ─────────────────
-const TRACE_LINES = [
-  { delay: 0,    text: "$ traceroute --max-hops=8 kavlabs.dev/[path]" },
-  { delay: 600,  text: " 1  gateway.local (192.168.1.1)   0.412 ms" },
-  { delay: 1100, text: " 2  10.0.0.1 (10.0.0.1)          1.883 ms" },
-  { delay: 1700, text: " 3  transit-node-3 (185.x.x.x)   22.41 ms" },
-  { delay: 2300, text: " 4  * * *" },
-  { delay: 2800, text: " 5  * * *" },
-  { delay: 3300, text: " 6  * * *" },
-  { delay: 3800, text: " 7  Request timeout for icmp_seq 7" },
-  { delay: 4200, text: " 8  Request timeout for icmp_seq 8" },
-  { delay: 4700, text: "traceroute: unknown host — node unreachable" },
-  // The last line will be replaced with localized error
-];
+const itemVariants = {
+  hidden: { opacity: 0, y: 16, scale: 0.98 },
+  show: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { 
+      duration: 0.45, 
+      ease: [0.22, 1, 0.36, 1] 
+    } 
+  },
+} as const;
 
-// ── glitch characters ──────────────────────────────────────────────
-const GLITCH_CHARS = ["▓", "░", "█", "▒", "4", "0", "■", "□"];
-function glitchChar(orig: string, active: boolean) {
-  if (!active) return orig;
-  return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
-}
+const buttonVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.35, ease: "easeOut" }
+  },
+  hover: { 
+    y: -2, 
+    scale: 1.02,
+    transition: { duration: 0.2, ease: "easeOut" }
+  },
+  tap: { 
+    scale: 0.97,
+    transition: { duration: 0.1 }
+  },
+} as const;
 
-export function NotFoundClient({ locale }: NotFoundClientProps) {
+// ── Translations ─────────────────────────────────────────────────────────────
+const COPY = {
+  en: {
+    code: "404",
+    title: "Signal Lost",
+    desc: "The endpoint you're looking for doesn't exist or has been moved. Let's get you back on track.",
+    homeBtn: "Return to Base",
+    searchBtn: "Try Search",
+    backBtn: "Go Back",
+    techNote: "Error: RESOURCE_NOT_FOUND",
+  },
+  fa: {
+    code: "۴۰۴",
+    title: "سیگنال قطع شد",
+    desc: "مسیری که جستجو می‌کنید وجود نداره یا جابجا شده. بیایید مسیر جدید پیدا کنیم.",
+    homeBtn: "بازگشت به صفحه اصلی",
+    searchBtn: "جستجو رو امتحان کنید",
+    backBtn: "بازگشت به صفحه قبل",
+    techNote: "خطا: RESOURCE_NOT_FOUND",
+  },
+} as const;
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MAIN COMPONENT
+// ══════════════════════════════════════════════════════════════════════════════
+export default function NotFoundClient({ locale }: Props) {
+  const router = useRouter();
+  const dir = getDirection(locale);
   const isRTL = locale === "fa";
   const prefersReduced = useReducedMotion();
-  const pathname = usePathname();
+  const content = COPY[locale];
+  const [canGoBack, setCanGoBack] = useState(false);
 
-  const [visibleLines, setVisibleLines] = useState<number[]>([]);
-  const [done, setDone] = useState(false);
-  const [glitch, setGlitch] = useState(false);
-
-  // Get current path for traceroute line
-  const currentPath = pathname ?? "/unknown";
-  const traceLines = TRACE_LINES.map((line, i) => {
-    if (i === 0) {
-      return {
-        ...line,
-        text: line.text.replace("[path]", currentPath),
-      };
-    }
-    if (i === TRACE_LINES.length - 1) {
-      return {
-        ...line,
-        text: dict[locale].errorLine,
-      };
-    }
-    return line;
-  });
-
-  // ── animation timers ────────────────────────────────────────────
   useEffect(() => {
-    const timers = traceLines.map((line, i) =>
-      setTimeout(() => {
-        setVisibleLines((prev) => [...prev, i]);
-        if (i === traceLines.length - 1) {
-          setTimeout(() => setDone(true), 400);
-        }
-      }, line.delay)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [traceLines]);
-
-  // ── periodic glitch on 404 numbers ─────────────────────────────
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setGlitch(true);
-      setTimeout(() => setGlitch(false), 120);
-    }, 2800);
-    return () => clearInterval(interval);
+    setCanGoBack(window.history.length > 1);
   }, []);
 
-  // ── reset function ─────────────────────────────────────────────
-  const handleRetry = () => {
-    setVisibleLines([]);
-    setDone(false);
-    setTimeout(() => {
-      const timers = traceLines.map((line, i) =>
-        setTimeout(() => {
-          setVisibleLines((prev) => [...prev, i]);
-          if (i === traceLines.length - 1) {
-            setTimeout(() => setDone(true), 400);
-          }
-        }, line.delay)
-      );
-      return () => timers.forEach(clearTimeout);
-    }, 50);
+  const handleGoBack = () => {
+    if (canGoBack) {
+      router.back();
+    }
   };
 
-  // ── font classes ───────────────────────────────────────────────
-  const farsiFont = "font-farsi";
-  const defaultFont = isRTL ? farsiFont : "font-mono";
+  const baseContainerProps = prefersReduced
+    ? {}
+    : { variants: containerVariants, initial: "hidden" as const, animate: "show" as const };
 
-  // ── glitched digits ────────────────────────────────────────────
-  const [g0, g1, g2] = ["4", "0", "4"].map((c) =>
-    glitchChar(c, glitch)
-  );
-
-  // ── number formatting for Farsi digits ────────────────────────
-  const fmtYear = (n: number) =>
-    isRTL ? n.toLocaleString("fa-IR", { useGrouping: false }) : n.toString();
-  const year = fmtYear(new Date().getFullYear()); // not used but available
-
-  // ── animation variants ────────────────────────────────────────
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
+  // Apply Farsi font class conditionally
+  const fontClass = locale === "fa" ? FA_FONT_CLASS : "";
 
   return (
-    <div
-      dir={isRTL ? "rtl" : "ltr"}
-      className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-16 select-none"
+    <div 
+      dir={dir} 
+      className={`relative flex min-h-[calc(100vh-200px)] w-full items-center justify-center py-12 md:py-20 ${fontClass}`}
     >
-      {/* ── BIG 404 (always LTR) ────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative mb-8"
-        aria-label={isRTL ? "۴۰۴" : "404"}
-        dir="ltr"
+        {...baseContainerProps}
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card/40 px-6 py-10 shadow-2xl backdrop-blur-md sm:px-8 sm:py-12 md:px-10 md:py-14"
       >
-        <span
-          aria-hidden
-          className="absolute inset-0 font-mono text-[clamp(7rem,20vw,11rem)] font-black leading-none tracking-tighter text-primary/5 blur-sm translate-x-1 translate-y-1 select-none"
-        >
-          404
-        </span>
-        <span className="relative font-mono text-[clamp(7rem,20vw,11rem)] font-black leading-none tracking-tighter text-foreground/90">
-          {g0}
-          {g1}
-          {g2}
-        </span>
-        <motion.div
-          className="absolute -bottom-2 left-0 h-0.5 bg-primary/60"
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-        />
-      </motion.div>
+        <NotFoundBackgroundOrbs prefersReduced={prefersReduced} />
 
-      {/* ── TERMINAL WINDOW (forced LTR for code alignment) ───── */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="w-full max-w-xl rounded-xl border border-border bg-card/60 overflow-hidden shadow-lg mb-8"
-        dir="ltr" // always LTR – terminal output is code
-      >
-        {/* Title bar */}
-        <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 bg-muted/40">
-          <Terminal className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-          <span className="font-mono text-xs text-muted-foreground tracking-wide">
-            {dict[locale].windowTitle}
-          </span>
-          <div className="ml-auto flex gap-1.5" aria-hidden>
-            {["bg-red-400/70", "bg-yellow-400/70", "bg-green-400/70"].map((c) => (
-              <span key={c} className={`h-2.5 w-2.5 rounded-full ${c}`} />
-            ))}
-          </div>
-        </div>
-
-        {/* Output */}
-        <div className="px-4 py-4 space-y-0.5 min-h-[200px]">
-          {traceLines.map((line, i) => (
-            <AnimatePresence key={i}>
-              {visibleLines.includes(i) && (
-                <motion.p
-                  initial={{ opacity: 0, x: -6 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className={`font-mono text-xs leading-relaxed ${
-                    i === traceLines.length - 1
-                      ? "text-red-400/80 font-semibold"
-                      : i >= 3 && i <= 8
-                      ? "text-muted-foreground/50"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {line.text}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          ))}
-
-          {/* Blinking cursor */}
-          {!done && (
-            <span
-              aria-hidden
-              className="inline-block w-2 h-3.5 bg-primary/70 animate-pulse ml-0.5"
-            />
-          )}
-        </div>
-      </motion.div>
-
-      {/* ── NAVIGATION BUTTONS ───────────────────────────────── */}
-      <AnimatePresence>
-        {done && (
-          <motion.div
-            variants={!prefersReduced ? containerVariants : undefined}
-            initial={!prefersReduced ? "hidden" : undefined}
-            animate={!prefersReduced ? "show" : undefined}
-            className="flex flex-wrap items-center justify-center gap-3"
-          >
-            <motion.div variants={itemVariants}>
-              <Link
-                href={`/${locale}`}
-                className={`inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-2 ${defaultFont} text-sm text-muted-foreground transition-all duration-150 hover:border-primary/50 hover:text-primary hover:bg-primary/5`}
+        <div className="relative z-10 flex flex-col items-center text-center">
+          
+          {/* ── Animated Icon ─────────────────────────────────────────── */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <div className="relative inline-flex items-center justify-center">
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-primary/20 blur-xl"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.4, 0.7, 0.4]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
+              <motion.div 
+                className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-border/60 bg-background/60 shadow-lg backdrop-blur-xl"
+                whileHover={prefersReduced ? undefined : { 
+                  rotate: [0, -5, 5, 0],
+                  scale: 1.05,
+                  borderColor: "var(--primary)"
+                }}
+                transition={{ duration: 0.4 }}
               >
-                <Home className="h-3.5 w-3.5" aria-hidden />
-                {dict[locale].homeLabel}
-              </Link>
-            </motion.div>
+                <Radar className="h-10 w-10 text-primary" strokeWidth={1.5} />
+              </motion.div>
+            </div>
 
-            <motion.div variants={itemVariants}>
-              <Link
-                href={`/${locale}/blog`}
-                className={`inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-2 ${defaultFont} text-sm text-muted-foreground transition-all duration-150 hover:border-primary/50 hover:text-primary hover:bg-primary/5`}
-              >
-                <FileText className="h-3.5 w-3.5" aria-hidden />
-                {dict[locale].blogLabel}
-              </Link>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <button
-                type="button"
-                onClick={handleRetry}
-                className={`inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-2 ${defaultFont} text-sm text-muted-foreground transition-all duration-150 hover:border-primary/50 hover:text-primary hover:bg-primary/5`}
-              >
-                <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-                {dict[locale].retryLabel}
-              </button>
+            <motion.div 
+              className="mt-6 text-[5rem] font-bold leading-none tracking-tighter text-foreground/10 dark:text-foreground/20 sm:text-[6rem]"
+              initial={{ opacity: 0, scale: 0.5, rotate: -5 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ 
+                duration: 0.7, 
+                delay: 0.4,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
+            >
+              {content.code}
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* ── BOTTOM HINT ─────────────────────────────────────── */}
-      <AnimatePresence>
-        {done && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className={`mt-8 ${defaultFont} text-[10px] text-muted-foreground/40 tracking-widest`}
-            dir={isRTL ? "rtl" : "ltr"}
+          {/* ── Text Content ────────────────────────────────────────── */}
+          <motion.h1 
+            variants={itemVariants} 
+            className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl md:text-3xl"
           >
-            {dict[locale].bottomHint}
+            {content.title}
+          </motion.h1>
+          
+          <motion.p 
+            variants={itemVariants} 
+            className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground sm:text-base"
+          >
+            {content.desc}
           </motion.p>
-        )}
-      </AnimatePresence>
+
+          <motion.div 
+            variants={itemVariants} 
+            className="mt-3 flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-1.5"
+          >
+            <motion.div
+              className="h-2 w-2 rounded-full bg-destructive"
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
+            <span className="text-[10px] font-mono text-muted-foreground/70">
+              {content.techNote}
+            </span>
+          </motion.div>
+
+          {/* ── Action Buttons ──────────────────────────────────────── */}
+          <motion.div 
+            variants={itemVariants} 
+            className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4"
+          >
+            {canGoBack && (
+              <motion.button
+                onClick={handleGoBack}
+                variants={buttonVariants}
+                whileHover={prefersReduced ? undefined : "hover"}
+                whileTap={prefersReduced ? undefined : "tap"}
+                className="group inline-flex items-center gap-2 rounded-md border border-border/60 bg-background/60 px-4 py-2.5 text-[11px] font-semibold text-foreground shadow-sm backdrop-blur-md transition-all duration-200 hover:border-primary/50 sm:px-5 sm:py-3 sm:text-xs"
+              >
+                <ArrowLeft className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary sm:h-4 sm:w-4" />
+                {content.backBtn}
+              </motion.button>
+            )}
+
+            <Link
+              href={`/${locale}/`}
+              className="group inline-flex items-center gap-2 rounded-md bg-primary/80 px-4 py-2.5 text-[11px] font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:brightness-110 hover:shadow-md sm:px-5 sm:py-3 sm:text-xs"
+            >
+              <Home className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              {content.homeBtn}
+            </Link>
+
+            <Link
+              href={`/${locale}/search`}
+              className="group inline-flex items-center gap-2 rounded-md border border-border/60 bg-background/60 px-4 py-2.5 text-[11px] font-semibold text-foreground shadow-sm backdrop-blur-md transition-all duration-200 hover:bg-muted hover:border-primary/50 sm:px-5 sm:py-3 sm:text-xs"
+            >
+              <Search className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary sm:h-4 sm:w-4" />
+              {content.searchBtn}
+            </Link>
+          </motion.div>
+        </div>
+      </motion.div>
     </div>
   );
 }

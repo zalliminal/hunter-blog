@@ -34,15 +34,14 @@ sources:
 
 فرض کن یه فرم داری که <span dir="ltr">IP</span> رو <span dir="ltr">Ping</span> می‌کنه:
 ```
-__PROTECTED_16__ [__PROTECTED_17__]
+ping [user_input]
 ```
 
-هکر می‌زنه: `__PROTECTED_16__.__PROTECTED_17__.__PROTECTED_18__.__PROTECTED_19__; __PROTECTED_20__ /__PROTECTED_21__/__PROTECTED_22__`
-
+هکر می‌زنه: `8.8.8.8; cat /etc/passwd`
 سرور اجرا می‌کنه:
 ```
-__PROTECTED_25__ __PROTECTED_26__.__PROTECTED_27__.__PROTECTED_28__.__PROTECTED_29__
-__PROTECTED_30__ /__PROTECTED_31__/__PROTECTED_32__
+ping 8.8.8.8
+cat /etc/passwd
 ```
 
 و فایل حساس رو نشون می‌ده!

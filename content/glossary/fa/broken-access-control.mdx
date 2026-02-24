@@ -24,27 +24,26 @@ sources:
 
 ### انواع کنترل دسترسی شکسته:
 
-**<span dir="ltr">Vertical</span> <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span>:** کاربر عادی دسترسی ادمین می‌گیره. مثلاً با تغییر یه عدد تو <span dir="ltr">URL</span> از `__PROTECTED_4__=__PROTECTED_5__` به `__PROTECTED_6__=__PROTECTED_7__` می‌شی ادمین!
+**Vertical Privilege Escalation:** کاربر عادی دسترسی ادمین می‌گیره. مثلاً با تغییر یه عدد تو URL از `user_id=100` به `user_id=1` می‌شی ادمین!
 
-**<span dir="ltr">Horizontal</span> <span dir="ltr">Privilege</span> <span dir="ltr">Escalation</span>:** دسترسی به داده‌های کاربر دیگه. مثلاً تو اکانت خودتی، ولی با تغییر <span dir="ltr">ID</span> می‌تونی پروفایل بقیه رو ببینی.
+**Horizontal Privilege Escalation:** دسترسی به داده‌های کاربر دیگه. مثلاً تو اکانت خودتی، ولی با تغییر ID می‌تونی پروفایل بقیه رو ببینی.
 
-**<span dir="ltr">Directory</span> <span dir="ltr">Traversal</span>:** دسترسی به فایل‌هایی که نباید. مثلاً به جای `__PROTECTED_14__=__PROTECTED_15__.__PROTECTED_16__` می‌زنی `__PROTECTED_17__=../../__PROTECTED_18__/__PROTECTED_19__`.
+**Directory Traversal:** دسترسی به فایل‌هایی که نباید. مثلاً به جای `file=report.pdf` می‌زنی `file=../../etc/passwd`.
 
-**<span dir="ltr">CORS</span> <span dir="ltr">Misconfiguration</span>:** سایت تو به همه دامنه‌ها اجازه می‌ده درخواست بفرستن. مهاجم از این سوءاستفاده می‌کنه.
+**CORS Misconfiguration:** سایت تو به همه دامنه‌ها اجازه می‌ده درخواست بفرستن. مهاجم از این سوءاستفاده می‌کنه.
 
 ### مثال واقعی:
 
-فرض کن یه سایت فروشگاهی داری. <span dir="ltr">URL</span> پروفایل کاربر اینه:
+فرض کن یه سایت فروشگاهی داری. URL پروفایل کاربر اینه:
 ```
-__PROTECTED_23__://__PROTECTED_24__.`__PROTECTED_13__=__PROTECTED_14__`/```
-__PROTECTED_31__://__PROTECTED_32__.__PROTECTED_33__/__PROTECTED_34__/__PROTECTED_35__?__PROTECTED_36__=__PROTECTED_37__
-```?__PROTECTED_27__=__PROTECTED_28__
+https://shop.com/profile?user_id=123
 ```
 
-کاربر می‌تونه بزنه `__PROTECTED_13__=__PROTECTED_14__` و پروفایل ادمین رو ببینه! یا حتی:
+کاربر می‌تونه بزنه `user_id=1` و پروفایل ادمین رو ببینه! یا حتی:
 ```
-__PROTECTED_31__://__PROTECTED_32__.__PROTECTED_33__/__PROTECTED_34__/__PROTECTED_35__?__PROTECTED_36__=__PROTECTED_37__
+https://shop.com/admin/delete_user?id=5
 ```
+
 
 و کاربر عادی بتونه کاربرای دیگه رو حذف کنه! این یعنی کنترل دسترسی شکسته.
 

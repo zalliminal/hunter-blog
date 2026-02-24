@@ -28,7 +28,7 @@ sources:
 سرور رو نصب می‌کنی، پسورد <span dir="ltr">admin</span>/<span dir="ltr">admin</span> رو عوض نمی‌کنی. هکر با همون وارد می‌شه!
 
 **<span dir="ltr">۲</span>. صفحه ادمین عمومی:**
-پنل ادمین رو می‌ذاری روی `/__PROTECTED_4__` و هیچ محافظتی نداره. هکر راحت پیداش می‌کنه!
+پنل ادمین رو می‌ذاری روی `/admin` و هیچ محافظتی نداره. هکر راحت پیداش می‌کنه!
 
 **<span dir="ltr">۳</span>. <span dir="ltr">Error</span> <span dir="ltr">Messages</span> زیاد:**
 وقتی خطا می‌خوره، تمام جزئیات رو نشون می‌ده (نسخه سرور، مسیر فایل‌ها، کوئری <span dir="ltr">SQL</span>). هکر از این اطلاعات استفاده می‌کنه!
@@ -37,7 +37,7 @@ sources:
 پورت‌های اضافی بازه، سرویس‌هایی که نیاز نیستن روشنه. هر کدوم یه راه نفوذه!
 
 **<span dir="ltr">۵</span>. <span dir="ltr">Headers</span> امنیتی نداره:**
-<span dir="ltr">Headers</span> مثل `__PROTECTED_13__`، `__PROTECTED_14__` رو نمی‌ذاری. سایتت در برابر کلیک‌جکینگ و <span dir="ltr">XSS</span> آسیب‌پذیره!
+Headers مثل `X-Frame-Options`، `Content-Security-Policy` رو نمی‌ذاری. سایتت در برابر کلیک‌جکینگ و XSS آسیب‌پذیره!
 
 **<span dir="ltr">۶</span>. <span dir="ltr">Cloud</span> <span dir="ltr">Storage</span> عمومی:**
 باکت <span dir="ltr">S3</span> رو عمومی می‌ذاری. هر کسی می‌تونه فایل‌هات رو دانلود کنه!

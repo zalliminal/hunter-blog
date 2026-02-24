@@ -4,35 +4,40 @@ export type TocItem = {
   level: 2 | 3;
 };
 
-export function slugifyHeading(raw: string): string {
-  return raw
+export function slugify(text: string): string {
+  return text
     .toLowerCase()
     .trim()
-    .replace(/[`~!@#$%^&*()+=<>?,./:;"'{}|[\]\\]/g, "")
-    .replace(/\s+/g, "-");
+    .replace(/[^\w\s-]/g, "") // remove non-word chars
+    .replace(/[\s_-]+/g, "-") // replace spaces/underscores with dash
+    .replace(/^-+|-+$/g, ""); // trim dashes from ends
 }
 
 export function generateTocFromContent(content: string): TocItem[] {
   const lines = content.split("\n");
-  const items: TocItem[] = [];
+  const toc: TocItem[] = [];
 
   for (const line of lines) {
-    const match = /^(#{2,3})\s+(.+)$/.exec(line.trim());
-    if (!match) continue;
-    const level = match[1].length as 2 | 3;
-    if (level !== 2 && level !== 3) continue;
+    // Match ## Heading or ### Heading
+    const match = line.match(/^(#{2,3})\s+(.+)$/);
+    
+    if (match) {
+      const level = match[1].length as 2 | 3;
+      let title = match[2].trim();
+      
+      // Remove custom ID if present (e.g., ## Heading {#custom-id})
+      const idMatch = title.match(/\{#([^}]+)\}$/);
+      if (idMatch) {
+        title = title.replace(/\{#([^}]+)\}$/, "").trim();
+      }
 
-    const rawTitle = match[2].replace(/\s*\{#([^}]+)\}\s*$/, "");
-    const idMatch = /\{#([^}]+)\}\s*$/.exec(match[2]);
-    const id = idMatch ? idMatch[1] : slugifyHeading(rawTitle);
-
-    items.push({
-      id,
-      title: rawTitle,
-      level,
-    });
+      toc.push({
+        id: idMatch ? idMatch[1] : slugify(title),
+        title,
+        level,
+      });
+    }
   }
 
-  return items;
+  return toc;
 }
-

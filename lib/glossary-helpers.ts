@@ -36,9 +36,9 @@ export function getDifficultyColor(difficulty?: string) {
       };
     case "intermediate":
       return {
-        bg: "bg-chart-3/10",
-        text: "text-chart-3",
-        border: "border-chart-3/20",
+        bg: "bg-chart-4/10",
+        text: "text-chart-4",
+        border: "border-chart-4/20",
       };
     case "advanced":
       return {

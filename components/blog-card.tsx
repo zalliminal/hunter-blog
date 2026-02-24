@@ -12,11 +12,9 @@ type BlogCardProps = {
 };
 
 export function BlogCard({ post, locale, priority = false }: BlogCardProps) {
-  // Fix #1: Shared hook - no duplicate date/isNew/text logic
   const { isRTL, dir, textAlign, readMoreText, newText, formatDate, isNew } =
     useBlogCard(locale);
 
-  // Fix #3 & #10: Computed once at top, no IIFE in JSX
   const category = post.category ? getCategory(post.category) : null;
   const author = post.author ? getAuthor(post.author) : null;
   const rowReverse = isRTL ? "flex-row-reverse" : "flex-row";

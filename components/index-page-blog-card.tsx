@@ -105,7 +105,6 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
               </>
             )}
 
-            {/* Fix #10: category computed above, no IIFE */}
             {category && (
               <>
                 <span className="text-border" aria-hidden>·</span>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, Search, X, Tag, LayoutGrid, Home, BookOpen, Book } from "lucide-react";
+import { Menu, Search, X, Tag, LayoutGrid, Home, BookOpen, Book, BrainCircuit } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Locale, NavDictionary } from "@/lib/i18n";
 import { LOCALES } from "@/lib/i18n";
@@ -179,7 +179,7 @@ function PrimaryNav({
                             "text-muted-foreground hover:bg-primary/10 hover:text-primary",
                           )}
                         >
-                          <Book className="h-4 w-4 shrink-0" />
+                          <BrainCircuit className="h-4 w-4 shrink-0" />
                           <span>{dict.navGlossary}</span>
                         </Link>
                       </NavigationMenuLink>
@@ -343,7 +343,7 @@ function MobileMenu({
               </Link>
               <Link href={`/${locale}/glossary`} onClick={() => setOpen(false)} className={itemClass}>
                 <span className="flex items-center gap-2">
-                  <Book className="h-4 w-4 shrink-0" />
+                  <BrainCircuit className="h-4 w-4 shrink-0" />
                   {dict.navGlossary}
                 </span>
               </Link>

@@ -25,9 +25,9 @@ sources:
 ### چطور کار می‌کنه؟
 
 برنامه‌ای به زبان <span dir="ltr">C</span> داری:
-```__PROTECTED_4__
-__PROTECTED_5__ __PROTECTED_6__[__PROTECTED_7__];
-__PROTECTED_8__(__PROTECTED_9__); // کاربر __PROTECTED_10__ کاراکتر می‌ده!
+```c
+char buffer[10];
+gets(buffer); // کاربر ۵۰ کاراکتر می‌ده!
 ```
 
 <span dir="ltr">۴۰</span> کاراکتر اضافی می‌ریزه روی <span dir="ltr">Stack</span>. اگه هکر دقیق محاسبه کنه، می‌تونه <span dir="ltr">Return</span> <span dir="ltr">Address</span> رو عوض کنه و کد خودش رو اجرا کنه!

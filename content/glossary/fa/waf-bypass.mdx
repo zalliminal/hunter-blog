@@ -25,19 +25,19 @@ sources:
 ### تکنیک‌های رایج <span dir="ltr">WAF</span> <span dir="ltr">Bypass</span>:
 
 **<span dir="ltr">۱</span>. <span dir="ltr">Encoding</span> (کدگذاری):**
-به جای `<__PROTECTED_10__>` می‌نویسی `%__PROTECTED_11__%__PROTECTED_12__`. بعضی WAFها این رو نمی‌شناسن!
+به جای `<script>` می‌نویسی `%3Cscript%3E`. بعضی WAFها این رو نمی‌شناسن!
 
 **<span dir="ltr">۲</span>. <span dir="ltr">Case</span> <span dir="ltr">Toggling</span> (تغییر حروف):**
-به جای `__PROTECTED_16__` می‌نویسی `__PROTECTED_17__`. بعضی WAFها فقط حروف بزرگ رو چک می‌کنن!
+به جای `SELECT` می‌نویسی `SeLeCt`. بعضی WAFها فقط حروف بزرگ رو چک می‌کنن!
 
 **<span dir="ltr">۳</span>. <span dir="ltr">Comment</span> <span dir="ltr">Injection</span> (تزریق کامنت):**
-به جای `__PROTECTED_21__` می‌نویسی `__PROTECTED_22__/**/__PROTECTED_23__`. <span dir="ltr">WAF</span> فکر می‌کنه دو تا کلمه‌ست، ولی دیتابیس می‌فهمه یکیه!
+به جای `SELECT` می‌نویسی `SEL/**/ECT`. WAF فکر می‌کنه دو تا کلمه‌ست، ولی دیتابیس می‌فهمه یکیه!
 
 **<span dir="ltr">۴</span>. <span dir="ltr">HTTP</span> <span dir="ltr">Parameter</span> <span dir="ltr">Pollution</span>:**
 همون پارامتر رو چند بار می‌فرستی. <span dir="ltr">WAF</span> گیج می‌شه کدوم رو چک کنه!
 
 **<span dir="ltr">۵</span>. <span dir="ltr">Path</span> <span dir="ltr">Traversal</span> <span dir="ltr">Tricks</span>:**
-به جای `/__PROTECTED_34__/__PROTECTED_35__` می‌نویسی `/....//....//__PROTECTED_36__/__PROTECTED_37__`. بعضی WAFها این رو نمی‌شناسن!
+به جای `/etc/passwd` می‌نویسی `/....//....//etc/passwd`. بعضی WAFها این رو نمی‌شناسن!
 
 **<span dir="ltr">۶</span>. <span dir="ltr">HTTP</span> <span dir="ltr">Verb</span> <span dir="ltr">Tampering</span>:**
 به جای <span dir="ltr">GET</span> از <span dir="ltr">POST</span> استفاده می‌کنی یا برعکس. بعضی WAFها فقط یه روش رو چک می‌کنن .

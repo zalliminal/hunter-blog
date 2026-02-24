@@ -24,11 +24,11 @@ sources:
 
 ### انواع <span dir="ltr">Injection</span>:
 
-**<span dir="ltr">SQL</span> <span dir="ltr">Injection</span>:** کد <span dir="ltr">SQL</span> مخرب به دیتابیس می‌فرستی. مثلاً به جای پسورد می‌زنی `' __PROTECTED_5__ '__PROTECTED_6__'='__PROTECTED_7__` و بدون پسورد وارد می‌شی!
+**<span dir="ltr">SQL</span> <span dir="ltr">Injection</span>:** کد <span dir="ltr">SQL</span> مخرب به دیتابیس می‌فرستی. مثلاً به جای پسورد می‌زنی `' OR '1'='1` و بدون پسورد وارد می‌شی!
 
 **<span dir="ltr">XSS</span> (<span dir="ltr">Cross-Site</span> <span dir="ltr">Scripting</span>):** کد <span dir="ltr">JavaScript</span> مخرب تو سایت تزریق می‌کنی. وقتی کاربر دیگه سایت رو باز می‌کنه، کد تو اجرا می‌شه.
 
-**<span dir="ltr">Command</span> <span dir="ltr">Injection</span>:** دستور سیستمی به سرور می‌فرستی. مثلاً `; __PROTECTED_14__ -__PROTECTED_15__ /` و کل سرور پاک می‌شه!
+**<span dir="ltr">Command</span> <span dir="ltr">Injection</span>:** دستور سیستمی به سرور می‌فرستی. مثلاً `; rm -rf /` و کل سرور پاک می‌شه!
 
 **<span dir="ltr">LDAP</span> <span dir="ltr">Injection</span>:** به دایرکتوری <span dir="ltr">LDAP</span> کد مخرب می‌فرستی.
 
@@ -37,19 +37,18 @@ sources:
 ### مثال <span dir="ltr">SQL</span> <span dir="ltr">Injection</span>:
 
 فرض کن لاگین فرم داری:
-```__PROTECTED_25__
-__PROTECTED_26__ * __PROTECTED_27__ __PROTECTED_28__ __PROTECTED_29__ __PROTECTED_30__ = '__PROTECTED_31__' __PROTECTED_32__ __PROTECTED_33__ = '`' __PROTECTED_20__ '__PROTECTED_21__'='__PROTECTED_22__`'
+```sql
+SELECT * FROM users WHERE username = 'ali' AND password = '123456'
 ```
 
-هکر به جای پسورد می‌زنه: `' __PROTECTED_20__ '__PROTECTED_21__'='__PROTECTED_22__`
-
+هکر به جای پسورد می‌زنه: `' OR '1'='1`
 کوئری می‌شه:
-```__PROTECTED_38__
-__PROTECTED_39__ * __PROTECTED_40__ __PROTECTED_41__ __PROTECTED_42__ __PROTECTED_43__ = '__PROTECTED_44__' __PROTECTED_45__ __PROTECTED_46__ = '' __PROTECTED_47__ '__PROTECTED_48__'='__PROTECTED_49__'
+
+```sql
+SELECT * FROM users WHERE username = 'ali' AND password = '' OR '1'='1'
 ```
 
-`'__PROTECTED_23__'='__PROTECTED_24__'` همیشه درسته! پس هکر بدون پسورد وارد می‌شه!
-
+`'1'='1'` همیشه درسته! پس هکر بدون پسورد وارد می‌شه!
 ### چرا برای امنیت مهمه؟
 
 چون شماره <span dir="ltr">۳</span> <span dir="ltr">OWASP</span> <span dir="ltr">Top</span> <span dir="ltr">10</span> <span dir="ltr">2021</span> هست! <span dir="ltr">Injection</span> می‌تونه منجر به دزدی داده، حذف داده، دسترسی کامل به سرور، یا حتی برداشتن کل سیستم بشه.

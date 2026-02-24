@@ -1,9 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import { CodeBlock } from "./code-block";
-import { slugifyHeading } from "@/lib/toc";
-import { Link } from "lucide-react"; 
+import { slugify } from "@/lib/toc"; // Changed from slugifyHeading to slugify
+import { Link } from "lucide-react";
 import { GlossaryTermMDX } from "@/components/glossary/glossary-term-mdx";
-
+import { Note, Tip, Warning, Danger, InfoBox, Legal, AI } from "./callout";
 
 // --- Helper: extract line highlights from metastring ---
 function extractHighlightLines(meta?: string): number[] {
@@ -47,12 +47,12 @@ const Heading =
   (Tag: "h2" | "h3") =>
   ({ children }: { children: React.ReactNode }) => {
     const text = flattenText(children);
-    const id = slugifyHeading(text);
+    const id = slugify(text); // Uses same function as TOC generator
 
     return (
       <Tag
         id={id}
-        className={`group scroll-mt-24 font-semibold tracking-tight ${
+        className={`group scroll-mt-28 font-semibold tracking-tight ${
           Tag === "h2"
             ? "mt-10 text-lg"
             : "mt-6 text-[15px] text-muted-foreground"
@@ -78,6 +78,13 @@ export const mdxComponents: MDXComponents = {
   h2: Heading("h2"),
   h3: Heading("h3"),
   GlossaryTerm: GlossaryTermMDX,
+  Note,
+  Tip,
+  Warning,
+  Danger,
+  InfoBox,
+  Legal,
+  AI,
 
   p: (props) => (
     <p
@@ -147,9 +154,13 @@ export const mdxComponents: MDXComponents = {
       <table {...props} className="w-full text-sm" />
     </div>
   ),
-  thead: (props) => <thead {...props} className="bg-muted/50 border-b border-border" />,
+  thead: (props) => (
+    <thead {...props} className="bg-muted/50 border-b border-border" />
+  ),
   tbody: (props) => <tbody {...props} />,
-  tr: (props) => <tr {...props} className="border-b border-border last:border-0" />,
+  tr: (props) => (
+    <tr {...props} className="border-b border-border last:border-0" />
+  ),
   th: (props) => (
     <th
       {...props}
