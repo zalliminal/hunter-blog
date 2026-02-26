@@ -1,0 +1,176 @@
+---
+slug: "status-code"
+term: "HTTP Status Code"
+abbreviation: ""
+shortDefinition: "A three-digit number returned by a server indicating the result of an HTTP request (200=success, 404=not found, 500=server error, etc.)."
+category: "Web Fundamentals"
+tags: ["http", "status-code", "web", "response", "server"]
+relatedTerms: ["http-request", "server", "api", "endpoint"]
+language: "en"
+hasTranslation: true
+translationSlug: "status-code"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+---
+
+## Short Definition
+Status codes are server responses in numbers: 200 means "here's what you asked for," 404 means "can't find that," 403 means "you're not allowed," and 500 means "I messed up." They're how servers quickly tell you what happened.
+
+## Full Definition
+HTTP status codes are standardized three-digit numbers that indicate the outcome of an HTTP request.
+
+**Categories (by first digit):**
+
+**1xx - Informational:**
+- 100 Continue
+- 101 Switching Protocols
+
+**2xx - Success:**
+- 200 OK (request succeeded)
+- 201 Created (new resource created)
+- 204 No Content (success but no data)
+
+**3xx - Redirection:**
+- 301 Moved Permanently
+- 302 Found (temporary redirect)
+- 304 Not Modified (cached version still good)
+
+**4xx - Client Error:**
+- 400 Bad Request (malformed request)
+- 401 Unauthorized (need authentication)
+- 403 Forbidden (authenticated but not allowed)
+- 404 Not Found (resource doesn't exist)
+- 429 Too Many Requests (rate limited)
+
+**5xx - Server Error:**
+- 500 Internal Server Error
+- 502 Bad Gateway
+- 503 Service Unavailable
+- 504 Gateway Timeout
+
+## Why It Matters
+- Quick diagnosis of issues
+- API design and error handling
+- User experience (friendly error pages)
+- Security (information leakage)
+- Semi-Blind SSRF relies on status codes
+
+## How Attackers Use It
+**Semi-Blind SSRF reconnaissance:**
+
+Even without seeing full response, status codes reveal information:
+
+```python
+# Test internal network
+for ip in range(1, 255):
+    url = f"http://192.168.1.{ip}:80"
+    status = ssrf_request(url).status_code
+    
+    if status == 200:
+        print(f"{ip}: Service up and responding")
+    elif status == 403:
+        print(f"{ip}: Service exists but access denied")
+    elif status == timeout:
+        print(f"{ip}: No service or filtered")
+```
+
+**Information gained:**
+- 200/403: Host exists, service running
+- 401: Authentication required (target found)
+- 404: Host up but wrong path
+- Timeout: No service or firewall blocking
+
+**Other attacks:**
+
+**Error-based enumeration:**
+```
+GET /api/users/123 → 200 (user exists)
+GET /api/users/999 → 404 (doesn't exist)
+→ Can enumerate valid user IDs
+```
+
+**Timing-based attacks:**
+```
+Incorrect password → 401 in 10ms
+Correct password → 401 in 100ms (checking hash)
+→ Username enumeration via timing + status
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**Minimize information leakage:**
+```python
+# Bad: Reveals why request failed
+if user_not_found:
+    return 404, "User doesn't exist"
+if password_wrong:
+    return 401, "Invalid password"
+
+# Good: Generic message
+if auth_failed:
+    return 401, "Invalid credentials"
+```
+
+**Rate limiting:**
+```python
+if too_many_requests:
+    return 429, "Rate limit exceeded"
+```
+
+**Consistent responses:**
+```python
+# Prevent timing attacks
+time.sleep(random.uniform(0.1, 0.3))
+return 401, "Authentication failed"
+```
+
+**For SSRF:**
+- Don't return raw status codes from internal requests
+- Sanitize responses before showing users
+- Log internal status codes separately
+
+**Detection:**
+- Monitor for status code enumeration patterns
+- Alert on excessive 404s (scanning)
+- Track 401/403 patterns (brute force)
+- Log unusual status code sequences
+
+## Common Misconceptions
+- "404 means server is down" - Server is up, resource not found
+- "200 always means success" - Application logic may have failed
+- "500 is always bad" - Helps identify server issues
+- "Status codes are optional" - HTTP requires them
+- "Same status = same result" - Response body matters too
+
+## Real-World Example
+**GitHub Enumeration via Status Codes**
+
+```
+GET /username → 404 (doesn't exist)
+GET /torvalds → 200 (exists)
+```
+
+Allowed enumeration of all GitHub users via status codes.
+
+**AWS S3 Bucket Enumeration**
+
+```
+GET /bucket-name → 404 (doesn't exist)
+GET /company-data → 403 (exists but private)
+GET /public-files → 200 (exists and accessible)
+```
+
+Attackers use status codes to find valid bucket names.
+
+**Semi-Blind SSRF in Capital One**
+
+Even though attacker couldn't see full metadata response initially, status codes revealed:
+- 200: Metadata endpoint exists
+- 403: Authentication needed (but IMDSv1 didn't require it)
+- Different codes for different paths guided exploration
+
+## Related Terms
+HTTP Request, Server, API, Endpoint, Semi-Blind SSRF

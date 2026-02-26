@@ -10,8 +10,8 @@
  */
 
 const WPM: Record<string, number> = {
-    fa: 130,  // Persian
-    ar: 130,  // Arabic (if you ever add it)
+    fa: 150,  // Persian
+    ar: 150,  // Arabic (if you ever add it)
     default: 200,
   };
   

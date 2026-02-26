@@ -1,0 +1,169 @@
+---
+slug: "owasp-top-10"
+term: "OWASP Top 10"
+abbreviation: ""
+shortDefinition: "A regularly updated list of the ten most critical web application security risks, published by the Open Web Application Security Project."
+category: "Security Standards"
+tags: ["owasp", "security", "vulnerability", "standard", "web"]
+relatedTerms: ["vulnerability", "injection", "broken-access-control", "ssrf"]
+language: "en"
+hasTranslation: true
+translationSlug: "owasp-top-10"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://owasp.org/www-project-top-ten/"
+---
+
+## Short Definition
+OWASP Top 10 is like the "most wanted" list for web vulnerabilities. Security experts worldwide vote on the biggest threats, updated every few years. If you're learning security, start here — it covers 90% of real-world attacks.
+
+## Full Definition
+The OWASP Top 10 is a standard awareness document for web application security, representing a broad consensus about the most critical security risks.
+
+**2021 Version:**
+
+**A01 - Broken Access Control**
+- Users accessing data they shouldn't
+- IDOR, privilege escalation
+- Most common category (moved from #5)
+
+**A02 - Cryptographic Failures**
+- Sensitive data exposure
+- Weak encryption
+- Previously "Sensitive Data Exposure"
+
+**A03 - Injection**
+- SQL, NoSQL, command injection
+- XSS moved out to separate category
+- Still highly dangerous
+
+**A04 - Insecure Design**
+- NEW in 2021
+- Flaws in architecture/design
+- Missing security controls
+
+**A05 - Security Misconfiguration**
+- Default passwords, unnecessary features
+- Verbose errors, improper headers
+
+**A06 - Vulnerable and Outdated Components**
+- Using libraries with known vulnerabilities
+- Lack of updates
+
+**A07 - Identification and Authentication Failures**
+- Broken login mechanisms
+- Session management issues
+
+**A08 - Software and Data Integrity Failures**
+- NEW in 2021
+- Unsigned updates, insecure CI/CD
+
+**A09 - Security Logging and Monitoring Failures**
+- Can't detect or respond to breaches
+- Insufficient logging
+
+**A10 - Server-Side Request Forgery (SSRF)**
+- NEW in 2021
+- Tricking servers into making malicious requests
+
+## Why It Matters
+- Industry standard reference
+- Training and awareness focus
+- Compliance requirements reference it
+- Bug bounty programs use it for severity
+- Guides security testing priorities
+
+## How Attackers Use It
+Attackers study OWASP Top 10 to know what to look for:
+
+**Systematic testing approach:**
+```
+1. Test A01: Try changing IDs, access other users' data
+2. Test A03: Try SQL injection in all inputs
+3. Test A10: Look for URL inputs, test SSRF
+... and so on
+```
+
+**Automated scanners** are built around Top 10:
+- OWASP ZAP
+- Burp Suite Pro
+- Nikto
+- SQLmap (for A03)
+
+**Real-world targeting:**
+Most breaches involve Top 10 vulnerabilities:
+- Capital One: A10 (SSRF)
+- Equifax: A06 (Outdated Components)
+- Yahoo: A02 (Cryptographic Failures)
+
+## How to Detect or Prevent It
+**Prevention (by category):**
+
+**A01 (Access Control):**
+- Implement proper authorization checks
+- Deny by default
+- Test with different user roles
+
+**A03 (Injection):**
+- Use parameterized queries
+- Input validation
+- WAF deployment
+
+**A10 (SSRF):**
+- Validate URLs
+- Block private IPs
+- Use allowlists
+
+**General approach:**
+1. Security training for developers
+2. Secure coding guidelines
+3. Security testing in CI/CD
+4. Regular security audits
+5. Penetration testing
+
+**Detection:**
+- Use security scanners (OWASP ZAP)
+- Code analysis tools (SonarQube)
+- Runtime protection (RASP)
+- Security monitoring
+
+## Common Misconceptions
+- "Covering Top 10 = secure" - It's a starting point, not complete
+- "Top 10 never changes" - Updated every 3-4 years
+- "Only for web apps" - Principles apply broadly
+- "Ranked by severity" - Ranked by prevalence + impact
+- "If not in Top 10, not important" - Many serious vulns not listed
+
+## Real-World Example
+**How Top 10 Guided Capital One Breach**
+
+**A10 - SSRF (NEW in 2021):**
+- Vulnerability found: URL input in WAF
+- Attack: Requested metadata service
+- Result: Credentials stolen
+
+**A01 - Broken Access Control:**
+- WAF role had excessive S3 permissions
+- Should have had least privilege
+- Allowed access to all buckets
+
+**A09 - Logging Failures:**
+- Unusual API patterns not detected
+- Took 4 months to discover breach
+- Insufficient monitoring
+
+Multiple Top 10 issues combined = major breach.
+
+**2021 Update Impact:**
+
+SSRF became A10 because:
+- Cloud adoption increased
+- Metadata service attacks rising
+- SSRF in 50% of bug bounty programs
+- Capital One breach influence
+
+This shows how Top 10 evolves with real threats.
+
+## Related Terms
+Vulnerability, Injection, Broken Access Control, SSRF, CVE

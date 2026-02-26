@@ -1,0 +1,189 @@
+---
+slug: "url-parser"
+term: "تجزیه‌گر URL"
+abbreviation: ""
+shortDefinition: "جزئی که یک URL را به اجزای آن (پروتکل، دامنه، مسیر و غیره) تجزیه می‌کند. تجزیه‌گرهای مختلف می‌توانند یک URL را متفاوت تفسیر کنند و مشکلات امنیتی ایجاد کنند."
+category: "امنیت وب"
+tags: ["url", "تجزیه‌گر", "ssrf", "دور-زدن", "امنیت"]
+relatedTerms: ["url", "ssrf", "bypass", "domain"]
+language: "fa"
+hasTranslation: true
+translationSlug: "url-parser"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf"
+---
+
+## تعریف کوتاه
+تجزیه‌گر URL یک URL را می‌خواند و آن را به تکه‌ها (طرح، میزبان، مسیر) تقسیم می‌کند. مشکل: تجزیه‌گرهای مختلف در نحوه تقسیم یک URL اختلاف نظر دارند، بنابراین بررسی امنیتی شما و درخواست واقعی ممکن است مقاصد متفاوتی را ببینند.
+
+## تعریف کامل
+تجزیه‌گر URL کدی است که یک رشته URL را تفسیر کرده و اجزای آن را استخراج می‌کند. هر زبان برنامه‌نویسی و کتابخانه تجزیه‌گر مخصوص خود را دارد و همیشه با هم توافق ندارند.
+
+**آنچه تجزیه‌گرها استخراج می‌کنند:**
+```
+https://user:pass@example.com:8080/path?query=1#fragment
+```
+
+تجزیه‌گر برمی‌گرداند:
+- طرح: https
+- نام کاربری: user
+- رمز عبور: pass
+- نام میزبان: example.com
+- پورت: ۸۰۸۰
+- مسیر: /path
+- پرس‌وجو: query=1
+- بخش: fragment
+
+**مشکل: URLهای مبهم**
+
+```
+http://evil.com@good.com
+```
+
+- برخی تجزیه‌گرها: username=evil.com, host=good.com
+- برخی دیگر: host=evil.com, path=@good.com
+- نتیجه: دور زدن امنیتی
+
+## چرا مهم است
+- تصمیمات امنیتی بر اساس خروجی تجزیه‌گر
+- ناسازگاری تجزیه‌گر = فرصت‌های دور زدن
+- فیلترهای SSRF اغلب به تجزیه URL وابسته هستند
+- یک URL می‌تواند برای سیستم‌های مختلف معانی متفاوتی داشته باشد
+- آزمایش همه رفتارهای تجزیه‌گر سخت است
+
+## چگونه مهاجمان از آن استفاده می‌کنند
+**حمله سردرگمی تجزیه‌گر:**
+
+```python
+# اعتبارسنجی امنیتی
+parsed = urlparse(user_input)
+if parsed.hostname == "trusted-site.com":
+    fetch(user_input)  # تأیید شد
+
+# مهاجم ارائه می‌دهد:
+"http://trusted-site.com@evil.com"
+
+# اعتبارسنج می‌بیند: hostname = "trusted-site.com" ✓
+# کتابخانه HTTP متصل می‌شود به: "evil.com" ✗
+```
+
+**وکتورهای حمله واقعی:**
+
+**۱. سردرگمی با علامت @:**
+```
+http://whitelisted.com@attacker.com
+http://whitelisted.com%00@attacker.com
+```
+
+**۲. بک‌اسلش در مقابل اسلش جلو:**
+```
+http://whitelisted.com\.attacker.com
+http://whitelisted.com/..​.attacker.com
+```
+
+**۳. دستکاری نقطه:**
+```
+http://whitelisted.com.attacker.com
+http://whitelisted.com。attacker.com (نقطه تمام‌عرض)
+```
+
+**۴. ترفندهای کدگذاری:**
+```
+http://whitelisted.com%2f%2f@attacker.com
+http://whitelisted.com%09@attacker.com
+```
+
+## چگونه تشخیص یا پیشگیری کنیم
+**راهبردهای پیشگیری:**
+
+**۱. استفاده از تجزیه‌گر یکسان برای اعتبارسنجی و درخواست:**
+```python
+# بد: تجزیه‌گرهای متفاوت
+if urllib.parse.urlparse(url).hostname in whitelist:  # تجزیه‌گر A
+    requests.get(url)  # تجزیه‌گر B - ممکن است اختلاف داشته باشد!
+
+# بهتر: تجزیه‌گر یکسان
+session = requests.Session()
+parsed = session.prepare_request(Request('GET', url)).url
+# اکنون URL آماده شده را اعتبارسنجی کنید
+```
+
+**۲. حل و اعتبارسنجی IP:**
+```python
+hostname = urlparse(url).hostname
+ip = socket.gethostbyname(hostname)
+if is_private_ip(ip) or ip == "169.254.169.254":
+    block()
+```
+
+**۳. استفاده از حالت‌های تجزیه سخت‌گیرانه:**
+```python
+# در صورت وجود حالت سخت‌گیرانه فعال کنید
+parsed = urllib.parse.urlparse(url, allow_fragments=False)
+```
+
+**۴. بررسی فرم متعارف:**
+```python
+# رد URLهای دارای الگوهای مشکوک
+suspicious = ['@', '\\', '%00', '\t', '\n']
+if any(char in url for char in suspicious):
+    reject()
+```
+
+**تشخیص:**
+- ثبت URLها قبل و بعد از تجزیه
+- مقایسه خروجی تجزیه‌گر در کتابخانه‌های مختلف
+- هشدار در مورد URLهای دارای کاراکترهای غیرعادی
+- تست با بارهای سردرگمی تجزیه‌گر
+
+## باورهای غلط رایج
+- "تجزیه URL استاندارد شده است" - موارد لبه زیادی وجود دارد
+- "کتابخانه من آن را به درستی مدیریت می‌کند" - برای اطمینان تست کنید
+- "اعتبارسنجی + کدگذاری آن را حل می‌کند" - تجزیه‌گر اول اجرا می‌شود
+- "تجزیه‌گرهای مدرن ایمن هستند" - دور زدن‌های جدید مرتباً پیدا می‌شوند
+- "فقط دامنه را بررسی کنید" - استخراج دامنه بخش آسیب‌پذیر است
+
+## مثال واقعی
+**تحقیقات Orange Tsai (۲۰۱۷)**
+
+ناسازگاری تجزیه‌گر را در موارد زیر کشف کرد:
+- Python (urllib، urllib2، requests)
+- PHP (parse_url)
+- Java (Java.net.URL)
+- JavaScript (URL API)
+
+**دور زدن SSRF در پایتون:**
+```python
+# اعتبارسنج از urlparse استفاده می‌کند
+url = "http://localhost%09@good.com"
+urlparse(url).hostname  # برمی‌گرداند: "good.com"
+
+# کتابخانه requests متصل می‌شود به
+# localhost (کاراکتر تب %09 تجزیه‌گر را گیج می‌کند)
+```
+
+**SSRF در Shopify (۲۰۱۸)**
+
+```ruby
+# Ruby URI.parse
+url = "http://0x7f.1:22​/" 
+URI.parse(url).host  # برمی‌گرداند: "0x7f.1"
+
+# اما هگز "0x7f.1" به 127.0.0.1 حل می‌شود
+# مسدودیت localhost را دور زد
+```
+
+**CVE تجزیه URL در Safari**
+
+```
+file:///​/evil.com/path
+```
+
+- Safari تجزیه کرد: پروتکل file، مسیر محلی
+- در واقع از evil.com واکشی کرد
+- امکان خواندن دلخواه فایل را فراهم کرد
+
+## اصطلاحات مرتبط
+URL, SSRF, Bypass, Domain, HTTP Request

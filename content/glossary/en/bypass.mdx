@@ -1,0 +1,182 @@
+---
+slug: "bypass"
+term: "Bypass"
+abbreviation: ""
+shortDefinition: "A technique to circumvent security controls, filters, or restrictions that are in place to block malicious activity."
+category: "Attack Techniques"
+tags: ["bypass", "evasion", "security", "filter", "waf"]
+relatedTerms: ["waf", "firewall", "filter", "exploit"]
+language: "en"
+hasTranslation: true
+translationSlug: "bypass"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://owasp.org/www-community/attacks/Filter_Evasion"
+---
+
+## Short Definition
+Bypass means finding a clever way around security measures. If there's a filter blocking "attack.com", you might try "att%61ck.com" (URL encoded) or "attack.com." (with a dot). The security is there, but you found a loophole.
+
+## Full Definition
+A bypass is a technique that circumvents security controls without directly breaking them. You're not destroying the lock — you're finding another door.
+
+**Common bypass targets:**
+- WAF (Web Application Firewall)
+- Input validation/filters
+- Authentication mechanisms
+- Rate limiting
+- IP restrictions
+- File upload restrictions
+- Access controls
+
+**Bypass categories:**
+
+**Encoding/Obfuscation:**
+- URL encoding: `<script>` → `%3Cscript%3E`
+- Double encoding: `<` → `%253C`
+- Unicode: `<` → `\u003C`
+- Case variation: `<ScRiPt>`
+
+**Logic flaws:**
+- Race conditions
+- Parameter pollution
+- Type juggling
+- Path normalization
+
+**Protocol abuse:**
+- HTTP smuggling
+- DNS rebinding
+- SSRF redirects
+
+## Why It Matters
+- Security measures are only effective if they can't be bypassed
+- Bypass techniques are constantly evolving
+- One successful bypass can negate entire security infrastructure
+- Bypasses are often simpler than direct attacks
+
+## How Attackers Use It
+**WAF Bypass example:**
+
+WAF blocks: `<script>alert(1)</script>`
+
+Bypasses:
+```html
+alert(1)     ← Blocked
+<script>alert(1)  ← May work
+  ← Alternative
+<svg/onload=alert(1)>         ← SVG vector
+```
+
+**SSRF Filter Bypass:**
+
+Blocked: `http://169.254.169.254`
+
+Bypasses:
+```
+http://169.254.169.254          ← Blocked
+http://169.254.169.254.nip.io   ← DNS bypass
+http://0xA9FEA9FE               ← Hex IP
+http://[::ffff:169.254.169.254] ← IPv6
+http://169.254.169.254.        ← Trailing dot
+http://①⑥⑨.②⑤④.①⑥⑨.②⑤④  ← Unicode digits
+```
+
+**Authentication Bypass:**
+```javascript
+// Vulnerable check
+if (password === "admin123") {
+  login();
+}
+
+// Bypass with type juggling
+password = true;  // true == "admin123" may be true
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+- Whitelist > Blacklist
+- Defense in depth (multiple layers)
+- Proper input canonicalization
+- Strict type checking
+- Regular expression carefully crafted
+- Test with bypass payloads
+
+**Specific defenses:**
+
+**SSRF Prevention:**
+```python
+# Bad: Blacklist
+if "169.254.169.254" not in url:
+    fetch(url)  # Can be bypassed
+
+# Good: Whitelist + DNS resolution check
+allowed_domains = ["example.com"]
+parsed = urlparse(url)
+if parsed.hostname in allowed_domains:
+    ip = socket.gethostbyname(parsed.hostname)
+    if not is_private_ip(ip):
+        fetch(url)
+```
+
+**Detection:**
+- Log all filtered requests
+- Monitor for bypass patterns:
+  - Excessive encoding
+  - Unusual characters
+  - Multiple failed attempts
+  - Success after many failures
+- Use advanced WAFs with ML
+- Regular security testing
+
+## Common Misconceptions
+- "WAF means I'm safe" - WAFs are regularly bypassed
+- "Input validation is enough" - Need output encoding too
+- "Blacklists work fine" - Impossible to enumerate all bad inputs
+- "Bypasses are theoretical" - Widely used in real attacks
+- "Complex filters are better" - Often introduce new bypasses
+
+## Real-World Example
+**CloudFlare WAF Bypass (2019)**
+
+Protected site blocked `<script>`, but allowed:
+```html
+@import'http://attacker.com/xss.css';
+```
+
+Result: XSS execution despite WAF.
+
+**URL Parser Bypass (Many Applications)**
+
+Different parsers disagree on URL interpretation:
+
+```
+http://evil.com@internal.com
+
+Parser A: "Going to internal.com"
+Parser B: "Going to evil.com"
+```
+
+If validator uses Parser A and request uses Parser B → bypass.
+
+**Capital One SSRF Bypass**
+
+WAF had rules, but misconfigured:
+- Allowed certain HTTP methods
+- Didn't check all headers
+- Validation happened after routing
+
+Attacker found the gap → full SSRF.
+
+**OWASP Top 10 2021 Bypass Examples:**
+
+A01 (Access Control):
+- Change `user_id=123` to `user_id=124` in POST body
+- Add `admin=true` parameter
+
+A03 (Injection):
+- WAF blocks `' OR 1=1--`
+- Try `' OR 'a'='a` or `' OR 2>1--`
+
+## Related Terms
+WAF, Filter, Firewall, Exploit, Encoding

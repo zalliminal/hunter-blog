@@ -1,0 +1,184 @@
+---
+slug: "url"
+term: "URL"
+abbreviation: "URL"
+shortDefinition: "آدرس وب که مکان یک منبع را در اینترنت مشخص می‌کند، مانند https://example.com/page."
+category: "مبانی وب"
+tags: ["url", "وب", "http", "پروتکل", "آدرس"]
+relatedTerms: ["uri", "domain", "endpoint", "http-request"]
+language: "fa"
+hasTranslation: true
+translationSlug: "url"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL"
+---
+
+## تعریف کوتاه
+URL متنی است که در نوار آدرس مرورگر می‌بینید و به مرورگر می‌گوید چیزی را کجا در اینترنت پیدا کند. `https://example.com/products/123` می‌گوید: از پروتکل HTTPS استفاده کن، برو به example.com، بخش محصولات را پیدا کن، آیتم ۱۲۳ را بگیر.
+
+## تعریف کامل
+URL (آدرس وب) آدرس کامل برای دسترسی به یک منبع در وب است.
+
+**ساختار URL:**
+```
+https://user:pass@www.example.com:443/path/to/page?key=value#section
+│      │ │        │                 │   │            │         │
+│      │ │        │                 │   │            │         └─ بخش
+│      │ │        │                 │   │            └─ پرس‌وجو
+│      │ │        │                 │   └─ مسیر
+│      │ │        │                 └─ پورت
+│      │ │        └─ دامنه (نام میزبان)
+│      │ └─ اعتبارنامه (منسوخ شده)
+│      └─ پروتکل (طرح)
+└─ https://
+```
+
+**اجزا:**
+
+**پروتکل:** نحوه دسترسی (http، https، ftp، file)
+
+**دامنه:** کجا برویم (example.com)
+
+**پورت:** کدام سرویس (۸۰=HTTP، ۴۴۳=HTTPS)
+
+**مسیر:** چه منبعی (/products/123)
+
+**پرس‌وجو:** پارامترها (?color=red&size=large)
+
+**بخش:** بخش صفحه (#reviews)
+
+## چرا مهم است
+- هر درخواست وب با یک URL شروع می‌شود
+- URLها کنترل می‌کنند داده کجا می‌رود
+- ساختار URL بر امنیت تأثیر می‌گذارد
+- موتورهای جستجو به URLهای تمیز وابسته هستند
+- APIها از URLها به عنوان رابط استفاده می‌کنند
+
+## چگونه مهاجمان از آن استفاده می‌کنند
+**حملات مبتنی بر URL:**
+
+**۱. تزریق/دستکاری URL:**
+```
+# اصلی
+https://bank.com/transfer?to=user1&amount=100
+
+# مهاجم تغییر می‌دهد
+https://bank.com/transfer?to=attacker&amount=10000
+```
+
+**۲. SSRF از طریق URL:**
+```
+# عادی
+https://site.com/fetch?url=https://cdn.example.com/image.jpg
+
+# مخرب
+https://site.com/fetch?url=http://169.254.169.254/metadata
+```
+
+**۳. تغییر مسیر باز:**
+```
+https://trusted.com/redirect?url=http://evil.com
+```
+
+**۴. پیمایش مسیر:**
+```
+https://site.com/download?file=../../../etc/passwd
+```
+
+**۵. سردرگمی تجزیه‌گر URL:**
+```
+http://evil.com@trusted.com  ← کدام دامنه؟
+http://trusted.com.evil.com   ← ترفند زیردامنه
+```
+
+## چگونه تشخیص یا پیشگیری کنیم
+**پیشگیری:**
+- URLها را به طور کامل اعتبارسنجی کنید
+- از کتابخانه‌های تجزیه URL استفاده کنید (نه regex)
+- لیست سفید دامنه‌های مجاز
+- پس از جستجوی DNS، IP حل شده را بررسی کنید
+- کاراکترهای خاص را به درستی کدگذاری کنید
+- در صورت امکان از URLهای نسبی استفاده کنید
+- اعتبارنامه‌های URL را در برنامه‌های مدرن غیرفعال کنید
+
+**به طور خاص برای SSRF:**
+```python
+from urllib.parse import urlparse
+import socket
+
+def is_safe_url(url):
+    parsed = urlparse(url)
+    
+    # بررسی پروتکل
+    if parsed.scheme not in ['http', 'https']:
+        return False
+    
+    # بررسی لیست سفید دامنه
+    if parsed.hostname not in ALLOWED_DOMAINS:
+        return False
+    
+    # بررسی IP حل شده
+    try:
+        ip = socket.gethostbyname(parsed.hostname)
+        if is_private_ip(ip):
+            return False
+    except:
+        return False
+    
+    return True
+```
+
+**تشخیص:**
+- ثبت تمام URLهای پردازش شده توسط برنامه
+- هشدار در مورد الگوهای مشکوک:
+  - آدرس‌های IP خصوصی
+  - IPهای سرویس متادیتا
+  - کدگذاری دوگانه
+  - پروتکل‌های غیرعادی (gopher, file)
+  - طول بیش از حد URL
+
+## باورهای غلط رایج
+- "اعتبارسنجی URL ساده است" - تفاوت‌های تجزیه‌گر مشکل ایجاد می‌کند
+- "URLهای HTTPS همیشه ایمن هستند" - همچنان می‌توانند به محتوای مخرب اشاره کنند
+- "دامنه در URL واضح است" - حملات سردرگمی تجزیه‌گر وجود دارد
+- "کدگذاری URL از حملات جلوگیری می‌کند" - مهاجمان نیز از آن استفاده می‌کنند
+- "URLها نمی‌توانند اعتبارنامه داشته باشند" - می‌توانند (منسوخ شده اما کار می‌کند)
+
+## مثال واقعی
+**SSRF در GitHub (۲۰۱۷)**
+
+پروکسی تصویر GitHub URLها را می‌پذیرفت:
+```
+https://github.com/proxy?url=...
+```
+
+هدف: فقط تصاویر خارجی
+
+آسیب‌پذیری: عدم اعتبارسنجی مقصد
+
+بهره‌برداری:
+```
+url=http://127.0.0.1:6379/
+```
+
+نتیجه: به سرور Redis داخلی دسترسی پیدا کرد، دستورات اجرا کرد.
+
+**سردرگمی تجزیه‌گر URL - موارد متعدد**
+
+کتابخانه‌های مختلف یک URL را متفاوت تجزیه می‌کنند:
+
+```
+http://evil.com@good.com
+
+PHP parse_url(): میزبان = good.com
+Python requests:  میزبان = evil.com
+```
+
+اعتبارسنج good.com را می‌بیند (عبور می‌کند)، فرستنده به evil.com متصل می‌شود (دور زده شد).
+
+## اصطلاحات مرتبط
+URI, Domain, Endpoint, HTTP Request, URL Parser
+
+

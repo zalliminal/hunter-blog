@@ -1,0 +1,189 @@
+---
+slug: "url-parser"
+term: "URL Parser"
+abbreviation: ""
+shortDefinition: "A component that breaks down a URL into its parts (protocol, domain, path, etc.). Different parsers can interpret the same URL differently, creating security issues."
+category: "Web Security"
+tags: ["url", "parser", "ssrf", "bypass", "security"]
+relatedTerms: ["url", "ssrf", "bypass", "domain"]
+language: "en"
+hasTranslation: true
+translationSlug: "url-parser"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf"
+---
+
+## Short Definition
+A URL parser reads a URL and splits it into pieces (scheme, host, path). Problem: different parsers disagree about how to split the same URL, so your security check and actual request might see different destinations.
+
+## Full Definition
+A URL parser is code that interprets a URL string and extracts its components. Each programming language and library has its own parser, and they don't always agree.
+
+**What parsers extract:**
+```
+https://user:pass@example.com:8080/path?query=1#fragment
+```
+
+Parser returns:
+- Scheme: https
+- Username: user
+- Password: pass
+- Hostname: example.com
+- Port: 8080
+- Path: /path
+- Query: query=1
+- Fragment: fragment
+
+**The problem: Ambiguous URLs**
+
+```
+http://evil.com@good.com
+```
+
+- Some parsers: username=evil.com, host=good.com
+- Other parsers: host=evil.com, path=@good.com
+- Result: Security bypass
+
+## Why It Matters
+- Security decisions based on parser output
+- Parser inconsistencies = bypass opportunities
+- SSRF filters often rely on URL parsing
+- Same URL can mean different things to different systems
+- Hard to test all parser behaviors
+
+## How Attackers Use It
+**Parser Confusion Attack:**
+
+```python
+# Security validation
+parsed = urlparse(user_input)
+if parsed.hostname == "trusted-site.com":
+    fetch(user_input)  # Approved
+
+# Attacker provides:
+"http://trusted-site.com@evil.com"
+
+# Validator sees: hostname = "trusted-site.com" ✓
+# HTTP library connects to: "evil.com" ✗
+```
+
+**Real attack vectors:**
+
+**1. @ symbol confusion:**
+```
+http://whitelisted.com@attacker.com
+http://whitelisted.com%00@attacker.com
+```
+
+**2. Backslash vs forward slash:**
+```
+http://whitelisted.com\.attacker.com
+http://whitelisted.com/..​.attacker.com
+```
+
+**3. Dot manipulation:**
+```
+http://whitelisted.com.attacker.com
+http://whitelisted.com。attacker.com (full-width dot)
+```
+
+**4. Encoding tricks:**
+```
+http://whitelisted.com%2f%2f@attacker.com
+http://whitelisted.com%09@attacker.com
+```
+
+## How to Detect or Prevent It
+**Prevention strategies:**
+
+**1. Use same parser for validation and request:**
+```python
+# Bad: Different parsers
+if urllib.parse.urlparse(url).hostname in whitelist:  # Parser A
+    requests.get(url)  # Parser B - may disagree!
+
+# Better: Same parser
+session = requests.Session()
+parsed = session.prepare_request(Request('GET', url)).url
+# Now validate the prepared URL
+```
+
+**2. Resolve and validate IP:**
+```python
+hostname = urlparse(url).hostname
+ip = socket.gethostbyname(hostname)
+if is_private_ip(ip) or ip == "169.254.169.254":
+    block()
+```
+
+**3. Use strict parsing modes:**
+```python
+# Enable strict mode if available
+parsed = urllib.parse.urlparse(url, allow_fragments=False)
+```
+
+**4. Canonical form checking:**
+```python
+# Reject URLs with suspicious patterns
+suspicious = ['@', '\\', '%00', '\t', '\n']
+if any(char in url for char in suspicious):
+    reject()
+```
+
+**Detection:**
+- Log URLs before and after parsing
+- Compare parser outputs across libraries
+- Alert on URLs with unusual characters
+- Test with parser confusion payloads
+
+## Common Misconceptions
+- "URL parsing is standardized" - Many edge cases
+- "My library handles it correctly" - Test to be sure
+- "Validation + encoding fixes it" - Parser runs first
+- "Modern parsers are safe" - New bypasses found regularly
+- "Just check the domain" - Domain extraction is the vulnerable part
+
+## Real-World Example
+**Orange Tsai's Research (2017)**
+
+Discovered parser inconsistencies in:
+- Python (urllib, urllib2, requests)
+- PHP (parse_url)
+- Java (Java.net.URL)
+- JavaScript (URL API)
+
+**Python SSRF Bypass:**
+```python
+# Validator uses urlparse
+url = "http://localhost%09@good.com"
+urlparse(url).hostname  # Returns: "good.com"
+
+# requests library connects to
+# localhost (tab character %09 confuses parser)
+```
+
+**Shopify SSRF (2018)**
+
+```ruby
+# Ruby URI.parse
+url = "http://0x7f.1:22​/" 
+URI.parse(url).host  # Returns: "0x7f.1"
+
+# But hex "0x7f.1" resolves to 127.0.0.1
+# Bypassed localhost block
+```
+
+**Safari URL Parsing CVE**
+
+```
+file:///​/evil.com/path
+```
+
+- Safari parsed as: file protocol, local path
+- Actually fetched from: evil.com
+- Allowed arbitrary file reads
+
+## Related Terms
+URL, SSRF, Bypass, Domain, HTTP Request

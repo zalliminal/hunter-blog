@@ -1,0 +1,187 @@
+---
+slug: "domain"
+term: "Domain Name"
+abbreviation: ""
+shortDefinition: "A human-readable address like example.com that maps to an IP address, making it easier to remember website locations."
+category: "Web Fundamentals"
+tags: ["domain", "dns", "web", "hostname", "internet"]
+relatedTerms: ["dns", "url", "subdomain", "ip-address"]
+language: "en"
+hasTranslation: true
+translationSlug: "domain"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.cloudflare.com/learning/dns/glossary/what-is-a-domain-name/"
+---
+
+## Short Definition
+A domain is the readable name of a website, like google.com or github.com. Instead of typing 172.217.164.78, you type google.com. DNS translates domain names to IP addresses computers actually use.
+
+## Full Definition
+A domain name is a human-readable identifier for a location on the internet. It's part of a hierarchical system that makes the web usable.
+
+**Structure:**
+```
+subdomain.example.com
+│         │      │
+│         │      └─ TLD (Top-Level Domain)
+│         └─ Second-level domain
+└─ Subdomain (optional)
+
+Full examples:
+www.example.com
+api.example.com
+blog.subdomain.example.com
+```
+
+**Levels:**
+- **TLD**: .com, .org, .io, .gov
+- **Second-level**: example (in example.com)
+- **Subdomain**: www, api, mail
+
+**How it works:**
+1. User types domain in browser
+2. DNS lookup translates to IP
+3. Browser connects to that IP
+4. Server responds
+
+## Why It Matters
+- Domains are how users find websites
+- Trust associated with domain names
+- Certificates tied to domains (HTTPS)
+- Domains used in security policies (CORS, CSP)
+- Domain ownership = control
+
+## How Attackers Use It
+**Attack techniques:**
+
+**1. Typosquatting:**
+```
+google.com   ← Legitimate
+gooogle.com  ← Fake (extra 'o')
+g00gle.com   ← Fake (zeros instead of 'o')
+```
+
+**2. Subdomain Takeover:**
+```
+# Company creates subdomain
+old-app.company.com → points to AWS S3
+
+# Company deletes S3 bucket but forgets DNS
+# Attacker creates bucket with same name
+old-app.company.com → now controlled by attacker
+```
+
+**3. DNS Rebinding (SSRF):**
+```
+1. attacker.com → 1.2.3.4 (attacker's server)
+2. Validation sees: 1.2.3.4 ✓
+3. attacker.com → 169.254.169.254 (DNS changed)
+4. Actual request goes to: 169.254.169.254
+```
+
+**4. Homograph Attacks:**
+```
+аpple.com  ← Uses Cyrillic 'а', not Latin 'a'
+apple.com  ← Real domain
+```
+
+Look identical but different domains.
+
+**5. Cookie Stealing via Subdomain:**
+```
+# Cookie set on .example.com
+# Attacker compromises: evil.example.com
+# Can steal cookies for all subdomains
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**For organizations:**
+- Register common typos
+- Monitor for similar domains
+- Use HTTPS with HSTS
+- Implement CAA DNS records
+- Monitor certificate transparency logs
+- Remove dangling DNS records
+- Use domain monitoring services
+
+**For applications:**
+- Validate domain against whitelist
+- Check resolved IP address
+- Use pinned domains for critical requests
+- Implement CORS properly
+- Set specific cookie domains
+
+**Example validation:**
+```python
+from urllib.parse import urlparse
+
+ALLOWED_DOMAINS = ['example.com', 'api.example.com']
+
+def is_safe_domain(url):
+    parsed = urlparse(url)
+    domain = parsed.hostname
+    
+    # Exact match
+    if domain in ALLOWED_DOMAINS:
+        return True
+    
+    # Check if subdomain of allowed
+    for allowed in ALLOWED_DOMAINS:
+        if domain.endswith('.' + allowed):
+            return True
+    
+    return False
+```
+
+**Detection:**
+- Monitor DNS requests for unusual domains
+- Check certificate transparency logs
+- Use domain reputation services
+- Alert on newly registered similar domains
+- Track subdomain enumeration attempts
+
+## Common Misconceptions
+- "Subdomain = separate ownership" - Same owner controls all
+- "HTTPS = legitimate domain" - Attackers get certificates too
+- ".com more secure than .io" - TLD doesn't determine security
+- "Domain in URL is clear" - Homograph attacks exist
+- "Can't fake domain" - Typosquatting and homographs work
+
+## Real-World Example
+**Steam Login Typosquatting**
+
+Fake domains:
+```
+steamcommunity.com   ← Real
+steamcommunitу.com   ← Fake (Cyrillic у)
+steamcommunity.co    ← Fake (.co instead of .com)
+steam-community.com  ← Fake (hyphen)
+```
+
+Result: Thousands of stolen credentials
+
+**GitHub Subdomain Takeover (Multiple)**
+
+1. Company creates: `docs.company.com` → GitHub Pages
+2. Company deletes GitHub repo
+3. DNS record remains: `docs.company.com` → old GitHub URL
+4. Attacker creates repo with same name
+5. Attacker now controls `docs.company.com`
+
+Real cases: Uber, Shopify, Tesla, others
+
+**PayPal Homograph Attack**
+
+```
+paypal.com   ← Real (Latin characters)
+pаypаl.com   ← Fake (Cyrillic 'а')
+```
+
+Browser may show fake as real in address bar.
+
+## Related Terms
+DNS, URL, Subdomain, IP Address, Certificate

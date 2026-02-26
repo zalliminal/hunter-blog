@@ -1,0 +1,128 @@
+---
+slug: "api"
+term: "Application Programming Interface"
+abbreviation: "API"
+shortDefinition: "A set of rules and endpoints that let different software applications talk to each other, like a menu of available functions."
+category: "Web Fundamentals"
+tags: ["api", "rest", "endpoint", "web", "integration"]
+relatedTerms: ["endpoint", "http-request", "rest", "json"]
+language: "en"
+hasTranslation: true
+translationSlug: "api"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://aws.amazon.com/what-is/api/"
+---
+
+## Short Definition
+API is like a restaurant menu for programmers. Instead of ordering food, you're asking an application to do something: "give me user data," "save this," "delete that." The API defines what you can ask for and how to ask for it.
+
+## Full Definition
+An API (Application Programming Interface) is a contract between different software components defining how they communicate. Modern web APIs typically:
+
+**Key concepts:**
+- **Endpoints**: Specific URLs for different functions
+- **Methods**: HTTP verbs (GET, POST, PUT, DELETE)
+- **Request**: What you send (parameters, body)
+- **Response**: What you get back (usually JSON)
+
+**Example:**
+```
+GET /api/users/123
+→ Returns user data
+
+POST /api/users
+→ Creates new user
+
+DELETE /api/users/123
+→ Deletes user
+```
+
+**Common API types:**
+- **REST**: Uses HTTP methods, stateless
+- **GraphQL**: Query exactly what you need
+- **SOAP**: XML-based, more rigid
+- **WebSocket**: Real-time, two-way
+
+## Why It Matters
+- Modern apps are built on APIs
+- Mobile apps communicate via APIs
+- Microservices talk through APIs
+- Third-party integrations use APIs
+- APIs expose business logic to attackers
+
+## How Attackers Use It
+**Common API attacks:**
+
+1. **Broken authentication**: Weak or missing auth
+2. **Broken authorization**: Access other users' data
+3. **Excessive data exposure**: API returns too much info
+4. **Rate limiting issues**: Brute force attacks
+5. **Mass assignment**: Modify fields that should be protected
+6. **SSRF through API**: API fetches external URLs
+7. **Injection**: SQL/command injection through parameters
+
+**Example attack:**
+```
+# API endpoint
+GET /api/users/123
+
+# IDOR attack (change ID)
+GET /api/users/456  # Access other user's data
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+- Implement proper authentication (OAuth 2.0, JWT)
+- Validate all inputs
+- Apply rate limiting
+- Use API gateways
+- Version your API properly
+- Document security requirements
+- Never expose internal IDs directly
+- Return minimal data (only what's needed)
+
+**Detection:**
+- Log all API requests
+- Monitor for unusual patterns:
+  - High request frequency
+  - Sequential ID enumeration
+  - Unauthorized endpoint access
+  - Suspicious parameter values
+- Use API security tools (42Crunch, Salt Security)
+- Implement anomaly detection
+
+## Common Misconceptions
+- "APIs are just for public services" - Most are internal
+- "Authentication means authorization" - Two different things
+- "Rate limiting solves security" - It helps but isn't enough
+- "Private API keys are secure" - Can be leaked/stolen
+- "API == REST" - REST is one type of many
+
+## Real-World Example
+**Venmo API Privacy Fail (2019)**
+
+Issue: Public API exposed:
+- All transactions (amounts, participants)
+- No authentication required
+- Could scrape millions of transactions
+- Revealed financial relationships
+
+**Uber API Vulnerabilities (2016)**
+
+Found issues:
+- Rider endpoints accessible without proper auth
+- Could retrieve other users' trip history
+- Mass assignment allowed privilege escalation
+- Led to data breach of 57M accounts
+
+**OWASP API Top 10 (2023):**
+1. Broken Object Level Authorization (IDOR)
+2. Broken Authentication
+3. Broken Object Property Level Authorization
+4. Unrestricted Resource Consumption
+5. Broken Function Level Authorization
+
+## Related Terms
+Endpoint, HTTP Request, REST, JSON, Authentication

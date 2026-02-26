@@ -1,0 +1,59 @@
+---
+slug: "http-request"
+term: "HTTP Request"
+abbreviation: "HTTP"
+shortDefinition: "A message sent by a client to a server asking for a resource or action, following standardized HTTP protocol rules."
+category: "Web Fundamentals"
+tags: ["http", "web", "protocol", "request", "client-server"]
+relatedTerms: ["http", "api", "endpoint", "server", "url"]
+language: "en"
+hasTranslation: true
+translationSlug: "http-request"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages"
+---
+
+## Short Definition
+An HTTP request is your browser (or any app) asking a server for something: "give me this page" or "save this data." It's how everything on the web talks to each other.
+
+## Full Definition
+HTTP request is a message with:
+- Method (GET, POST, PUT, DELETE)
+- URL (where to send it)
+- Headers (metadata)
+- Body (optional data)
+
+Common methods: GET (read), POST (create), PUT (update), DELETE (remove)
+
+## Why It Matters
+- Foundation of all web communication
+- APIs use HTTP requests exclusively
+- Every security test involves manipulating requests
+- Request structure affects performance and caching
+
+## How Attackers Use It
+- Parameter manipulation (IDOR attacks)
+- Header injection (bypass IP restrictions)
+- SSRF (trick server into making malicious requests)
+- Injection attacks (SQL, command injection)
+- HTTP smuggling
+
+## How to Detect or Prevent It
+- Always use HTTPS
+- Validate all inputs
+- Use parameterized queries
+- Implement rate limiting
+- Log suspicious patterns
+
+## Common Misconceptions
+- "GET is safe, POST is secure" - Both need validation
+- "HTTPS encrypts everything" - Domain/IP still visible
+- "Servers process requests in order" - Not guaranteed with HTTP/2
+
+## Real-World Example
+Capital One SSRF: App accepted image URL, made HTTP request without validation. Attacker sent metadata URL, got AWS credentials.
+
+## Related Terms
+HTTP/HTTPS, API, Endpoint, URL, SSRF, Server

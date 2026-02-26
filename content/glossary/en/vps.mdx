@@ -1,0 +1,176 @@
+---
+slug: "vps"
+term: "Virtual Private Server"
+abbreviation: "VPS"
+shortDefinition: "A virtual machine sold as a service, giving you dedicated server resources without physical hardware. Used for hosting websites, applications, or in security testing as attack infrastructure."
+category: "Infrastructure"
+tags: ["vps", "server", "hosting", "cloud", "infrastructure"]
+relatedTerms: ["cloud-infrastructure", "server", "dedicated-server"]
+language: "en"
+hasTranslation: true
+translationSlug: "vps"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.cloudflare.com/learning/cloud/what-is-a-virtual-private-server/"
+---
+
+## Short Definition
+A VPS is your own virtual computer running in someone else's data center. You get root access and can install whatever you want, but you're sharing physical hardware with others. Cheaper than dedicated server, more control than shared hosting.
+
+## Full Definition
+A Virtual Private Server is a virtualized server instance allocated to a single customer, providing dedicated resources within a shared physical machine.
+
+**Key characteristics:**
+- Dedicated RAM, CPU, storage
+- Full root/admin access
+- Can install any software
+- Isolated from other VPS on same hardware
+- Public IP address
+- Lower cost than dedicated server
+
+**Common uses:**
+- Website hosting
+- Application servers
+- Development/testing
+- VPN servers
+- Game servers
+- Email servers
+
+**Popular providers:**
+- DigitalOcean (Droplets)
+- Linode
+- Vultr
+- AWS Lightsail
+- Google Cloud Compute
+
+## Why It Matters
+**For developers:**
+- Full control over environment
+- Scale resources as needed
+- Learn server administration
+- Host production applications
+
+**For security:**
+- Custom infrastructure for testing
+- Out-of-band callbacks (SSRF, blind vulnerabilities)
+- Command and control servers
+- Proxy/VPN for anonymity
+- Lab environments
+
+**Cost-effective:** $5-20/month for basic VPS
+
+## How Attackers Use It (and How Researchers Use It Ethically)
+**Ethical security research:**
+
+**1. Out-of-Band (OOB) server:**
+```bash
+# Set up VPS for blind SSRF testing
+# Install DNS logger
+git clone https://github.com/projectdiscovery/interactsh
+./interactsh-server -domain your-vps-domain.com
+
+# Now test for blind SSRF:
+POST /api/webhook
+{"url": "http://unique-id.your-vps-domain.com"}
+
+# VPS logs incoming requests
+```
+
+**2. Custom callback server:**
+```python
+# Flask app to log callbacks
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/')
+def catch_all(path):
+    print(f"Request from {request.remote_addr}")
+    print(f"Path: {path}")
+    print(f"Headers: {request.headers}")
+    return "OK"
+```
+
+**3. Test environment:**
+- Practice exploitation safely
+- Build vulnerable labs
+- Test security tools
+- Learn penetration testing
+
+**What malicious actors do (don't do this):**
+- Host malware/C2 servers
+- Proxy malicious traffic
+- DDoS attack sources
+- Phishing page hosting
+
+**Note:** Ethical hackers use VPS for authorized testing only.
+
+## How to Detect or Prevent It (From Defense Perspective)
+**Detection:**
+- Track requests from VPS IP ranges
+- Monitor known VPS provider ASNs
+- Check IP reputation databases
+- Identify unusual VPS-to-enterprise traffic
+
+**Prevention (as VPS provider):**
+- Abuse monitoring
+- Terms of service enforcement
+- Automated abuse detection
+- Respond to abuse reports
+
+**Prevention (as security tester):**
+- Use VPS responsibly
+- Stay within authorized scope
+- Follow bug bounty rules
+- Document legitimate use
+- Respect rate limits
+
+## Common Misconceptions
+- "VPS = dedicated server" - Shared hardware, dedicated resources
+- "VPS is always fast" - Depends on provider and oversubscription
+- "VPS is cloud" - Cloud is more sophisticated (auto-scaling, managed services)
+- "VPS means unlimited resources" - Has defined limits
+- "VPS is unhackable" - Requires proper security configuration
+
+## Real-World Example
+**Bug Bounty Hunter Setup**
+
+```bash
+# Typical VPS setup for security research
+$5/month DigitalOcean Droplet
+
+# Installed tools:
+- interactsh (blind SSRF detection)
+- DNS logger
+- HTTP callback server
+- Burp Collaborator alternative
+
+# Use cases:
+1. Test for blind SSRF:
+   url=http://xyz.researcher-vps.com
+   
+2. XXE out-of-band:
+   <!ENTITY xxe SYSTEM "http://researcher-vps.com/data">
+   
+3. Log DNS requests:
+   ping abc.researcher-vps.com
+```
+
+**Why personal VPS matters:**
+- Burp Collaborator URLs are blocked by many companies
+- interactsh public instances are also blocked
+- Custom domain looks more legitimate
+- Full control over logs and data
+
+**Capital One Investigation**
+
+After breach, investigators used VPS to:
+- Recreate attack infrastructure
+- Test similar vulnerabilities
+- Understand attack methodology
+- Safely analyze exploit behavior
+
+## Related Terms
+Cloud Infrastructure, Server, Dedicated Server, Out-of-Band

@@ -1,0 +1,55 @@
+---
+slug: "cloud-infrastructure"
+term: "Cloud Infrastructure"
+abbreviation: ""
+shortDefinition: "Remote computing resources (servers, storage, networks) provided by companies like AWS, Google Cloud, or Azure, accessible over the internet without owning physical hardware."
+category: "Infrastructure"
+tags: ["cloud", "infrastructure", "aws", "azure", "gcp", "servers"]
+relatedTerms: ["imds", "metadata", "vps", "server"]
+language: "en"
+hasTranslation: true
+translationSlug: "cloud-infrastructure"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://aws.amazon.com/what-is-cloud-computing/"
+  - "https://cloud.google.com/learn/what-is-cloud-infrastructure"
+---
+## Short Definition
+Cloud infrastructure is like renting computing power instead of buying it. Companies like Amazon (AWS), Google (GCP), and Microsoft (Azure) own massive data centers full of servers, and you can use them by paying only for what you need — no physical hardware required.
+
+## Full Definition
+Cloud infrastructure refers to hardware and software components — servers, storage, networks, virtualization — delivered as a service over the internet. Instead of maintaining physical data centers, companies rent computing resources from cloud providers on-demand.
+
+Three main types:
+- **IaaS**: Raw resources (VMs, storage, networks)
+- **PaaS**: Development platforms
+- **SaaS**: Ready-to-use applications
+
+## Why It Matters
+- Cost savings (no hardware purchases)
+- Instant scalability
+- Global deployment
+- New security challenges (metadata services, misconfigurations)
+
+## How Attackers Use It
+- SSRF attacks against metadata endpoints
+- Misconfigured storage buckets
+- Over-permissioned IAM roles
+- Credential theft from metadata services
+
+## How to Detect or Prevent It
+- Use IMDSv2
+- Apply least privilege
+- Monitor CloudTrail/audit logs
+- Block private IP ranges in outbound requests
+
+## Common Misconceptions
+- "Cloud is always more secure" - Security is shared responsibility
+- "VPC makes everything safe" - Apps can still access metadata
+
+## Real-World Example
+Capital One breach (2019): SSRF vulnerability exploited metadata service, stole credentials, accessed 100M+ records. Cost: $230M+ total.
+
+## Related Terms
+IMDS, Metadata, Credentials, VPS, SSRF

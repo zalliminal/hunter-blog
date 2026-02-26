@@ -1,0 +1,138 @@
+---
+slug: "internal-network-recon"
+term: "Internal Network Reconnaissance"
+abbreviation: ""
+shortDefinition: "The process of discovering and mapping internal network resources, services, and vulnerabilities that aren't accessible from the internet."
+category: "Attack Techniques"
+tags: ["reconnaissance", "network", "scanning", "enumeration", "ssrf"]
+relatedTerms: ["ssrf", "port", "server", "endpoint"]
+language: "en"
+hasTranslation: true
+translationSlug: "internal-network-reconnaissance"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://attack.mitre.org/tactics/TA0007/"
+---
+
+## Short Definition
+Internal network recon is like drawing a map of a building from the inside. Once you're in (or can make a server act for you), you scan to find what's there: other servers, databases, admin panels — anything the company thought was hidden.
+
+## Full Definition
+Internal network reconnaissance is the process of gathering information about resources within a private network that aren't exposed to the internet. This includes:
+
+**What's discovered:**
+- Active hosts (IP addresses)
+- Open ports and services
+- Operating systems
+- Application versions
+- Network topology
+- Database servers
+- Admin interfaces
+- API endpoints
+
+**Common techniques:**
+- Port scanning (testing which ports are open)
+- Service enumeration (identifying what's running)
+- Banner grabbing (reading version info)
+- DNS enumeration (finding hostnames)
+
+**Through SSRF:**
+Instead of direct access, attackers make the compromised server do the scanning:
+```python
+# Test if internal service exists
+for port in [80, 443, 8080, 3306, 5432]:
+    response = ssrf_request(f"http://192.168.1.1:{port}")
+    if response.status_code == 200:
+        print(f"Found service on port {port}")
+```
+
+## Why It Matters
+- Critical first step in lateral movement
+- Reveals attack surface invisible from outside
+- Identifies high-value targets (databases, admin panels)
+- Enables privilege escalation
+- In SSRF context, this happens server-side (harder to detect)
+
+## How Attackers Use It
+**Traditional method (requires network access):**
+1. Compromise one system
+2. Use it as pivot point
+3. Scan internal network from there
+
+**SSRF-based method (no direct access needed):**
+1. Find SSRF vulnerability
+2. Iterate through private IP ranges
+3. Check common ports via SSRF
+4. Map responses (status codes, timing)
+5. Identify vulnerable services
+
+**Example workflow:**
+```
+# Scan common private ranges
+192.168.0.0/16
+10.0.0.0/8  
+172.16.0.0/12
+
+# Test common ports
+22 (SSH), 3306 (MySQL), 5432 (PostgreSQL)
+6379 (Redis), 27017 (MongoDB), 9200 (Elasticsearch)
+8080, 8443, 9090 (web admin panels)
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+- Segment networks properly
+- Implement zero-trust architecture
+- Require authentication for all internal services
+- Use micro-segmentation
+- Disable unnecessary services
+- Close unused ports
+
+**For SSRF specifically:**
+- Block private IP ranges in outbound requests
+- Implement request whitelisting
+- Rate limit outbound requests
+- Monitor for scanning patterns
+
+**Detection:**
+- Alert on port scans from unexpected sources
+- Monitor for sequential port access patterns
+- Track connections to unusual internal IPs
+- Log all cross-subnet traffic
+- Watch for SSRF indicators (metadata access attempts)
+
+**Tools:**
+- IDS/IPS systems (Suricata, Snort)
+- Network monitoring (Zeek, Moloch)
+- SIEM correlation rules
+
+## Common Misconceptions
+- "Internal networks don't need monitoring" - Attackers are already inside
+- "Firewall blocks everything" - Not internal-to-internal traffic
+- "We'll detect port scans" - SSRF scans look like normal app behavior
+- "Private IPs can't be reached" - From outside yes, but SSRF bypasses this
+
+## Real-World Example
+**How Capital One recon happened:**
+
+1. **Initial SSRF found**: WAF accepted URLs
+2. **Metadata discovered**: `http://169.254.169.254/` responded
+3. **Credentials extracted**: Got IAM role credentials
+4. **S3 enumeration**: Used AWS CLI to list buckets
+   ```bash
+   aws s3 ls
+   ```
+5. **Bucket reconnaissance**: Found 700+ buckets
+6. **Data exfiltration**: Downloaded sensitive buckets
+
+**Semi-Blind SSRF recon:**
+Attacker doesn't see full response, only status codes:
+- 200 = Service exists and responding
+- 403 = Service exists but access denied
+- Timeout = No service on that port
+
+By checking hundreds of ports across IP ranges, attacker maps the internal network even without seeing actual data.
+
+## Related Terms
+SSRF, Port, Endpoint, Status Code, Bypass

@@ -1,0 +1,315 @@
+---
+title: "Make the Server Do Your Dirty Work — What is SSRF?"
+description: "SSRF is one of the most dangerous vulnerabilities in the cloud world. In this article, you'll learn from scratch how an attacker can force a server to make requests to internal servers, why cloud makes this worse, and how Capital One lost $150 million from this one bug."
+date: "2026-02-26"
+slug: "what-is-ssrf"
+category: "security-fundamentals"
+author: "parhamf"
+thumbnail: "/blog/thumbnails/what-is-ssrf.png"
+tags: ["SSRF", "web security", "bug bounty", "cloud security", "OWASP", "security tutorial"]
+lang: "en"
+published: true
+---
+## So What Exactly is SSRF?
+One morning, a former AWS engineer sat down at home with their laptop, ran a simple tool, and by noon had the data of 100 million people. No sophisticated malware, no hacking team, no months of work. Just one vulnerability the developer never even thought about.
+
+The name of this vulnerability was SSRF, and this article is your first step to understanding it. If you're doing bug bounty work, or want to understand how real systems get hacked, this is one of the most important things you need to know — especially in a world where everything's moving to the <GlossaryTerm slug="cloud-infrastructure" locale="en">**cloud**</GlossaryTerm>.
+
+In one sentence: this attack happens when an attacker can force your server to send requests to arbitrary addresses (internal or external). Now let's unpack this a bit.
+
+So SSRF stands for Server-Side Request Forgery.
+
+Request Forgery means forging a request — you're creating a fake request. **Server-Side** means this forged request is sent by the server on your behalf, not your browser. Normally we can't access internal servers, and that's exactly what we exploit here.
+
+Now that we understand what SSRF is, an important question comes up — why would a server need to make <GlossaryTerm slug="http-request" locale="en">requests</GlossaryTerm> somewhere else? Isn't everything inside itself?
+
+### Why Would a Server Need to Make Requests Elsewhere?
+This might be a question that comes to mind, and it's a great and important one. Modern applications aren't a single thing — they use dozens of different services, depending on their architecture. For example, if a site lets you import an image from an external URL, it's actually making a request to that address. Or it might use third-party services — here it has to make requests to that server's address. This behavior is completely normal and part of modern web architecture.
+
+### So Why Don't We Have Access to Those Internal Servers?
+First we need to understand how networking works. We have two types of <GlossaryTerm slug="ip-address" locale="en">**IP addresses**</GlossaryTerm> — public and private.
+
+Public addresses are ones you can reach from anywhere on the internet, like Google's address or your own site. But private addresses have specific ranges that only make sense within a network — like `192.168.x.x` or `10.x.x.x`. These addresses aren't routed on the public internet, meaning if you try to connect to `192.168.1.5` from your browser, you'll never reach it because the internet doesn't know where this address is.
+
+Companies keep their internal servers — databases, internal services, admin panels — on these private addresses. The <GlossaryTerm slug="firewall" locale="en">**firewall**</GlossaryTerm> blocks any traffic coming from outside trying to reach these addresses.
+
+But the application server is inside this same network — so for it, these addresses are completely accessible, meaning they must have access to function. When you have SSRF, you're exploiting this position the server has.
+
+So now we know why we can't reach internal servers from outside, and we know the server can do this for us. The question now is — why is this more dangerous in the cloud?
+
+## Why Is It More Dangerous in Cloud Environments?
+Let me explain from the ground up.
+
+### First — What's Cloud Architecture Like?
+When a company has its server on AWS, GCP, or Azure, that server has a special internal address: `169.254.169.254`. This address belongs to something called the Instance Metadata Service or **IMDS**. Any server on the cloud can make a request to this address and get information about itself.
+
+### Second — What is This Metadata?
+When you make a request to this address, things like this come back:
+
+- Contents of IAM credentials (meaning <GlossaryTerm slug="access-key-secret-key" locale="en">**access key and secret key**</GlossaryTerm>)
+- Server role (what level of access it has)
+- Internal network information
+- User data specifications which usually include config and sometimes passwords
+
+### Third — Why Is This Dangerous?
+That IAM credential that comes back is a temporary but completely valid token. Meaning the attacker can use that token to talk directly with the AWS <GlossaryTerm slug="api" locale="en">**API**</GlossaryTerm>. Depending on what level of access that server had, the attacker can:
+
+- Access the company's S3 buckets and extract data
+- Spin up new servers
+- Connect to databases
+- See the entire infrastructure
+
+### Why Does Cloud Make This Worse?
+In the old world (on-premise), even if you had SSRF, you had to know the internal network. Where to go? What to look for? You didn't have this information and had to blindly search for it. But in the cloud, one thing has changed — everything is standardized. Every server on AWS, the metadata service is always at that same address `169.254.169.254`. Every server on GCP (Google's cloud infrastructure), it's the same address `metadata.google.internal`. The attacker doesn't need to know the internal network — the map is ready and everyone knows it.
+
+Beyond this, what comes out of the <GlossaryTerm slug="metadata" locale="en">**metadata**</GlossaryTerm> — which we explained earlier — are <GlossaryTerm slug="credentials" locale="en">credentials</GlossaryTerm> that give access to the entire infrastructure. In the old world, even if you reached an internal server, that server was limited. But in the cloud, one credential can give access to hundreds of services and millions of data records (if configured improperly).
+
+---
+
+## A Story Example for Better Understanding:
+Imagine you're outside an office building. You're only allowed to give letters to the public relations room, but you want to give a letter to the manager's office. But what's the solution? Fortunately there's a weakness here — they just set the rules, nobody actually sees where the letter comes from and where it goes. They trusted that the user — that's us — are upstanding people who follow the rules, but they read it wrong.
+
+We exploit the mail carriers here. The mail carriers' job is to take letters from the mailbox and bring them to their destination, that's it, they don't ask any questions or do any checks. In other words, if your letter reaches the mail carriers, they'll deliver it to the intended destination without seeing where it came from — they just do their job. So the only thing needed is to go and drop the letter in the mailbox.
+
+I know the example was very simple and childish, but in the real world it's pretty much the same. You exploit the server, which is the mail carrier, to access places you shouldn't normally have access to — meaning internal servers. When you're giving the server a <GlossaryTerm slug="url" locale="en">**URL**</GlossaryTerm> and it sends the request without sufficient checks. The concept of SSRF is built on exploiting this intermediary. Nowadays these intermediaries have generally gotten smarter and do some checks beforehand (either by default or implemented by developers), but hey, we're hackers and we ethically bypass these, which I'll cover in this and future articles — both how they work and how to bypass them. Now let's look at a real example of this vulnerability.
+
+---
+
+## The Reality of the Story
+
+### The Capital One Attack in 2019
+One of the most famous examples of SSRF attacks that was a major lesson was the Capital One attack in 2019 which led to the exposure of information of 100 million American users. From first and last names to social security numbers (like our national ID). Since the story is interesting and a turning point in attack history, I want to unpack it a bit.
+
+**Stage 1 — Entry Point**
+
+The attack happened between March 22 and 23, 2019. The attacker was Paige Thompson, a former AWS engineer. She had built a custom scanning tool to find vulnerable AWS accounts.
+
+**Stage 2 — Finding the Vulnerability**
+
+Capital One used an open-source **WAF** (a type of firewall) called ModSecurity. Mistakes in this firewall's configuration allowed the attacker to trick it so the request reached the metadata service.
+
+**Stage 3 — Getting Credentials**
+
+The attacker first got the IAM role name by hitting `http://169.254.169.254/iam/security-credentials` — which they called `ISRM-WAF-Role` — then with another request got the complete security credentials.
+
+**Stage 4 — Why Was This Credential So Powerful?**
+
+This WAF had more access than it needed, meaning it could access things it shouldn't — read and list access to all S3 buckets. Meaning one small mistake in **server configuration** became access to all data.
+
+**Stage 5 — Data Extraction**
+
+The information included PII like names, addresses, birth dates, credit scores, as well as 140,000 Social Security numbers and 80,000 bank account numbers.
+
+**What Makes This Breach Special**
+
+The thing is, the company's standard monitoring didn't detect this attack because the traffic looked exactly like normal AWS API calls (meaning there was no clear difference between the server's normal work and this attack). And from the time of the attack until it was discovered took about four months.
+
+**Outcome**
+
+Capital One ultimately paid $80 million in fines and more than $150 million in total damages. AWS also came and introduced IMDSv2 after this breach, which now requires a session token to get metadata — exactly to prevent this attack.
+
+This wasn't an isolated case. Let's see where this vulnerability stands now.
+
+### Some Statistics
+This breach in 2019 was so important that SSRF entered the <GlossaryTerm slug="owasp-top-10" locale="en">**OWASP Top 10**</GlossaryTerm> for the first time in 2021 — and interestingly, in that year's survey, SSRF got first place from the security community. Meaning experts knew this vulnerability was getting bigger before official statistics confirmed it.
+
+Now let's look at 2025. SonicWall's report shows a 452% increase in SSRF attacks from 2023 to 2024. [Vectra AI](https://www.vectra.ai/topics/server-side-request-forgery) And in March 2025, GreyNoise identified a coordinated surge in exploitation of multiple SSRF CVEs simultaneously — at least 400 <GlossaryTerm slug="ip-address" locale="en">**IPs**</GlossaryTerm> were exploiting multiple vulnerabilities in parallel. [The Hacker News](https://thehackernews.com/2025/03/over-400-ips-exploiting-multiple-ssrf.html)
+
+These numbers show something important: SSRF is no longer a niche vulnerability that only researchers know about. It's becoming one of the most active attack vectors right now.
+
+Alright, we've seen the story and statistics. Now it's time to get under the hood and see exactly how this attack works.
+
+# Now Let's Get a Bit More Technical
+## How Do Web Applications Make Requests to Servers?
+**Why would a web app make a request elsewhere?**
+
+These days, modern web apps very often don't do all their work themselves, or rather, everything doesn't happen on one server, and instead they use other servers, or sometimes need to make requests to another server because they want to give you a feature. Let's use the image example again. Say a site accepts a <GlossaryTerm slug="url" locale="en">**URL**</GlossaryTerm> from you for your profile. Now to get this image, it needs to make a request to where the image is, right? This is exactly a potential test case. Or let's talk about an app hosting servers, or wanting to use a third-party service. Say you enter a site that uses Google's map <GlossaryTerm slug="api" locale="en">**API**</GlossaryTerm> for their maps, meaning it's making a request to Google's server, which is an external server.
+
+These communications usually happen through <GlossaryTerm slug="http-request" locale="en">**HTTP requests**</GlossaryTerm> — the same thing your browser does every moment, except this time the server is doing it, not you. The entire web is built on these requests. Now if you task the server with making a request, you can test for SSRF.
+
+**What's the Mechanism?**
+
+Let's start with an everyday example. Say you have a site that says "give me your profile picture address." You give a URL, the site goes and fetches that image and shows it to you. Simple.
+
+Now what happens behind the scenes? The server has a library — in Python they call it `requests`, in PHP they call it `cURL` — whose job is to take a <GlossaryTerm slug="url" locale="en">**URL**</GlossaryTerm>, go connect to it, bring back the response. That's it.
+
+```python
+url = request.args.get('url')   # Gets it from the user
+response = requests.get(url)    # Goes and fetches it
+return response.content         # Returns the response
+```
+
+These three lines show the entire mechanism. The server takes the <GlossaryTerm slug="url" locale="en">**URL**</GlossaryTerm> and goes and fetches it. Doesn't ask any questions. Doesn't do any checks. This behavior isn't a problem by itself — the problem is who's giving this URL and where it points to.
+
+**This Is Where the Problem Starts**
+
+Now if you put this in an app, you have a complete vulnerability because look, there's no validation of whether it's an image, whether this request is going to our internal servers or not. So you tell it to make a request to your internal server and it does, and you can see all the information inside that server (depending on the type, we explained the lowest below). When you can control the input in any way, you should look for this vulnerability there, exactly like the mail carrier problem.
+
+This is the most basic reason SSRF exists — the server makes the request on behalf of the user, but the user determines the destination.
+
+## The Problem of Internal Requests and Why Cloud Infrastructure Makes Everything Worse
+We partially explained this section before — that the server is inside the network and has access to private addresses. And we somewhat explained why cloud makes it worse, but let's talk a bit more.
+
+In the old world, if you had SSRF, you had to know the company's internal network. Which server is where? What service is on which <GlossaryTerm slug="port" locale="en">**port**</GlossaryTerm>? You didn't have this information and had to blindly search for it.
+
+But in the cloud, one thing has changed — everything is standardized. Any server on AWS, the metadata service is always at that same address `169.254.169.254`. Any server on GCP (Google's cloud infrastructure), it's the same address `metadata.google.internal`. The attacker doesn't need to know the internal network — the map is ready and everyone knows it.
+
+Beyond this, what comes out of the <GlossaryTerm slug="metadata" locale="en">**metadata**</GlossaryTerm> — which we explained earlier — are <GlossaryTerm slug="credentials" locale="en">credentials</GlossaryTerm> that give access to the entire infrastructure. In the old world, even if you reached an internal server, that server was limited. But in the cloud, one credential can give access to hundreds of services and millions of data records (if configured improperly).
+
+# Types of SSRF
+
+Now that we understand what SSRF is and grasp what mistakes need to happen for these things to occur, let's examine its types — so when you find a suspicious case, you can work more easily. This section is important.
+
+---
+
+## The Simplest Case — Basic SSRF
+
+I'm serious, this is the best and most exciting thing. The server goes and makes the request and directly shows the result — no hassle.
+
+A simple example: say you have a site that says "give a keyword so we can get everything from a server for you." Instead of a keyword, you give the metadata service address. The server goes and fetches there and shows the response right on the page. All credentials, all information — right in front of you.
+
+You just need to find it and bypass the restrictions, which I'll explain in detail in the next article, and you see the complete result.
+
+---
+
+## Need to Be Clever — Blind SSRF
+
+One important thing to know: whenever you don't see the output directly, it becomes Blind.
+
+Here the server goes and sends the request but doesn't show you anything — no error, no response, basically nothing. From your perspective, it's like nothing happened.
+
+**So What's the Point of This Request?**
+
+There are many processes that happen behind the scenes and you don't see anything at the moment. For example, say an application sends every user action to an <GlossaryTerm slug="endpoint" locale="en">**endpoint**</GlossaryTerm> for storage and later review. You don't see anything directly, but this is happening and the request is being sent from the server. We want to exploit this.
+
+**How Do We Know It Worked?**
+
+Through something called <GlossaryTerm slug="oob" locale="en">out-of-band</GlossaryTerm> or **OOB**. In simple terms, it means another channel — a communication path that we control ourselves.
+
+This is how it works: you have a server or <GlossaryTerm slug="endpoint" locale="en">endpoint</GlossaryTerm> that tools like Burp Collaborator or interactsh give you. This <GlossaryTerm slug="endpoint" locale="en">**endpoint**</GlossaryTerm> is like a personal mailbox — it records and shows you every request that comes to it. Now you give this address instead of an internal address to the victim server. If the server comes and makes a request to your <GlossaryTerm slug="endpoint" locale="en">**endpoint**</GlossaryTerm>, that's it — you found the bug.
+
+<Warning>
+One important practical note: some targets or their firewalls block well-known addresses like Burp Collaborator and interactsh. But the problem isn't just these two — some systems carefully examine any unknown address and won't make the request.
+
+That's why many professional hunters have personal infrastructure — a simple <GlossaryTerm slug="vps" locale="en">VPS</GlossaryTerm> with a domain that's not connected to known security tools and has <GlossaryTerm slug="dns-log" locale="en">**DNS logging**</GlossaryTerm> so they can see incoming requests. In the bug bounty community, they call it custom out-of-band infrastructure, and having it is much more reliable, especially for Blind attacks. You can use interactsh itself to set it up.
+</Warning>
+
+**So How Does It Leak Information?**
+
+Here we play a bit smarter. You can tell the server to first do something like reading a <GlossaryTerm slug="credential" locale="en">credential</GlossaryTerm>, then send the result as part of a request to your <GlossaryTerm slug="endpoint" locale="en">**endpoint**</GlossaryTerm>. For example, put the result in the URL — something like `your-endpoint.com/?data=STOLEN_DATA`. When this request comes to your endpoint, that information comes with it.
+
+I should say that in the simplest case, you just confirm that the server is making requests — this itself is a confirmed bug. But in more advanced cases, you can pull data out through this same channel, for example using special <GlossaryTerm slug="protocol" locale="en">**protocols**</GlossaryTerm> like gopher:// which lets you build more complex <GlossaryTerm slug="payload" locale="en">**payloads**</GlossaryTerm>. These techniques require more knowledge and we'll get to all of them in detail in the next article.
+
+<Tip>
+An important note for bug bounty: very often finding and confirming a bug is enough for a report — but if you can show its real impact, the value of your report multiplies. For example, there's a big difference between saying "the server made a request to my endpoint" versus "through this bug I reached the metadata service and got AWS credentials." The first gets a low or medium, the second can become critical. Of course always within that program's rules — the goal is showing real impact, not damaging the system.
+</Tip>
+
+---
+
+## Need Analysis — Semi-Blind SSRF
+
+This one is between the previous two. The server doesn't show the complete response, but it leaks something small.
+
+That small thing is usually the <GlossaryTerm slug="status-code" locale="en">status code</GlossaryTerm>. Status code means the status number the server returns — like `200` means "found it and responded," `403` means "found it but you don't have access," and timeout means "no such thing exists or it's not responding."
+
+Now why is this important? Because these three numbers tell you:
+
+- Whether that internal address exists or not
+- Whether that service is alive right now or not
+- Whether that port is open or closed
+
+With just this little information you can map the internal network — meaning figure out which servers are alive, which services are running, where it's worth spending more time. This is called <GlossaryTerm slug="internal-network-recon" locale="en">**internal network reconnaissance**</GlossaryTerm> and it's very valuable in bug bounty because it's a prelude to bigger attacks.
+
+---
+
+## Indirect Methods — SSRF via URL Parsers, Redirects, File Inclusion
+
+Sometimes you can't directly give an internal address — the system checks and rejects it. This is where we use indirect methods.
+
+**URL Parser Confusion**
+
+Every programming language has a library that parses URLs — it's called a <GlossaryTerm slug="url-parser" locale="en">**URL parser**</GlossaryTerm>. The problem is these parsers don't always think the same way.
+
+For example, look at this URL: `https://evil.com@internal-server.com`
+
+One parser might say "the destination is `internal-server.com` and `evil.com` is just the username." Another parser might say "no, the main destination is `evil.com`." When the security system checks with one parser but the server makes the request with another parser, this difference becomes an entry point.
+
+**Open Redirect**
+
+Say you have a trusted endpoint like `https://trusted-site.com/redirect?url=X` whose job is to redirect users to any URL. The security system knows and trusts this domain.
+
+Now the attacker comes and says make the destination URL `http://192.168.1.1` — an internal address. The server goes to trusted-site.com, gets redirected to the internal address, and the server follows. The security system only saw and approved the first part, didn't know where it went after. Of course this attack works when the server is configured to follow redirects — which is the case in many real implementations.
+
+**File Inclusion**
+
+This one doesn't even have to do with networking. Some servers support the `file://` protocol — meaning they can read files inside the system itself.
+
+The attacker says `file:///etc/passwd` instead of an HTTP address. The server goes and opens this file and returns its contents — the complete list of system users. Or `file:///etc/nginx/nginx.conf` which shows the complete server config. No network involved, you're directly reading sensitive system files.
+
+# Find the Problem
+
+Let's look at real code:
+
+```python
+import requests
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/fetch-image')
+def fetch_image():
+    url = request.args.get('url')  # Gets directly from user
+    response = requests.get(url)   # Fetches without any check
+    return response.content
+```
+
+Where's the problem? The server fetches any URL the user gives without any questions. Doesn't check where the URL goes, or whether it's even an image. Now instead of a normal image address, give this:
+
+```
+/fetch-image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/
+```
+
+The server goes and fetches this address and returns the response — AWS credentials right in front of you.
+
+Here the developer wrote a feature, thought the user would always give a normal image URL, and didn't put any validation. This one simple mistake is enough.
+
+Now let's see a version with validation:
+
+```python
+from urllib.parse import urlparse
+
+ALLOWED_DOMAINS = ['images.trusted-site.com', 'cdn.trusted-site.com']
+
+@app.route('/fetch-image')
+def fetch_image():
+    url = request.args.get('url')
+    
+    parsed = urlparse(url)
+    if parsed.hostname not in ALLOWED_DOMAINS:  # Only allowed domains
+        return "URL not allowed", 403
+        
+    response = requests.get(url)
+    return response.content
+```
+
+This is better — but not enough. Why? Because this code only checks the domain name, not where the final request goes. For example, if `images.trusted-site.com` has an open redirect, the attacker can say go to this domain — which is trusted — and it redirects there to an internal address. The server saw and approved the first part but didn't know where it went after. Or with <GlossaryTerm slug="dns-rebinding" locale="en">**DNS rebinding**</GlossaryTerm> you can temporarily resolve this domain to an internal IP.
+
+These <GlossaryTerm slug="bypass" locale="en">**bypasses**</GlossaryTerm> are exactly the topic of the next article — but for now, know that simple validation is a good start, but not the end of the story.
+
+## Summary — What Did We Learn?
+
+Alright, we've reached the end, let's do a quick review.
+
+SSRF attack means you can force the server to make requests to places it shouldn't — including the internal network, internal services, and in cloud environments, the metadata service which holds complete AWS credentials.
+
+A few important things that should stick with you:
+
+Anywhere you control the URL and the server is fetching it is a potential test point. Doesn't matter what the feature is — link preview, importing images, PDF generation, or <GlossaryTerm slug="webhook" locale="en">**webhooks**</GlossaryTerm> — all of these should be tested.
+
+SSRF in the cloud is more dangerous because the map is ready in advance. Everyone knows where the metadata service is and what it returns. Capital One lost $150 million with this one mistake.
+
+Better to say Basic SSRF is the best case but rare. Blind SSRF is more common and requires personal infrastructure so you can confirm requests. Semi-blind can also extract information by reading status codes.
+
+Know that simple validation isn't enough. We saw that even a simple allowlist has bypass methods — which is exactly the topic of the next article.
+
+**Next article:** We'll examine the most common methods developers use to prevent SSRF — and then bypass each one.

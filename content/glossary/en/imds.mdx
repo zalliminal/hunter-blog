@@ -1,0 +1,92 @@
+---
+slug: "imds"
+term: "Instance Metadata Service"
+abbreviation: "IMDS"
+shortDefinition: "A service in cloud environments that provides instances with information about themselves, including temporary credentials, accessible at 169.254.169.254."
+category: "Cloud Security"
+tags: ["cloud", "aws", "metadata", "credentials", "ssrf"]
+relatedTerms: ["cloud-infrastructure", "metadata", "credentials", "ssrf"]
+language: "en"
+hasTranslation: true
+translationSlug: "imds"
+difficulty: "intermediate"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html"
+---
+## Short Definition
+IMDS is a magic endpoint that cloud servers can talk to. Ask it "who am I?" and it tells you everything — including temporary passwords (credentials) to access other cloud resources. Problem: attackers love targeting it via SSRF.
+
+## Full Definition
+Instance Metadata Service (IMDS) is a service provided by cloud platforms (AWS, GCP, Azure) that allows running instances to retrieve information about themselves without making external API calls.
+
+**What it provides:**
+- IAM role credentials (access keys)
+- Instance ID and configuration
+- Network information
+- User data (often contains secrets)
+- Security group details
+
+**Access method:**
+- AWS: `http://169.254.169.254/latest/meta-data/`
+- GCP: `http://metadata.google.internal/`
+- Azure: `http://169.254.169.254/metadata/instance`
+
+**Versions:**
+- IMDSv1: Simple HTTP GET (no authentication)
+- IMDSv2: Requires session token (more secure)
+
+## Why It Matters
+- Critical for cloud operations (instances need credentials)
+- Primary target in SSRF attacks
+- Credentials from IMDS can access entire infrastructure
+- Default in most cloud deployments
+
+## How Attackers Use It
+1. Find SSRF vulnerability in application
+2. Make app request `http://169.254.169.254/...`
+3. Extract temporary credentials from response
+4. Use credentials with AWS CLI/SDK to access resources
+5. Escalate privileges if role is over-permissioned
+
+**Famous example:** Capital One breach used this exact method
+
+## How to Detect or Prevent It
+**Prevention:**
+- Use IMDSv2 (requires PUT request for token first)
+- Apply hop limit of 1 (prevents forwarding)
+- Use IAM roles with minimal permissions
+- Block 169.254.169.254 in application firewalls
+- Validate and restrict URL inputs
+
+**Detection:**
+- Monitor for unusual metadata access patterns
+- Alert on credential usage from unexpected locations
+- Track API calls made with metadata credentials
+- Log all IMDSv2 token requests
+
+## Common Misconceptions
+- "IMDS is AWS-only" - All major cloud providers have it
+- "IMDSv2 prevents all SSRF" - Helps but not foolproof
+- "Can't access IMDS from containers" - Yes you can (unless blocked)
+- "IMDS credentials are permanent" - They rotate every 6 hours
+
+## Real-World Example
+**Capital One Breach (2019)**
+
+Vulnerable code:
+```python
+url = request.args.get('url')
+response = requests.get(url)
+return response.content
+```
+
+Attack:
+```
+url=http://169.254.169.254/latest/meta-data/iam/security-credentials/ISRM-WAF-Role
+```
+
+Result: Got temporary credentials, used them to access S3 buckets, downloaded 100M+ records.
+
+## Related Terms
+Cloud Infrastructure, Metadata, Credentials, SSRF, Access Key

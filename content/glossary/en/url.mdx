@@ -1,0 +1,182 @@
+---
+slug: "url"
+term: "Uniform Resource Locator"
+abbreviation: "URL"
+shortDefinition: "A web address that specifies the location of a resource on the internet, like https://example.com/page."
+category: "Web Fundamentals"
+tags: ["url", "web", "http", "protocol", "address"]
+relatedTerms: ["uri", "domain", "endpoint", "http-request"]
+language: "en"
+hasTranslation: true
+translationSlug: "url"
+difficulty: "beginner"
+lastUpdated: "2026-02-26"
+sources:
+  - "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL"
+---
+
+## Short Definition
+A URL is the address bar text that tells your browser where to find something on the internet. `https://example.com/products/123` says: use HTTPS protocol, go to example.com, find the products section, get item 123.
+
+## Full Definition
+A URL (Uniform Resource Locator) is the complete address to access a resource on the web.
+
+**URL Structure:**
+```
+https://user:pass@www.example.com:443/path/to/page?key=value#section
+│      │ │        │                 │   │            │         │
+│      │ │        │                 │   │            │         └─ Fragment
+│      │ │        │                 │   │            └─ Query
+│      │ │        │                 │   └─ Path
+│      │ │        │                 └─ Port
+│      │ │        └─ Domain (hostname)
+│      │ └─ Credentials (deprecated)
+│      └─ Protocol (scheme)
+└─ https://
+```
+
+**Components:**
+
+**Protocol:** How to access (http, https, ftp, file)
+
+**Domain:** Where to go (example.com)
+
+**Port:** Which service (80=HTTP, 443=HTTPS)
+
+**Path:** What resource (/products/123)
+
+**Query:** Parameters (?color=red&size=large)
+
+**Fragment:** Page section (#reviews)
+
+## Why It Matters
+- Every web request starts with a URL
+- URLs control where data goes
+- URL structure affects security
+- Search engines rely on clean URLs
+- APIs use URLs as interfaces
+
+## How Attackers Use It
+**URL-based attacks:**
+
+**1. URL Injection/Manipulation:**
+```
+# Original
+https://bank.com/transfer?to=user1&amount=100
+
+# Attacker modifies
+https://bank.com/transfer?to=attacker&amount=10000
+```
+
+**2. SSRF through URL:**
+```
+# Normal
+https://site.com/fetch?url=https://cdn.example.com/image.jpg
+
+# Malicious
+https://site.com/fetch?url=http://169.254.169.254/metadata
+```
+
+**3. Open Redirect:**
+```
+https://trusted.com/redirect?url=http://evil.com
+```
+
+**4. Path Traversal:**
+```
+https://site.com/download?file=../../../etc/passwd
+```
+
+**5. URL Parser Confusion:**
+```
+http://evil.com@trusted.com  ← Which domain?
+http://trusted.com.evil.com   ← Subdomain trick
+```
+
+## How to Detect or Prevent It
+**Prevention:**
+- Validate URLs thoroughly
+- Use URL parsing libraries (don't regex)
+- Whitelist allowed domains
+- Check resolved IP after DNS lookup
+- Encode special characters properly
+- Use relative URLs when possible
+- Disable URL credentials in modern apps
+
+**For SSRF specifically:**
+```python
+from urllib.parse import urlparse
+import socket
+
+def is_safe_url(url):
+    parsed = urlparse(url)
+    
+    # Check protocol
+    if parsed.scheme not in ['http', 'https']:
+        return False
+    
+    # Check domain whitelist
+    if parsed.hostname not in ALLOWED_DOMAINS:
+        return False
+    
+    # Check resolved IP
+    try:
+        ip = socket.gethostbyname(parsed.hostname)
+        if is_private_ip(ip):
+            return False
+    except:
+        return False
+    
+    return True
+```
+
+**Detection:**
+- Log all URLs processed by application
+- Alert on suspicious patterns:
+  - Private IP addresses
+  - Metadata service IPs
+  - Double encoding
+  - Unusual protocols (gopher, file)
+  - Excessive URL length
+
+## Common Misconceptions
+- "URL validation is simple" - Parser differences cause issues
+- "HTTPS URLs are always safe" - Can still point to malicious content
+- "Domain in URL is clear" - Parser confusion attacks exist
+- "URL encoding prevents attacks" - Attackers use it too
+- "URLs can't contain credentials" - They can (deprecated but works)
+
+## Real-World Example
+**GitHub SSRF (2017)**
+
+GitHub's image proxy accepted URLs:
+```
+https://github.com/proxy?url=...
+```
+
+Intended: External images only
+
+Vulnerability: No validation of destination
+
+Exploit:
+```
+url=http://127.0.0.1:6379/
+```
+
+Result: Accessed internal Redis server, executed commands.
+
+**URL Parser Confusion - Multiple Cases**
+
+Different libraries parse same URL differently:
+
+```
+http://evil.com@good.com
+
+PHP parse_url(): Host = good.com
+Python requests:  Host = evil.com
+```
+
+Validator sees good.com (passes), requester connects to evil.com (bypassed).
+
+## Related Terms
+URI, Domain, Endpoint, HTTP Request, URL Parser
