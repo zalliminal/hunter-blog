@@ -18,18 +18,16 @@ import { PostShare } from "@/components/post-share";
 import { PostNav } from "@/components/post-nav";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import type { PostFrontmatter } from "@/lib/blog";
 import { EnhancedBlogCard } from "@/components/index-page-blog-card";
 import { getSiteUrl } from "@/lib/site";
-import { getCategory } from "@/lib/categories_and_authors";
+import { getCategory, getAuthorSignatureColors } from "@/lib/categories_and_authors";
 
 type PageParams = {
   locale: Locale;
   slug: string;
 };
-
+export const dynamicParams = false;
 // This turns every post page from SSR → SSG, making clicks feel instant.
 export function generateStaticParams(): PageParams[] {
   return LOCALES.flatMap((locale) =>
@@ -88,26 +86,33 @@ export default async function BlogPostPage({
   const toc = generateTocFromContent(post.content);
 
   const { content } = await compileMDX<PostFrontmatter>({
-    source: post.content,
-    options: {
-      parseFrontmatter: false,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]],
-      },
+  source: post.content,
+  options: {
+    parseFrontmatter: false,
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [],
     },
-    components: mdxComponents,
-  });
+  },
+  components: mdxComponents,
+});
 
-  const allPosts = getAllPosts(locale);
-  const relatedPosts = getRelatedPosts(post, locale, 3);
-  const index = allPosts.findIndex((p) => p.slug === post.slug);
-  const previous = index > 0 ? allPosts[index - 1] : null;
-  const next = index < allPosts.length - 1 ? allPosts[index + 1] : null;
+  // After — getAllPosts is cache()-wrapped, one read, everything derived
+const allPosts = getAllPosts(locale);
+const index = allPosts.findIndex((p) => p.slug === post.slug);
+const previous = index > 0 ? allPosts[index - 1] : null;
+const next = index < allPosts.length - 1 ? allPosts[index + 1] : null;
+
+// Pass allPosts directly so getRelatedPosts doesn't re-fetch
+const relatedPosts = allPosts
+  .filter((p) => p.slug !== post.slug && p.published && p.tags.some((t) => post.tags.includes(t)))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
 
   const category = post.category ? getCategory(post.category) : null;
   const author = post.author ? getPostAuthor(post.author) : null;
-
+  const colors = getAuthorSignatureColors(author?.id);
+  const primaryColor = colors.primary.oklch || colors.primary.hex;
   return (
     <article className="relative">
       <div className="flex flex-col gap-10 lg:flex-row">
@@ -115,22 +120,38 @@ export default async function BlogPostPage({
           <header className="mb-6 space-y-3">
             <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               <span>
-                {new Date(post.date).toLocaleDateString(locale, {
-                  year: "numeric",
-                  month: "short",
-                  day: "2-digit",
-                })}
+                {new Date(post.date).toLocaleDateString(
+                  locale === "fa" ? "fa-IR" : "en-US",
+                  { year: "numeric", month: "short", day: "2-digit" }
+                )}
               </span>
               <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
               <span>{post.tags.slice(0, 2).join(" · ")}</span>
               <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
               <span>{locale === "fa" ? "زبان: فارسی" : "Language: English"}</span>
-              <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
-              <span>
-                {locale === "fa"
-                  ? `${post.readingTime} دقیقه مطالعه`
-                  : `${post.readingTime} min read`}
-              </span>
+              <span className="h-1 w-1 rounded-full bg-muted-foreground/50 opacity-0 sm:opacity-100" />
+              <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                <span>
+                  {locale === "fa"
+                    ? `${post.readingTime} دقیقه مطالعه`
+                    : `${post.readingTime} min read`}
+                </span>
+
+                {post.updatedAt && post.updatedAt !== post.date && (
+                  <>
+                    <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
+                    <span>
+                      {locale === "fa"
+                        ? "آخرین بروزرسانی: "
+                        : "Updated on "}
+                      {new Date(post.updatedAt).toLocaleDateString(
+                        locale === "fa" ? "fa-IR" : "en-US",
+                        { year: "numeric", month: "long", day: "2-digit" }
+                      )}
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
             <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -139,16 +160,15 @@ export default async function BlogPostPage({
 
             <div className="flex flex-wrap items-center gap-2 pt-1">
               {category && (
-                <span
-                  className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold ${category.color.bg} ${category.color.text}`}
+                <Link
+                  href={`/${locale}/blog?category=${post.category}`}
+                  className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold transition-opacity hover:opacity-80 ${category.color.bg} ${category.color.text}`}
                 >
-                  <Link href={`/${locale}/blog?category=${post.category}`}>
-                    {category.label[locale]}
-                  </Link>
-                </span>
+                  {category.label[locale]}
+                </Link>
               )}
               {author && (
-                <span className="inline-flex rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                <span style={{ color: primaryColor }} className="inline-flex rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground">
                   {author.name[locale]}
                 </span>
               )}
@@ -218,7 +238,7 @@ export default async function BlogPostPage({
           </div>
         </div>
 
-        <PostToc items={toc} />
+        <PostToc items={toc} locale={locale} />
       </div>
     </article>
   );

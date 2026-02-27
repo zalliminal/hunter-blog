@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import type { Locale } from "./i18n";
 import { estimateReadingTime } from "./reading-time";
 import {
@@ -13,6 +15,7 @@ import {
   getCategory,
   getAuthor,
 } from "./categories_and_authors";
+import { PINNED_SLUGS } from "./pinned-posts";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -20,15 +23,6 @@ const CONTENT_DIR = path.join(process.cwd(), "content");
 // Constants / Enums
 // ─────────────────────────────────────────────
 
-/**
- * Post type controls layout and behavior.
- *
- * - article   : Standard blog post (default)
- * - pillar    : Long-form hub that groups related articles/tutorials
- * - tutorial  : Step-by-step, hands-on walkthrough
- * - writeup   : CTF or bug bounty write-up
- * - news      : Short-form security news or advisory
- */
 export const POST_TYPES = [
   "article",
   "pillar",
@@ -38,9 +32,6 @@ export const POST_TYPES = [
 ] as const;
 export type PostType = (typeof POST_TYPES)[number];
 
-/**
- * Difficulty level — used for roadmap, filtering, and UI badges.
- */
 export const DIFFICULTY_LEVELS = [
   "beginner",
   "intermediate",
@@ -48,10 +39,6 @@ export const DIFFICULTY_LEVELS = [
 ] as const;
 export type DifficultyLevel = (typeof DIFFICULTY_LEVELS)[number];
 
-/**
- * Severity rating for vulnerability-related posts.
- * Follows standard triage conventions used in bug bounty.
- */
 export const SEVERITY_LEVELS = [
   "informational",
   "low",
@@ -66,7 +53,6 @@ export type SeverityLevel = (typeof SEVERITY_LEVELS)[number];
 // ─────────────────────────────────────────────
 
 const PostFrontmatterSchema = z.object({
-  // ── Core (required) ───────────────────────────────────────────────────────
   title: z.string(),
   description: z.string(),
   date: z.string(),
@@ -74,115 +60,28 @@ const PostFrontmatterSchema = z.object({
   category: z.enum(CATEGORY_IDS),
   author: z.enum(AUTHOR_IDS),
   lang: z.string(),
-
-  // ── Core (optional) ───────────────────────────────────────────────────────
   thumbnail: z.string().optional(),
   tags: z.array(z.string()).default([]),
   published: z.boolean().default(true),
-
-  /** Manual override — if omitted, reading time is computed from content */
   readingTime: z.number().optional(),
-
-  /** Last time the post content was reviewed or updated */
   updatedAt: z.string().optional(),
-
-  /** Canonical URL — use when cross-posting to Medium, DEV, etc. */
   canonicalUrl: z.string().optional(),
-
-  // ── Content classification ────────────────────────────────────────────────
-
-  /** Controls layout and semantic meaning of the post */
   type: z.enum(POST_TYPES).default("article"),
-
-  /**
-   * Difficulty level for the reader.
-   * Drives roadmap ordering, UI badges, and future filtering.
-   */
   difficulty: z.enum(DIFFICULTY_LEVELS).optional(),
-
-  /**
-   * Severity of the vulnerability discussed.
-   * Only relevant for writeups and vulnerability articles.
-   */
   severity: z.enum(SEVERITY_LEVELS).optional(),
-
-  // ── Series / Pillar ───────────────────────────────────────────────────────
-
-  /**
-   * Slug of the pillar post this article belongs to.
-   * Pillar posts auto-collect all posts referencing their slug.
-   * Example: "xss-complete-guide"
-   */
   pillar: z.string().optional(),
-
-  /**
-   * Series identifier — groups sequential posts into a named course.
-   * Example: "web-hacking-101"
-   */
   series: z.string().optional(),
-
-  /** Position within the series — 1-indexed */
   seriesPart: z.number().optional(),
-
-  /** Total number of parts in the series (can be updated as you write) */
   seriesTotal: z.number().optional(),
-
-  // ── Learning graph ────────────────────────────────────────────────────────
-
-  /**
-   * Slugs of posts the reader should understand before this one.
-   * Powers the "Prerequisites" UI block and roadmap edges.
-   */
   prerequisites: z.array(z.string()).default([]),
-
-  /**
-   * Skills the reader will gain after reading this post.
-   * Used on roadmap and learning-path pages.
-   * Example: ["xss", "burp-suite", "dom-manipulation"]
-   */
   skills: z.array(z.string()).default([]),
-
-  /**
-   * Tools used or demonstrated in this post.
-   * Powers the /tools index page.
-   * Example: ["burp-suite", "sqlmap", "nmap"]
-   */
   tools: z.array(z.string()).default([]),
-
-  // ── CTF / Bug Bounty metadata ─────────────────────────────────────────────
-
-  /** Slug of the associated challenge on /challenges — for writeup posts */
   challengeSlug: z.string().optional(),
-
-  /**
-   * CTF event name — for writeup posts.
-   * Example: "PicoCTF 2024", "HTB Cyber Apocalypse 2024"
-   */
   ctfEvent: z.string().optional(),
-
-  /**
-   * CVE identifier(s) discussed in this post.
-   * Example: ["CVE-2024-1234", "CVE-2024-5678"]
-   */
   cves: z.array(z.string()).default([]),
-
-  /**
-   * Target program or platform for bug bounty writeups.
-   * Example: "HackerOne - Shopify"
-   */
   program: z.string().optional(),
-
-  // ── Future: engagement / gamification ────────────────────────────────────
-  // These fields are parsed now so frontmatter is forward-compatible.
-  // UI will be built when the platform layer is ready.
-
-  /** Whether this post has an associated quiz */
   hasQuiz: z.boolean().optional(),
-
-  /** Whether this post has hands-on lab steps */
   hasLab: z.boolean().optional(),
-
-  /** Estimated time to complete the lab in minutes */
   labMinutes: z.number().optional(),
 });
 
@@ -196,7 +95,6 @@ export type Post = PostFrontmatter & {
   locale: Locale;
   content: string;
   url: string;
-  /** Always present after parsing — computed from content if not in frontmatter */
   readingTime: number;
 };
 
@@ -210,18 +108,25 @@ function getLocaleDir(locale: Locale): string {
 
 // ─────────────────────────────────────────────
 // Core read functions
+// Wrapped with React cache() so multiple calls within the same
+// server request (e.g. layout + page) only hit the filesystem once.
 // ─────────────────────────────────────────────
 
-export function getAllPostSlugs(locale: Locale): string[] {
+export const getAllPostSlugs = cache(function getAllPostSlugs(
+  locale: Locale,
+): string[] {
   const dir = getLocaleDir(locale);
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((file) => file.endsWith(".mdx"))
     .map((file) => file.replace(/\.mdx$/, ""));
-}
+});
 
-export function getPostBySlug(locale: Locale, slug: string): Post | null {
+export const getPostBySlug = cache(function getPostBySlug(
+  locale: Locale,
+  slug: string,
+): Post | null {
   const dir = getLocaleDir(locale);
   const fullPath = path.join(dir, `${slug}.mdx`);
   if (!fs.existsSync(fullPath)) return null;
@@ -246,9 +151,9 @@ export function getPostBySlug(locale: Locale, slug: string): Post | null {
     content,
     url: `/${locale}/blog/${frontmatter.slug}`,
   };
-}
+});
 
-export function getAllPosts(locale: Locale): Post[] {
+export const getAllPosts = cache(function getAllPosts(locale: Locale): Post[] {
   const slugs = getAllPostSlugs(locale);
   const posts = slugs
     .map((slug) => getPostBySlug(locale, slug))
@@ -257,7 +162,34 @@ export function getAllPosts(locale: Locale): Post[] {
   return posts.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
-}
+});
+
+// ─────────────────────────────────────────────
+// Pinned posts
+// Returns exactly the two slugs you hardcoded in pinned-posts.ts,
+// in that order. Falls back to latest posts if a slug isn't found.
+// ─────────────────────────────────────────────
+
+export const getPinnedPosts = cache(function getPinnedPosts(
+  locale: Locale,
+): Post[] {
+  const slugs = PINNED_SLUGS[locale];
+  const result: Post[] = [];
+
+  for (const slug of slugs) {
+    const post = getPostBySlug(locale, slug);
+    if (post && post.published) {
+      result.push(post);
+    }
+  }
+
+  // If pinned slugs aren't found (e.g. draft), fall back to latest
+  if (result.length === 0) {
+    return getAllPosts(locale).slice(0, 2);
+  }
+
+  return result;
+});
 
 // ─────────────────────────────────────────────
 // Filtering helpers
@@ -309,19 +241,12 @@ export function getPostsBySeries(locale: Locale, series: string): Post[] {
     .sort((a, b) => (a.seriesPart ?? 0) - (b.seriesPart ?? 0));
 }
 
-/**
- * Get all posts that belong to a pillar post.
- * A post belongs to a pillar when its `pillar` field matches the pillar's slug.
- */
 export function getPillarChildren(locale: Locale, pillarSlug: string): Post[] {
   return getAllPosts(locale)
     .filter((post) => post.pillar === pillarSlug)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
-/**
- * Get all pillar posts.
- */
 export function getAllPillarPosts(locale: Locale): Post[] {
   return getPostsByType(locale, "pillar");
 }
@@ -425,10 +350,6 @@ export type ToolSummary = {
   count: number;
 };
 
-/**
- * Collect all tools mentioned across posts with their usage count.
- * Powers the /tools index page.
- */
 export function getAllToolSummaries(locale: Locale): ToolSummary[] {
   const posts = getAllPosts(locale);
   const map = new Map<string, number>();
@@ -454,10 +375,6 @@ export type SkillSummary = {
   count: number;
 };
 
-/**
- * Collect all skills across posts with their coverage count.
- * Powers the roadmap and learning-path pages.
- */
 export function getAllSkillSummaries(locale: Locale): SkillSummary[] {
   const posts = getAllPosts(locale);
   const map = new Map<string, number>();
@@ -485,9 +402,6 @@ export type SeriesSummary = {
   isComplete: boolean;
 };
 
-/**
- * Get full series metadata including all ordered parts.
- */
 export function getSeriesBySlug(
   locale: Locale,
   seriesSlug: string,
@@ -501,9 +415,6 @@ export function getSeriesBySlug(
   return { slug: seriesSlug, parts, total, isComplete };
 }
 
-/**
- * Get all distinct series with their parts.
- */
 export function getAllSeries(locale: Locale): SeriesSummary[] {
   const posts = getAllPosts(locale).filter((p) => p.series);
   const slugs = [...new Set(posts.map((p) => p.series as string))];
@@ -512,9 +423,6 @@ export function getAllSeries(locale: Locale): SeriesSummary[] {
     .filter((s): s is SeriesSummary => s !== null);
 }
 
-/**
- * Get prev/next navigation within a series.
- */
 export function getSeriesNavigation(
   post: Post,
   locale: Locale,
@@ -557,10 +465,6 @@ export function getPostAuthorRole(authorId: AuthorId, locale: Locale): string {
 // Roadmap / Learning path helpers
 // ─────────────────────────────────────────────
 
-/**
- * Resolve prerequisite slugs to full Post objects.
- * Slugs that don't match any published post are silently dropped.
- */
 export function resolvePrerequisites(post: Post, locale: Locale): Post[] {
   if (post.prerequisites.length === 0) return [];
   const all = getAllPosts(locale);
@@ -569,10 +473,6 @@ export function resolvePrerequisites(post: Post, locale: Locale): Post[] {
     .filter((p): p is Post => p !== undefined);
 }
 
-/**
- * Get posts recommended for a given difficulty level,
- * ordered by date and excluding the provided slugs.
- */
 export function getRoadmapPosts(
   locale: Locale,
   difficulty: DifficultyLevel,

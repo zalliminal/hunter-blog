@@ -5,17 +5,17 @@ import { Share2, Copy, Check } from "lucide-react";
 
 type Props = {
   title: string;
-  /** Current locale – used for translations (default: 'en') */
   locale?: string;
 };
 
 export function PostShare({ title, locale = "en" }: Props) {
   const [copied, setCopied] = useState(false);
   const [url, setUrl] = useState("");
+  // Fix: detect after mount only — never on server
+  const [canShare, setCanShare] = useState(false);
 
   const isRtl = locale === "fa";
 
-  // Translations
   const t = {
     share: isRtl ? "اشتراک‌گذاری" : "Share",
     copyLink: isRtl ? "کپی لینک" : "Copy link",
@@ -26,10 +26,12 @@ export function PostShare({ title, locale = "en" }: Props) {
 
   useEffect(() => {
     setUrl(window.location.href);
+    // Only set after hydration — server always skips this
+    setCanShare(!!navigator.share);
   }, []);
 
   const handleShare = async () => {
-    if (!navigator.share) return;
+    if (!canShare) return;
     try {
       await navigator.share({ title, url });
     } catch {
@@ -50,8 +52,8 @@ export function PostShare({ title, locale = "en" }: Props) {
 
   return (
     <div className="flex items-center gap-2">
-      {/* Share button – only if Web Share API is supported */}
-      {typeof navigator !== "undefined" && navigator.share && (
+      {/* Conditionally rendered after mount — no hydration mismatch */}
+      {canShare && (
         <button
           type="button"
           onClick={handleShare}
@@ -63,7 +65,6 @@ export function PostShare({ title, locale = "en" }: Props) {
         </button>
       )}
 
-      {/* Copy link button – always visible */}
       <button
         type="button"
         onClick={handleCopy}

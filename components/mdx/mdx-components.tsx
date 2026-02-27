@@ -1,7 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import { CodeBlock } from "./code-block";
-import { slugify } from "@/lib/toc"; // Changed from slugifyHeading to slugify
-import { Link } from "lucide-react";
+import { slugify } from "@/lib/toc";
+import { Link as LinkIcon } from "lucide-react";
 import { GlossaryTermMDX } from "@/components/glossary/glossary-term-mdx";
 import { Note, Tip, Warning, Danger, InfoBox, Legal, AI } from "./callout";
 
@@ -66,7 +66,7 @@ const Heading =
           className="ml-2 inline-flex opacity-0 transition-opacity group-hover:opacity-100"
           aria-label="Link to section"
         >
-          <Link className="h-4 w-4" />
+          <LinkIcon className="h-4 w-4" />
         </a>
       </Tag>
     );

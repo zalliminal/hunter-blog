@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { TocItem } from "@/lib/toc";
 import { ListTree } from "lucide-react";
+import type { Locale } from "@/lib/i18n";
 import {
   Drawer,
   DrawerContent,
@@ -16,21 +17,15 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
   items: TocItem[];
+  locale: Locale;
 };
-
-export function PostToc({ items }: Props) {
+export function PostToc({ items, locale }: Props) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dir, setDir] = useState<"ltr" | "rtl">("ltr");
 
-  // Detect document direction
-  useEffect(() => {
-    const htmlDir = document.documentElement.dir;
-    const containerDir = document.querySelector<HTMLElement>("[data-locale]")?.getAttribute("dir");
-    setDir((containerDir || htmlDir || "ltr") as "ltr" | "rtl");
-  }, []);
-
-  const isRtl = dir === "rtl";
+  // Derived directly — no DOM query, no render cycle, correct on first paint
+  const isRtl = locale === "fa";
+  const dir = isRtl ? "rtl" : "ltr";
 
   // 1. Intersection Observer to track active heading
   useEffect(() => {

@@ -32,7 +32,7 @@ export function BackToTop() {
                     text-muted-foreground 
                     transition-colors duration-300 
                     hover:border-primary hover:text-primary hover:bg-primary/10 
-                    focus:outline-none focus:ring-2 focus:ring-primary/50 sm:left-auto sm:right-5"
+                    focus:outline-none focus:ring-2 focus:ring-primary/50"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 0.4, y: 0 }}
           whileHover={{ opacity: 1, scale: 1.05 }}

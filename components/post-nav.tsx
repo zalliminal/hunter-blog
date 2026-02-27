@@ -17,6 +17,12 @@ export function PostNav({ locale, previous, next }: Props) {
   const PrevIcon = isRtl ? ArrowRight : ArrowLeft;
   const NextIcon = isRtl ? ArrowLeft : ArrowRight;
 
+  // Add this
+  const labels = {
+    prev: isRtl ? "قبلی" : "Previous",
+    next: isRtl ? "بعدی" : "Next",
+  };
+
   return (
     <div className="mt-10 flex flex-col gap-3 border-t border-border pt-4 text-xs sm:flex-row sm:justify-between">
       {previous ? (
@@ -26,8 +32,9 @@ export function PostNav({ locale, previous, next }: Props) {
         >
           <PrevIcon className="h-3 w-3" />
           <div className="flex flex-col">
+            {/* Changed */}
             <span className="text-[11px] uppercase tracking-[0.16em]">
-              Previous
+              {labels.prev}
             </span>
             <span className="line-clamp-2 text-xs">{previous.title}</span>
           </div>
@@ -41,8 +48,9 @@ export function PostNav({ locale, previous, next }: Props) {
           className="group inline-flex max-w-xs items-center gap-2 text-muted-foreground hover:text-foreground sm:justify-end"
         >
           <div className="flex flex-col text-right">
+            {/* Changed */}
             <span className="text-[11px] uppercase tracking-[0.16em]">
-              Next
+              {labels.next}
             </span>
             <span className="line-clamp-2 text-xs">{next.title}</span>
           </div>
@@ -54,4 +62,3 @@ export function PostNav({ locale, previous, next }: Props) {
     </div>
   );
 }
-

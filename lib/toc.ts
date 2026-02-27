@@ -4,14 +4,17 @@ export type TocItem = {
   level: 2 | 3;
 };
 
+// Exported so mdx-components.tsx can import it for heading IDs.
+// Both this file and mdx-components use the same function —
+// that's what keeps TOC anchor links and rendered heading IDs in sync.
 export function slugify(text: string): string {
   return text
     .toLowerCase()
     .trim()
     .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFFa-z0-9\s-]/gi, "")
-    .replace(/[\s_]+/g, "-") // replace spaces/underscores with dash
-    .replace(/-+/g, "-") // replace multiple dashes with single dash
-    .replace(/^-+|-+$/g, ""); // trim dashes from ends
+    .replace(/[\s_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export function generateTocFromContent(content: string): TocItem[] {
@@ -19,26 +22,18 @@ export function generateTocFromContent(content: string): TocItem[] {
   const toc: TocItem[] = [];
 
   for (const line of lines) {
-    // Match ## Heading or ### Heading
     const match = line.match(/^(#{2,3})\s+(.+)$/);
-    
-    if (match) {
-      const level = match[1].length as 2 | 3;
-      let title = match[2].trim();
-      
-      // Remove custom ID if present (e.g., ## Heading {#custom-id})
-      const idMatch = title.match(/\{#([^}]+)\}$/);
-      if (idMatch) {
-        title = title.replace(/\{#([^}]+)\}$/, "").trim();
-      }
+    if (!match) continue;
 
-      const id = idMatch ? idMatch[1] : slugify(title);
-      
-      toc.push({
-        id,
-        title,
-        level,
-      });
+    const level = match[1].length as 2 | 3;
+    let title = match[2].trim();
+
+    const idMatch = title.match(/\{#([^}]+)\}$/);
+    if (idMatch) {
+      title = title.replace(/\{#([^}]+)\}$/, "").trim();
+      toc.push({ id: idMatch[1], title, level });
+    } else {
+      toc.push({ id: slugify(title), title, level });
     }
   }
 

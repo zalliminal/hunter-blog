@@ -9,6 +9,7 @@ thumbnail: "/blog/thumbnails/what-is-ssrf.png"
 tags: ["SSRF", "امنیت وب", "باگ باونتی", "cloud security", "OWASP", "آموزش امنیت"]
 lang: "fa"
 published: true
+updatedAt: "2026-02-27"
 ---
 ## این SSRF اصلا چیه؟
 یه روز صبح یه مهندس سابق AWS از خونه‌ش نشست پشت لپ‌تاپش، یه ابزار ساده اجرا کرد، و تا ظهر اطلاعات ۱۰۰ میلیون نفر رو داشت. نه بدافزار پیچیده، نه تیم هکری، نه ماه‌ها کار. فقط یه آسیب‌پذیری که توسعه دهنده ش فکرش رو هم نمی‌کرد.
@@ -32,7 +33,7 @@ published: true
 ## چرا در محیط های ابری خطرناک تر هست؟
 خب بذار از پایه توضیح بدم.
 ### اول — معماری cloud چطوریه؟
-وقتی یه شرکت سرورش رو روی AWS یا GCP یا Azure داره، اون سرور یه آدرس داخلی خاص داره: `169.254.169.254`. این آدرس متعلق به چیزیه که بهش میگن Instance Metadata Service یا **IMDS**. هر سروری که روی <GlossaryTerm slug="cloud-infrastructure" locale="fa">**cloud**</GlossaryTerm> باشه می‌تونه به این آدرس request بزنه و اطلاعات خودش رو بگیره.
+وقتی یه شرکت سرورش رو روی AWS یا GCP یا Azure داره، اون سرور یه آدرس داخلی خاص داره: `169.254.169.254`. این آدرس متعلق به چیزیه که بهش میگن Instance Metadata Service یا <GlossaryTerm slug="imds" locale="fa">**IMDS**</GlossaryTerm>. هر سروری که روی <GlossaryTerm slug="cloud-infrastructure" locale="fa">**cloud**</GlossaryTerm> باشه می‌تونه به این آدرس request بزنه و اطلاعات خودش رو بگیره.
 ### دوم — این metadata چیه؟
 وقتی به این آدرس request می‌زنی چیزایی مثل این برمی‌گرده:
 
@@ -218,7 +219,7 @@ return response.content         # جواب رو برمیگردونه
 
 بذار یه کد واقعی ببینیم:
 
-````python
+```python
 import requests
 from flask import Flask, request
 
@@ -234,7 +235,7 @@ def fetch_image():
 مشکل کجاست؟ سرور هر URL ای که کاربر بده رو بدون هیچ سوالی fetch می‌کنه. نه چک می‌کنه URL به کجا میره، نه اینکه اصلاً عکسه یا نه. حالا به جای یه آدرس عکس معمولی این رو بدید:
 ```
 /fetch-image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/
-````
+```
 
 سرور میره این آدرس رو fetch می‌کنه و جواب رو برمیگردونه — credential های AWS جلوی چشمتونه.
 
