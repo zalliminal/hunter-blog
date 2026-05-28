@@ -1,28 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
+import "./fonts.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getSiteUrl } from "@/lib/site";
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
-const geistSans = Geist({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
-
-const vazir = Vazirmatn({
-  variable: "--font-farsi",
-  subsets: ["arabic"],
-  display: "swap",
-});
 
 const siteUrl = getSiteUrl();
 
@@ -71,12 +54,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${vazir.variable} bg-background text-foreground antialiased`}
+        className={`bg-background text-foreground antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-          <Analytics />
-          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

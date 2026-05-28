@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import type { GlossaryTerm } from "@/lib/glossary-helpers";
 import { GlossaryCard } from "./glossary-card";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 type Filters = {
   query: string;
@@ -50,21 +50,21 @@ export function GlossaryResults({
   const dir = locale === "fa" ? "rtl" : "ltr";
   const isRTL = locale === "fa";
 
-  // Filter terms based on filters
+  // استیت برای ذخیره حرف فعال در نوار ناوبری
+  const [activeLetter, setActiveLetter] = useState<string | null>(null);
+
+  // فیلتر کردن اصطلاحات بر اساس ورودی‌ها
   const filteredTerms = useMemo(() => {
     let results = terms;
 
-    // Filter by category
     if (filters.category) {
       results = results.filter((term) => term.category === filters.category);
     }
 
-    // Filter by difficulty
     if (filters.difficulty) {
       results = results.filter((term) => term.difficulty === filters.difficulty);
     }
 
-    // Search by query (only if 2+ characters)
     if (filters.query && filters.query.trim().length >= 2) {
       const query = filters.query.toLowerCase().trim();
       results = results.filter((term) => {
@@ -85,7 +85,7 @@ export function GlossaryResults({
     return results;
   }, [terms, filters]);
 
-  // Group terms by first letter (only when not filtering)
+  // گروه‌بندی اصطلاحات بر اساس حروف الفبا
   const groupedTerms = useMemo(() => {
     if (hasQuery || hasFilters) return null;
     
@@ -104,16 +104,53 @@ export function GlossaryResults({
     );
   }, [filteredTerms, locale, hasQuery, hasFilters]);
 
-  // Get all first letters for navigation
   const letters = useMemo(() => {
     if (!groupedTerms) return [];
     return Array.from(groupedTerms.keys());
   }, [groupedTerms]);
 
+  // منطق تشخیص بخش فعال هنگام اسکرول (Scroll Sync)
+  useEffect(() => {
+    if (hasQuery || hasFilters || letters.length === 0) return;
+
+    const observerOptions: IntersectionObserverInit = {
+      root: null,
+      // rootMargin: تشخیص نقطه فعال حدود 120 پیکسل از بالای صفحه
+      rootMargin: "-120px 0px -70% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const letter = entry.target.id.replace("letter-", "");
+          setActiveLetter(letter);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    letters.forEach((letter) => {
+      const element = document.getElementById(`letter-${letter}`);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [letters, hasQuery, hasFilters]);
+
   const scrollToLetter = (letter: string) => {
     const element = document.getElementById(`letter-${letter}`);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      // محاسبه فاصله با احتساب هدر ثابت (Sticky)
+      const offset = 140; 
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -149,82 +186,94 @@ export function GlossaryResults({
             transition={{ duration: 0.15 }}
             className="space-y-4"
           >
-            {/* Result count / Section title */}
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">
+            {/* تعداد نتایج */}
+            <div className="flex items-center justify-between px-1">
+              <p className="text-xs text-muted-foreground font-medium">
                 {hasQuery || hasFilters
                   ? t.resultCount(filteredTerms.length)
                   : t.allTerms}
               </p>
-              <p className="text-xs text-muted-foreground">
-                {t.resultCount(filteredTerms.length)}
-              </p>
+              {(hasQuery || hasFilters) && (
+                <p className="text-xs text-primary font-bold">
+                   {t.resultCount(filteredTerms.length)}
+                </p>
+              )}
             </div>
 
-            {/* Alphabetical Navigation Bar (only when browsing all terms) */}
+            {/* نوار ناوبری حروف (Sticky Alphabet Bar) */}
             {!hasQuery && !hasFilters && letters.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
                 className={cn(
-                  "sticky top-16 z-10 rounded-lg border border-border bg-background/95 p-3 shadow-sm backdrop-blur-sm",
-                  isRTL ? "text-right" : "text-left"
+                  "sticky top-16 z-20 rounded-xl border border-border bg-background/80 p-2 shadow-sm backdrop-blur-md",
+                  "my-4"
                 )}
               >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 px-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
                     {t.jumpTo}
                   </span>
                   <div className="flex flex-wrap gap-1">
-                    {letters.map((letter) => (
-                      <button
-                        key={letter}
-                        onClick={() => scrollToLetter(letter)}
-                        className="flex h-7 w-7 items-center justify-center rounded-md text-xs font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
-                      >
-                        {letter}
-                      </button>
-                    ))}
+                    {letters.map((letter) => {
+                      const isActive = activeLetter === letter;
+                      return (
+                        <button
+                          key={letter}
+                          onClick={() => scrollToLetter(letter)}
+                          className={cn(
+                            "flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-all duration-200",
+                            isActive
+                              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          )}
+                        >
+                          {letter}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </motion.div>
             )}
 
-            {/* Cards grid - Grouped by letter or flat list */}
+            {/* لیست اصطلاحات */}
             {groupedTerms ? (
-              <div className="space-y-12">
+              <div className="space-y-12 pt-4">
                 {Array.from(groupedTerms.entries()).map(([letter, letterTerms]) => (
                   <motion.div
                     key={letter}
                     id={`letter-${letter}`}
                     className="scroll-mt-32"
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.3 }}
                   >
-                    {/* Letter heading */}
-                    <h2
-                      className={cn(
-                        "mb-4 text-2xl font-bold tracking-tight text-primary",
-                        isRTL ? "text-right" : "text-left"
-                      )}
-                    >
-                      {letter}
-                    </h2>
+                    {/* سربرگ هر حرف */}
+                    <div className="relative mb-6 flex items-center gap-4">
+                      <h2
+                        className={cn(
+                          "text-3xl font-black tracking-tight text-primary",
+                          isRTL ? "text-right" : "text-left"
+                        )}
+                      >
+                        {letter}
+                      </h2>
+                      <div className="h-[1px] flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+                    </div>
 
-                    {/* Grid of terms */}
+                    {/* گرید کارت‌ها */}
                     <div className="grid gap-4 sm:grid-cols-2">
-                      <AnimatePresence initial={false}>
+                      <AnimatePresence mode="popLayout">
                         {letterTerms.map((term) => (
                           <motion.div
                             key={term.slug}
                             layout
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -4 }}
-                            transition={{ duration: 0.18, ease: "easeOut" }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             <GlossaryCard term={term} locale={locale} />
                           </motion.div>
@@ -235,16 +284,16 @@ export function GlossaryResults({
                 ))}
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <AnimatePresence initial={false}>
+              <div className="grid gap-4 sm:grid-cols-2 pt-4">
+                <AnimatePresence mode="popLayout">
                   {filteredTerms.map((term) => (
                     <motion.div
                       key={term.slug}
                       layout
-                      initial={{ opacity: 0, y: 8 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <GlossaryCard term={term} locale={locale} />
                     </motion.div>

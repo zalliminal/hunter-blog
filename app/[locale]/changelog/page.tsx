@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 import ChangelogClient from "@/components/changelog/changelog-client";
 
+
 const FA_FONT_CLASS = "font-[family-name:var(--font-farsi)]";
 
 export async function generateMetadata({

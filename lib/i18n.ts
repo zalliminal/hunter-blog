@@ -25,6 +25,8 @@ export type NavDictionary = {
   navCategories: string;
   navAdvancedSearch: string;
   navGlossary: string;
+  navSupport: string;
+  navLearningPath: string;
   // Add descriptions for navigation items
   tagsDescription: string;
   categoriesDescription: string;
@@ -57,6 +59,8 @@ const en: Dictionaries = {
     navCategories: "Categories",
     navAdvancedSearch: "Advanced Search",
     navGlossary: "Anatomy of Security",
+    navSupport: "Support",
+    navLearningPath: "Learning Paths",
     tagsDescription: "Browse content by tags and topics",
     categoriesDescription: "Explore posts organized by categories",
     advancedSearchDescription: "Search with advanced filters and options",
@@ -86,6 +90,8 @@ const fa: Dictionaries = {
     navCategories: "دسته‌بندی‌ها",
     navAdvancedSearch: "جستجوی پیشرفته",
     navGlossary: "آناتومی امنیت",
+    navSupport: "حمایت",
+    navLearningPath: "مسیر های یادگیری",
     tagsDescription: "مرور محتوا بر اساس تگ‌ها و موضوعات",
     categoriesDescription: "کاوش پست‌های سازمان‌یافته بر اساس دسته‌بندی‌ها",
     advancedSearchDescription: "جستجو با فیلترها و گزینه‌های پیشرفته",

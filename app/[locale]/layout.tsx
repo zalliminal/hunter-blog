@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
+import { MobileBottomNav } from "@/components/site-header"; // ایمپورت جدا
 import { LocaleTransition } from "@/components/locale-transition";
 import {
   DEFAULT_LOCALE,
@@ -42,11 +43,11 @@ export default async function LocaleLayout(props: {
       <LocaleTransition locale={locale}>
         <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
           {children}
-          <BackToTop/>
+          <BackToTop />
         </main>
       </LocaleTransition>
+      <MobileBottomNav locale={locale} dict={dict.nav} />
       <SiteFooter locale={locale} />
     </div>
   );
 }
-

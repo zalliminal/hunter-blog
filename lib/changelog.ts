@@ -11,6 +11,39 @@ export type ChangelogEntry = {
 
 // Only feat, fix, rebrand are shown by default — patch/chore are filtered out in the UI.
 export const CHANGELOG_DATA: ChangelogEntry[] = [
+  {
+    date: "2026-05-28",
+    type: "feat",
+    title: { en: "Academy Invitation", fa: "دعوت نامه آکادمی" },
+    description: {
+      en: "Dedicated page to get invitation for academy lunching",
+      fa: "صفحه اختصاصی برای دریافت دعوت نامه اکادمی در روز افتتاحیه",
+    },
+    author: "parham",
+    important: true,
+  },
+  // {
+  //   date: "2026-04-30",
+  //   type: "feat",
+  //   title: { en: "Learning path page", fa: "صفحه مسیر های آموزشی" },
+  //   description: {
+  //     en: "Dedicated page to see diffrent paths for learning realted categories.",
+  //     fa: "صفحه اختصاصی برای دیدن مسیر های آموزش متنوع",
+  //   },
+  //   author: "parham",
+  //   important: true,
+  // },
+  {
+    date: "2026-04-28",
+    type: "feat",
+    title: { en: "Support us page", fa: "صفحه حمایت از ما" },
+    description: {
+      en: "Dedicated page to see every option to support the project.",
+      fa: "صفحه اختصاصی برای دیدن همه روش های حمایت از پروژه",
+    },
+    author: "parham",
+    important: true,
+  },
   // ── Feb 24, 2026 ──────────────────────────────────────────────────────────
   {
     date: "2026-02-24",

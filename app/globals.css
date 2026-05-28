@@ -34,9 +34,9 @@
   --sidebar-accent-foreground: oklch(0.5638 0.1872 143.2450);
   --sidebar-border: oklch(0.9219 0 0);
   --sidebar-ring: oklch(0.5638 0.1872 143.2450);
-  --font-sans: 'Geist Sans', 'Inter', sans-serif;
+  --font-sans: 'Geist', 'Inter', sans-serif;
   --font-serif: 'Charter', 'Georgia', serif;
-  --font-mono: 'Geist Mono', 'Fira Code', monospace;
+  --font-mono: 'GeistMono', 'Fira Code', monospace;
   --font-farsi: 'Vazirmatn', 'Estedad', 'Vazir', sans-serif;
 
   --shadow-x: 0px;
@@ -90,10 +90,9 @@
   --sidebar-accent-foreground: oklch(0.8686 0.2776 144.4661);
   --sidebar-border: oklch(0.2850 0 0);
   --sidebar-ring: oklch(0.8686 0.2776 144.4661);
-  --font-sans: 'Geist Sans', 'Inter', sans-serif;
+  --font-sans: 'Geist', 'Inter', sans-serif;
   --font-serif: 'Charter', 'Georgia', serif;
-  --font-mono: 'Geist Mono', 'Fira Code', monospace;
-  /* 🔥 FARSI FONT - Add your chosen Farsi font here */
+  --font-mono: 'GeistMono', 'Fira Code', monospace;
   --font-farsi: 'Vazirmatn', 'Estedad', 'Vazir', sans-serif;
 
   --shadow-x: 0px;
