@@ -19,29 +19,23 @@ export default function KavLabsCard({ isFa, locale }: { isFa: boolean; locale: L
   };
 
   return (
-    <div className="rounded-xl border border-border/60 bg-card/60 p-4">
-      <h3 className="text-sm font-semibold">{isFa ? "کاولبز" : "KavLabs"}</h3>
-
-      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-        {isFa ? kavlabs.fa.breakdown : kavlabs.en.breakdown}
-      </p>
-
-      <div className="mt-6 text-xs text-muted-foreground">
-        <strong>{isFa ? "تلفظ:" : "Pronunciation (approx.):"}</strong>
-        <div className="mt-1">{isFa ? kavlabs.fa.pron : kavlabs.en.pron}</div>
+    <div className="rounded-xl border border-border/60 bg-card/60 p-4 h-full flex flex-col justify-between">
+      <div className="mt-2">
+        <h3 className="text-sm font-semibold">{isFa ? "کاولبز" : "KavLabs"}</h3>
+  
+        <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+          {isFa ? kavlabs.fa.breakdown : kavlabs.en.breakdown}
+        </p>
       </div>
 
-      <div className="mt-6 flex gap-2">
-        <Link href={`/${locale}/search`} className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
-          {isFa ? "جستجوی پیشرفته" : "Advance Search"}
-        </Link>
-
-        <a href="/rss.xml" className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
-          RSS
-        </a>
-        <Link href={`/${locale}/glossary`} className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
-          {isFa ? "آناتومی امنیت" : "Anatomy Of Security"}
-        </Link>
+      <div className="mt-6 mb-2 text-xs text-muted-foreground">
+        <strong>{isFa ? "تلفظ:" : "Pronunciation (approx.):"}</strong>
+        <div className="mt-1 flex justify-between items-center">
+          {isFa ? kavlabs.fa.pron : kavlabs.en.pron}
+          <a href="/rss.xml" className="inline-block rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">
+            RSS
+          </a>
+        </div>
       </div>
     </div>
   );

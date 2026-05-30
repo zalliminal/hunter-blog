@@ -1,14 +1,11 @@
 // components/hero/AboutSectionClient.tsx
 "use client";
-
 import { motion, useReducedMotion } from "framer-motion";
 import { useRef, useState, useEffect, useCallback, type ReactNode } from "react";
 import { Mail, FileDown } from "lucide-react";
 import { SiReddit, SiMastodon, SiX, SiTelegram } from "react-icons/si";
 import type { Locale } from "@/lib/i18n";
-
 type Props = { locale: Locale; isFa: boolean };
-
 // ── Background orbs ───────────────────────────────────────────────────────────
 function AboutBackgroundOrbits({ prefersReduced }: { prefersReduced: boolean | null }) {
   if (prefersReduced) return null;
@@ -29,11 +26,9 @@ function AboutBackgroundOrbits({ prefersReduced }: { prefersReduced: boolean | n
     </div>
   );
 }
-
 function Ltr({ children }: { children: ReactNode }) {
   return <span dir="ltr" className="inline-block">{children}</span>;
 }
-
 // ── Brand tints ───────────────────────────────────────────────────────────────
 const socialBrands = {
   reddit:   { bg: "hover:bg-[oklch(0.94_0.04_80)]   dark:hover:bg-[oklch(0.28_0.05_80)]",   border: "hover:border-[oklch(0.75_0.10_80)]   dark:hover:border-[oklch(0.55_0.10_80)]",   text: "group-hover:text-[oklch(0.45_0.12_80)]   dark:group-hover:text-[oklch(0.82_0.12_80)]"   },
@@ -41,7 +36,6 @@ const socialBrands = {
   twitter:  { bg: "hover:bg-[oklch(0.94_0.04_200)] dark:hover:bg-[oklch(0.28_0.05_200)]", border: "hover:border-[oklch(0.75_0.10_200)] dark:hover:border-[oklch(0.55_0.10_200)]", text: "group-hover:text-[oklch(0.45_0.12_200)] dark:group-hover:text-[oklch(0.82_0.12_200)]" },
   telegram: { bg: "hover:bg-[oklch(0.94_0.04_220)] dark:hover:bg-[oklch(0.28_0.05_220)]", border: "hover:border-[oklch(0.75_0.10_220)] dark:hover:border-[oklch(0.55_0.10_220)]", text: "group-hover:text-[oklch(0.45_0.12_220)] dark:group-hover:text-[oklch(0.82_0.12_220)]" },
 } as const;
-
 // ── Framer variants ───────────────────────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -55,7 +49,6 @@ const chipVariants = {
   hidden: { opacity: 0, y: 6 },
   show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
 } as const;
-
 // ══════════════════════════════════════════════════════════════════════════════
 // SOCIAL CARD
 // ══════════════════════════════════════════════════════════════════════════════
@@ -64,18 +57,17 @@ type SocialCardProps = {
     key: string;
     name: ReactNode;
     handle: ReactNode;
+    url: string;
     icon: ReactNode;
     brand: { bg: string; border: string; text: string };
   };
   prefersReduced: boolean | null;
 };
-
 function SocialCard({ card, prefersReduced }: SocialCardProps) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <motion.a
-      href="#"
+      href={card.url}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       whileTap={prefersReduced ? undefined : { scale: 0.96 }}
@@ -113,7 +105,6 @@ function SocialCard({ card, prefersReduced }: SocialCardProps) {
     </motion.a>
   );
 }
-
 // ══════════════════════════════════════════════════════════════════════════════
 // DRAW-IN RING HOOK
 // ══════════════════════════════════════════════════════════════════════════════
@@ -122,7 +113,6 @@ const DRAW_MS         = 1500;
 const HOLD_MS         = 1000;
 const FADE_MS         = 1000;
 const RADIUS          = 16;
-
 function useDrawRing(
   cardRef: React.RefObject<HTMLElement>,
   prefersReduced: boolean | null,
@@ -130,22 +120,17 @@ function useDrawRing(
   const glowRef  = useRef<SVGPathElement>(null);
   const crispRef = useRef<SVGPathElement>(null);
   const timerRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
-
   const clearTimers = useCallback(() => {
     timerRefs.current.forEach(clearTimeout);
     timerRefs.current = [];
   }, []);
-
   const fire = useCallback(() => {
     if (prefersReduced || !cardRef.current) return;
     clearTimers();
-
     const t0 = setTimeout(() => {
       if (!cardRef.current || !glowRef.current || !crispRef.current) return;
-
       const { width: w, height: h } = cardRef.current.getBoundingClientRect();
       const r = RADIUS;
-
       const d = [
         `M ${w / 2} 0`,
         `L ${w - r} 0`,
@@ -158,10 +143,8 @@ function useDrawRing(
         `A ${r} ${r} 0 0 1 ${r} 0`,
         `L ${w / 2} 0`,
       ].join(" ");
-
       const perimeter = 2 * (w - 2 * r) + 2 * (h - 2 * r) + 2 * Math.PI * r;
       const paths = [glowRef.current, crispRef.current];
-
       paths.forEach((p) => {
         p.style.transition       = "none";
         p.style.opacity          = "0";
@@ -169,43 +152,33 @@ function useDrawRing(
         p.style.strokeDasharray  = `${perimeter}`;
         p.style.strokeDashoffset = `${perimeter}`;
       });
-
       void glowRef.current.getBoundingClientRect();
-
       paths.forEach((p) => {
         p.style.transition       = `stroke-dashoffset ${DRAW_MS}ms cubic-bezier(0.45, 0, 0.55, 1), opacity 150ms ease`;
         p.style.opacity          = "1";
         p.style.strokeDashoffset = "0";
       });
-
       const t1 = setTimeout(() => {
         if (!glowRef.current || !crispRef.current) return;
         paths.forEach((p) => {
           p.style.transition = `opacity ${FADE_MS}ms cubic-bezier(0.4, 0, 0.6, 1)`;
           p.style.opacity    = "0";
         });
-
         const t2 = setTimeout(() => {
           paths.forEach((p) => {
             p.style.transition       = "none";
             p.style.strokeDashoffset = `${perimeter}`;
           });
         }, FADE_MS + 60);
-
         timerRefs.current.push(t2);
       }, DRAW_MS + HOLD_MS);
-
       timerRefs.current.push(t1);
     }, SCROLL_DELAY_MS);
-
     timerRefs.current.push(t0);
   }, [cardRef, prefersReduced, clearTimers]);
-
   useEffect(() => () => clearTimers(), [clearTimers]);
-
   return { glowRef, crispRef, fire };
 }
-
 // ══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════════════════════
@@ -213,64 +186,93 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
   const isRTL = locale === "fa";
   const dir = isRTL ? "rtl" : "ltr";
   const prefersReduced = useReducedMotion();
-
   const socialCardRef = useRef<HTMLElement>(null);
   const { glowRef, crispRef, fire } = useDrawRing(socialCardRef, prefersReduced);
-
   useEffect(() => {
     window.addEventListener("contactClicked", fire);
     return () => window.removeEventListener("contactClicked", fire);
   }, [fire]);
-
   const copy = {
-    kicker:        isFa ? "پشت پرده کاوش"                   : "Behind the research",
-    title:         isFa ? "جایی بین باگ، اسطوره و کد"        : "Somewhere between bugs, myth and code",
-    lead:          isFa ? "ما از دریچه‌ی باگ باونتی و OWASP به دنیای وب نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها." : "We look at the web through bug bounty and OWASP lenses — where every vulnerability is both a threat and a chance to understand systems more deeply.",
-    story:         isFa ? "کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به نوشته های ساده، اسکریپت‌های میدانی و write-upهای کوتاه تبدیل می‌شود." : "Our work lives on the edge: where bug reports meet real remediation and actual code. This is where security theory turns into small tools, field scripts and short, practical write-ups.",
-    skillsTitle:   isFa ? "چیزهایی که روشون حساب می‌کنیم" : "What we lean on",
-    bugBountyBody: isFa ? "از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً تاثیر دارند." : "From logic issues to chained bugs with real impact — focused on findings that actually move the needle.",
-    owaspBody:     isFa ? "سامان‌دهی ذهن با OWASP Top 10؛ از تزریق و کنترل دسترسی تا سوءاستفاده از misconfigها." : "A mental map built around OWASP Top 10 — from injection and access control to misconfig exploitation.",
+    kicker:        isFa ? "پشت پرده کاولبز"                 : "Behind KavLabs",
+    title:         isFa ? "جایی که کنجکاوی کافیه"           : "Where curiosity is enough",
+    lead:          isFa ? "امنیت سایبری پر از محتوای گرون‌قیمت، پیچیده و بی‌روحه — ما اینجاییم چون فکر می‌کنیم نباید اینقدر سخت باشه." : "Cybersecurity is full of expensive, gatekept, joyless content — we're here because we think it doesn't have to be.",
+    story:         isFa ? "نه دوره‌های چند میلیونی، نه محتوای کپی‌پیست. فقط دو نفر که دوست دارن بدونند چرا چیزها اینطوری کار می‌کنند — و می‌خوان این حس رو با بقیه قسمت کنند." : "No overpriced courses, no copy-paste tutorials. Just two people who genuinely want to understand how things break — and want to share that obsession.",
+    skillsTitle:   isFa ? "چیزهایی که روشون حساب می‌کنیم"  : "What we lean on",
+    bugBountyBody: isFa ? "Bug bounty برای ما فقط پول نیست — یه روش فکریه. هر باگ یه سوال بی‌جواب بود که کسی زودتر پیداش کرد." : "Bug bounty isn't just about rewards — it's a mindset. Every finding is an unanswered question someone got to first.",
+    owaspBody:     isFa ? "OWASP Top 10 نقشه ذهنی ماست؛ نه برای حفظ کردن، بلکه برای فهمیدن اینکه وب از کجاها می‌شکنه." : "OWASP Top 10 is our mental map — not to memorize, but to internalize where the web actually breaks.",
     codeLabel:     isFa ? "کد به‌عنوان ابزار"               : "Code as a tool",
-    codeBody:      isFa ? "ما از زبان هایی مثل Python و Go و غیره استفاده میکنیم برای تحلیل رفتار ها و اتوماسیون از ساخت PoC تا fuzzing و غیره." : "Python, Go and etc for PoCs, small automation, lightweight fuzzing and smart-contract behavior analysis.",
+    codeBody:      isFa ? "ما کد می‌نویسیم تا بفهمیم، نه فقط تا اجرا کنیم — از PoC های ساده تا اسکریپت‌هایی که کار واقعی انجام می‌دن." : "We write code to understand, not just to run — from simple PoCs to scripts that do real fieldwork.",
     socialTitle:   isFa ? "شبکه‌های اجتماعی"               : "Our Socials",
+    socialSubtitle: isFa ? "پیداتون می‌کنیم، یا شما پیدامون کنید." : "Find us — or let us find you.",
     contactTitle:  isFa ? "در تماس باشید"                  : "Stay in touch",
-    contactBody:   isFa ? "اگر روی تحقیق، همکاری یا ایده‌ای امنیتی فکر می‌کنید، یک ایمیل کوتاه کافی است." : "If you're thinking about research, collaboration or a strange security idea, a short email is enough to start.",
+    contactBody:   isFa ? "ایده، همکاری، انتقاد — هر سه رو دوست داریم. یه ایمیل کوتاه کافیه." : "Ideas, collaborations, criticism — we're open to all three. A short email is enough.",
     emailCta:      isFa ? "فرستادن ایمیل"                   : "Send an email",
-    contactEmail:  "kavlabs_official@proton.me", // Update with real email
+    contactEmail:  "kavlabs_official@proton.me",
   } as const;
-
   const socialCards: Array<{
     key: string;
     name: ReactNode;
     handle: ReactNode;
+    url: string;
     icon: ReactNode;
     brand: (typeof socialBrands)[keyof typeof socialBrands];
   }> = [
-    { key: "reddit",   name: isFa ? "ردیت" : "Reddit",                           handle: "r/kavlabs_official",              icon: <SiReddit   size={18} />, brand: socialBrands.reddit   },
-    { key: "mastodon", name: isFa ? "ماستودون" : "Mastodon",                     handle: "@kavlabs_official@infosec.exchange", icon: <SiMastodon size={18} />, brand: socialBrands.mastodon },
-    { key: "twitter",  name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",      handle: <Ltr>@kavlabs_official</Ltr>,      icon: <SiX        size={17} />, brand: socialBrands.twitter  },
-    { key: "telegram", name: isFa ? "تلگرام" : "Telegram",                       handle: <Ltr>@kavlabs_official</Ltr>, icon: <SiTelegram size={18} />, brand: socialBrands.telegram },
-  ];
-
-  const chips = [
-    { label: isFa ? <Ltr>Bug bounty</Ltr> : "Bug bounty",                    body: isFa ? <>از گزارش‌های منطقی تا زنجیره‌های چندمرحله‌ای؛ تمرکز روی باگ‌هایی که واقعاً تاثیر دارند.</> : copy.bugBountyBody },
-    { label: isFa ? <Ltr>OWASP &amp; web vulns</Ltr> : "OWASP & web vulns",  body: isFa ? <>سامان‌دهی ذهن با <Ltr>OWASP Top 10</Ltr>؛ از تزریق و کنترل دسترسی تا سوءاستفاده از <Ltr>misconfig</Ltr>ها.</> : copy.owaspBody },
     {
-      label: copy.codeLabel,
-      body: isFa ? (
-        <>
-          ما از زبان‌هایی مثل <Ltr>Python</Ltr> و <Ltr>Go</Ltr> و غیره استفاده می‌کنیم
-          برای تحلیل رفتارها و اتوماسیون؛
-          از ساخت <Ltr>PoC</Ltr> تا <Ltr>fuzzing</Ltr> و غیره.
-        </>
-      ) : copy.codeBody
+      key: "reddit",
+      name: isFa ? "ردیت" : "Reddit",
+      handle: "r/kavlabs_official",
+      url: "https://www.reddit.com/r/kavlabs_official",
+      icon: <SiReddit size={18} />,
+      brand: socialBrands.reddit,
+    },
+    {
+      key: "mastodon",
+      name: isFa ? "ماستودون" : "Mastodon",
+      handle: "@kavlabs_official@infosec.exchange",
+      url: "https://infosec.exchange/@kavlabs_official",
+      icon: <SiMastodon size={18} />,
+      brand: socialBrands.mastodon,
+    },
+    {
+      key: "twitter",
+      name: isFa ? <Ltr>X / Twitter</Ltr> : "X / Twitter",
+      handle: "@kavlabs_official",
+      url: "https://x.com/kavlabs_official",
+      icon: <SiX size={17} />,
+      brand: socialBrands.twitter,
+    },
+    {
+      key: "telegram",
+      name: isFa ? "تلگرام" : "Telegram",
+      handle: "@kavlabs_official",
+      url: "https://t.me/kavlabs_official",
+      icon: <SiTelegram size={18} />,
+      brand: socialBrands.telegram,
     },
   ];
-
+  const chips = [
+    {
+      label: isFa ? <Ltr>Bug bounty</Ltr> : "Bug bounty",
+      body: isFa
+        ? <><Ltr>Bug bounty</Ltr> برای ما فقط پول نیست — یه روش فکریه. هر باگ یه سوال بی‌جواب بود که کسی زودتر پیداش کرد.</>
+        : copy.bugBountyBody,
+    },
+    {
+      label: isFa ? <Ltr>OWASP &amp; web vulns</Ltr> : "OWASP & web vulns",
+      body: isFa
+        ? <><Ltr>OWASP Top 10</Ltr> نقشه ذهنی ماست؛ نه برای حفظ کردن، بلکه برای فهمیدن اینکه وب از کجاها می‌شکنه.</>
+        : copy.owaspBody,
+    },
+    {
+      label: copy.codeLabel,
+      body: isFa
+        ? <>ما کد می‌نویسیم تا بفهمیم، نه فقط تا اجرا کنیم — از <Ltr>PoC</Ltr> های ساده تا اسکریپت‌هایی که کار واقعی انجام می‌دن.</>
+        : copy.codeBody,
+    },
+  ];
   const baseContainerProps = prefersReduced
     ? {}
     : { variants: containerVariants, initial: "hidden" as const, animate: "show" as const };
-
   return (
     <section aria-labelledby="about-section-heading" dir={dir} className="relative">
       <motion.div
@@ -278,9 +280,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
         className="relative overflow-hidden rounded-3xl border border-border/70 bg-gradient-to-br from-card/90 via-background/70 to-background/40 p-6 shadow-xl md:p-8"
       >
         <AboutBackgroundOrbits prefersReduced={prefersReduced} />
-
         <div className="relative z-10 grid gap-5 md:grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)]">
-
           {/* ── Main about card ─────────────────────────────────────────── */}
           <motion.article
             variants={prefersReduced ? undefined : itemVariants}
@@ -289,10 +289,10 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary/80">{copy.kicker}</p>
             <h2 id="about-section-heading" className="text-lg font-semibold tracking-tight md:text-xl">{copy.title}</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              {isFa ? <>ما از دریچه‌ی باگ باونتی و <Ltr>OWASP</Ltr>  و یادگیری به دنیای دیجیتال نگاه می‌کنیم — جایی که هر آسیب‌پذیری هم تهدید است، هم فرصتی برای درک عمیق‌تر سیستم‌ها.</> : copy.lead}
+              {copy.lead}
             </p>
             <p className="text-xs leading-relaxed text-muted-foreground/90">
-              {isFa ? <>کار ما روی مرزهاست؛ جایی که گزارش‌های باگ با راهکارهای عملی و کد واقعی گره می‌خورند. اینجا جایی است که تئوری امنیت به نوشته های ساده، اسکریپت‌های میدانی و <Ltr>write-ups</Ltr>های کوتاه تبدیل می‌شود.</> : copy.story}
+              {copy.story}
             </p>
             <div className="pt-3">
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{copy.skillsTitle}</p>
@@ -311,10 +311,8 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
               </div>
             </div>
           </motion.article>
-
           {/* ── Side column ─────────────────────────────────────────────── */}
           <div className="space-y-4 flex flex-col justify-between">
-
             {/* ── Social card with ring overlay ────────────────────────── */}
             <div className="relative">
               <svg
@@ -346,7 +344,6 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                   opacity={0}
                 />
               </svg>
-
               <motion.article
                 ref={socialCardRef}
                 id="contact"
@@ -354,7 +351,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                 className="rounded-2xl border border-border/70 bg-background/60 p-4 shadow-md backdrop-blur-xl"
               >
                 <h2 className="mb-2 text-md font-semibold text-foreground">{copy.socialTitle}</h2>
-                <p className="text-xs font-medium text-muted-foreground mb-4">{isFa ? <>میتونید مارو اینجا ها پیدا کنید</> : <>You can find us in this places</>}</p>
+                <p className="text-xs font-medium text-muted-foreground mb-4">{copy.socialSubtitle}</p>
                 <div className="grid grid-cols-2 gap-3">
                   {socialCards.map((card) => (
                     <SocialCard key={card.key} card={card} prefersReduced={prefersReduced} />
@@ -362,8 +359,7 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                 </div>
               </motion.article>
             </div>
-
-            {/* ── Contact / CV card ─────────────────────────────────────── */}
+            {/* ── Contact card ──────────────────────────────────────────── */}
             <motion.article
               variants={prefersReduced ? undefined : itemVariants}
               className="rounded-2xl border border-border/70 bg-background/60 p-4 shadow-md backdrop-blur-xl"
@@ -382,7 +378,6 @@ export default function AboutSectionClient({ locale, isFa }: Props) {
                 </motion.a>
               </div>
             </motion.article>
-
           </div>
         </div>
       </motion.div>

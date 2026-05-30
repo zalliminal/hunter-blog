@@ -60,7 +60,7 @@ export default function HeroServer({ locale, isFa, dict }: Props) {
             {/* Static link — server rendered, zero JS */}
             <Link
               href={`/${locale}/blog`}
-              className="inline-flex items-center gap-2 rounded-md bg-primary/80 px-4 py-2 text-sm font-medium text-white shadow-sm hover:brightness-110"
+              className="inline-flex items-center gap-2 rounded-md bg-primary/80 px-4 py-2 text-sm font-medium text-background shadow-sm hover:brightness-110"
             >
               {isFa ? "همه مطالب" : "All posts"}
             </Link>
@@ -70,7 +70,7 @@ export default function HeroServer({ locale, isFa, dict }: Props) {
           </div>
         </div>
 
-        <div>
+        <div className="h-full">
           <KavLabsCard isFa={isFa} locale={locale} />
         </div>
       </div>

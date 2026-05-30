@@ -396,7 +396,13 @@ function MobileMenuItem({
 
 
 
-export function MobileBottomNav({ locale, dict }: { locale: Locale; dict: NavDictionary }) {
+export function MobileBottomNav({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: NavDictionary;
+}) {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -404,18 +410,23 @@ export function MobileBottomNav({ locale, dict }: { locale: Locale; dict: NavDic
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
       if (currentScrollY <= 0) {
-        setVisible(true); // بالای صفحه همیشه نمایش بده
+        setVisible(true);
       } else if (currentScrollY > lastScrollY.current + 10) {
-        setVisible(false); // اسکرول به پایین
+        setVisible(false);
       } else if (currentScrollY < lastScrollY.current - 10) {
-        setVisible(true); // اسکرول به بالا
+        setVisible(true);
       }
+
       lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const links = [
@@ -423,46 +434,73 @@ export function MobileBottomNav({ locale, dict }: { locale: Locale; dict: NavDic
     { href: `/${locale}/blog`, icon: BookOpen, label: dict.navBlog },
     { href: `/${locale}/support`, icon: Heart, label: dict.navSupport },
     ...(locale === "fa"
-      ? [{ href: `/${locale}/academy`, icon: GraduationCap, label: "آکادمی" }]
+      ? [
+          {
+            href: `/${locale}/academy`,
+            icon: GraduationCap,
+            label: "آکادمی",
+          },
+        ]
       : []),
   ];
 
-  const isHomeActive = (href: string) => {
+  const isHomeActive = () => {
     const homeBase = `/${locale}`;
-    return pathname === homeBase || pathname === homeBase + "/";
+    return pathname === homeBase || pathname === `${homeBase}/`;
   };
 
   return (
     <motion.nav
       initial={{ y: 0, opacity: 1 }}
-      animate={{ y: visible ? 0 : 80, opacity: visible ? 1 : 0 }}
-      transition={{ type: "spring", stiffness: 200, damping: 25 }}
+      animate={{
+        y: visible ? 0 : 80,
+        opacity: visible ? 1 : 0,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 200,
+        damping: 25,
+      }}
       className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 md:hidden"
     >
-      <div className="flex items-center gap-1 rounded-2xl bg-zinc-900/90 p-2 shadow-2xl backdrop-blur-lg border border-white/10">
+      <div
+        className="grid rounded-2xl border border-white/10 bg-zinc-900/90 p-1.5 shadow-2xl backdrop-blur-lg"
+        style={{
+          gridTemplateColumns: `repeat(${links.length}, minmax(60px, 1fr))`,
+        }}
+      >
         {links.map((link) => {
           const isActive =
             link.href === `/${locale}/`
-              ? isHomeActive(link.href)
+              ? isHomeActive()
               : pathname?.startsWith(link.href);
+    
           return (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-0.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors",
+                "relative flex min-w-[60px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-xs font-medium transition-colors",
                 isActive
                   ? "text-primary-foreground"
-                  : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                  : "text-zinc-400 hover:text-zinc-200"
               )}
             >
-              <link.icon className="h-5 w-5" />
-              <span className="text-[10px] leading-none">{link.label}</span>
+              <link.icon className="h-4.5 w-4.5" />
+    
+              <span className="text-[10px] leading-none">
+                {link.label}
+              </span>
+    
               {isActive && (
                 <motion.div
                   layoutId="activeBox"
-                  className="absolute inset-0 rounded-xl bg-primary -z-10"
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="absolute inset-0 -z-10 rounded-xl bg-primary"
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 25,
+                  }}
                 />
               )}
             </Link>
