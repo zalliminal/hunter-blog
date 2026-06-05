@@ -47,6 +47,7 @@ export default function NotFoundPage() {
       <NavigationProgress />
       <LocaleTransition locale={locale}>
         <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
+          
           <NotFoundClient locale={locale} />
           <BackToTop />
         </main>

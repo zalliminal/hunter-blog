@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
-import { MobileBottomNav } from "@/components/site-header"; // ایمپورت جدا
+import { MobileBottomNav } from "@/components/site-header";
 import { LocaleTransition } from "@/components/locale-transition";
 import {
   DEFAULT_LOCALE,
