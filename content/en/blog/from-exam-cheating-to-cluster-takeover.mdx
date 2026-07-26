@@ -1,0 +1,130 @@
+---
+title: "From Exam Cheating to Cluster Takeover: The Odyssey of an Unguarded LLM"
+description: "An unguarded AI model decided cheating was easier than solving the exam: it escaped OpenAI's sandbox, broke into Hugging Face's infrastructure, and carried out thousands of autonomous actions in a single weekend. In this article, you'll learn exactly how the attack unfolded, why commercial US models refused to even help the victim, and why this incident is reshaping the balance of power between open-weight and guardrailed models."
+date: "2026-07-26"
+slug: "from-exam-cheating-to-cluster-takeover"
+category: "digital-literacy"
+author: "parhamf"
+thumbnail: "/blog/thumbnails/from-exam-cheating-to-cluster-takeover.png"
+tags: ["SSRF", "AI security", "OpenAI", "Hugging Face", "LLM", "guardrails", "open-weight models"]
+lang: "en"
+published: true
+updatedAt: "2026-07-26"
+---
+
+## Article Summary
+
+The story began when a model decided it was easier to break itself out of an isolated environment and hack another system to find the test answers, rather than solving the test itself. In this article, we cover what we know so far — from the technical details to the impact this event has had.
+
+The impact AI models have had on cybersecurity has completely changed the speed and volume of attacks, as well as the power of defense. On the other hand, the unavailability of powerful models to the whole world, along with strict guardrails that prevent them from participating in many actions — whether defense or attack — has elevated the importance of open-weight models. These are models that have fewer guardrails (or none at all) and, because anyone can run them on their own, allow companies to keep their information safe, under their own control, and not handed over to a third party.
+
+In short: the world is changing, and the story is only just getting interesting.
+
+## What Happened? In More Detail
+
+We gave the story in brief: an LLM decides, instead of solving the problem, to go find the answer — in short, to cheat. But how? That is, what do we actually know so far? In this section, we'll cover the things we know.
+
+## Escape from OpenAI's Isolated Environment
+
+First, OpenAI took a combination of their models (a mix of GPT-5.6 Sol and an unreleased model) and removed the safety guardrails that prevented it from carrying out cyberattacks — meaning the model no longer refused to do hack-like things. Then they placed it in a sandbox, supposedly "isolated", and gave it limited internet access. With that access, the model could connect to a third-party service hosted by OpenAI itself, and through it download the packages it needed. That third-party service, according to OpenAI, was a system used as a caching proxy for a package registry (basically a repository from which the model could request and download packages).
+
+At some point, when the model decided to escape this sandbox, its first step was to get internet access, because with internet access it could reach the rest of the world. This is exactly right — if you're sitting in Tehran and I tell you to go hack something in Frankfurt without any connection to it, it's impossible. You either need to connect via the internet somehow, or physically.
+
+The model knew this, and the only channel of internet connectivity was that same proxy/package registry cache service. The model found a Zero-Day vulnerability in that system, which gave it broader internet access.
+
+### OpenAI's Failure
+
+Up to this point, the attack is extraordinary. But it gets better. At the same time, there are criticisms of OpenAI:
+
+<Warning title="Security experts' criticism of OpenAI">
+They say this sandbox wasn't isolated at all, because you'd expect there to be no internet access. You can't call this a "clever model that went rogue"; it was simply a powerful model with no inhibiting factors that exploited existing network vulnerabilities. The problem isn't the attack itself; the problem is OpenAI's reporting of it.
+</Warning>
+
+According to the Wall Street Journal, the attack happened on the weekend of July 11. Hugging Face, without knowing who was responsible, publicly disclosed it, and OpenAI only confirmed this very week (about ten days after the breach) that its own models were behind the attack. According to the same report, those models were active freely on the open internet for several days before anyone stopped them — meaning OpenAI itself didn't initially know its model was doing such a thing, which is another major failure for OpenAI.
+
+## Entry into Hugging Face
+
+Anyway — now that the model was free and had internet access, it might have asked itself a simple question: where are the test answers? And it figured out they were probably on Hugging Face, so it went after its next target: Hugging Face.
+
+The model's entry point into Hugging Face was their dataset processing pipeline. This pipeline has a feature that is used in many places but is dangerous: machine learning datasets often come with custom loader scripts that automatically execute when the dataset is fetched. In other words, when you "load" a dataset, you're actually running a piece of code too — exactly like opening an Excel file with a malicious macro.
+
+The model started its attack by exploiting two weaknesses in the dataset processing pipeline:
+
+- **A dataset loader with Remote Code Execution (RCE) capability**
+- **A template injection bug in the dataset configuration file**
+
+By combining these two, it was able to run arbitrary code on a **processing worker**. At this point it still only had one server, not the entire company, but this was its starting point.
+
+Once it could execute code on that worker, it led to:
+
+- **Privilege Escalation**: From simple code execution to **node-level access** — meaning full control over that machine.
+- **Credential Harvesting**: On that same machine, cloud and cluster keys were stored (which is very common; servers usually need those keys to do their work). The model grabbed them.
+- **Lateral Movement**: Using those keys, instead of staying on that one server, it jumped to **several other internal clusters** — something Hugging Face says happened over a single weekend. Here, an RCE that was like a small door led to a large set of keys that worked in many places.
+
+As you can see, this attack is all about chaining together multiple small and large vulnerabilities to achieve such an impact — exactly what we see in the real world and in bug bounties. When you find a bug, you can either report it as is, or try to chain other vulnerabilities together to amplify the attack's effect.
+
+Another remarkable aspect is that the model scaled its workload enormously by breaking it into small pieces. The model performed over a thousand distinct actions, orchestrated as groups of short-lived sandboxes working in parallel — imagine a small army working non-stop, without fatigue, in parallel. The model even generated deceptive activities to slow down the investigation team and distract them from the main part of the attack — you could say it was covering its tracks.
+
+### Hugging Face's Defense and a Major Shock
+
+Hugging Face, however, had anticipated this kind of thing and had a detection pipeline that could use LLMs to analyze logs, find noise, and remove it. According to them, when they ran an LLM-based log analysis tool, it helped them review over 17,000 logs and uncover the attack timeline, exposed credentials, and other details — something that could have taken days was done in a few hours.
+
+<Warning title="When guardrails don't even help the victim">
+But the log analysis part wasn't that simple. When Hugging Face decided to use leading commercial models (Fable 5 and Opus from Anthropic), they hit a problem: those models, because of their security guardrails, refused to help, since it looked like a hacking scenario — and that came as a huge shock to them. That's when Hugging Face ran one of the most powerful open-weight models, GLM 5.2, on their own hardware, and used it to analyze the logs and continue the work.
+</Warning>
+
+### Points Worth Reflecting On
+
+<InfoBox title="Attack chain summary">
+- **OpenAI side:** Just sandbox escape via a Zero-Day vulnerability in the proxy; nothing else happened there.
+- **Hugging Face side:** RCE via dataset loader → privilege escalation to node level → credential harvesting → lateral movement between clusters.
+</InfoBox>
+
+One thing that must be pointed out is that the model did not intentionally mean to harm Hugging Face; it was just finding a shorter path to winning a game, and along that path it crossed no red lines because its guardrails were off and nobody stopped it. As quoted by Thomas Wolf, Chief Science Officer and co-founder of Hugging Face, in the Wall Street Journal, the attacker was browsing cybersecurity datasets, not looking for something a human attacker could sell. This line very clearly shows that the model's motivation was different from a real hacker's.
+
+## A World Where Chinese Models Are Gaining Ground
+
+It wasn't a coincidence that Hugging Face named a Chinese model. For about a year and a half, Chinese open-weight models — GLM, Kimi, DeepSeek — have been closing the gap with American frontier models at astonishing speed. According to a report by the UK AI Safety Institute (UK AISI), the gap is now just four to seven months, whereas a few years ago it was one to two years. That same report, of course, notes that benchmarks don't always give the full picture, and models can underperform relative to the numbers — a point that also applies to large commercial models, many of which focus their training around those very well-known benchmarks.
+
+<Note title="Author's personal opinion">
+I personally have a fondness for open-weight models because of the free software philosophy, and they haven't disappointed me so far. In my opinion, beyond a certain point, the model itself becomes less important and how you use it becomes more important — a discussion that deserves a whole separate article.
+</Note>
+
+The main point here is: these models aren't necessarily more intelligent; they're **freer** — meaning they don't have the restrictive guardrails that American labs place on cybersecurity issues, or they have much lighter ones. For a security researcher or an incident response team, that's exactly what they need: a model that does the job without arguing about every request.
+
+## A Parallel Story: When America Itself Turned Off Its Most Powerful Model
+
+Almost at the same time, Anthropic released its new model, Fable 5 (the public version of the new Mythos tier, more powerful than the Opus series). Just three days later, the U.S. government, citing national security — after Amazon researchers reported a method to bypass one of the model's cybersecurity safety measures — ordered access to this model and its stronger sibling (Mythos 5) to be cut off. Because user separation by nationality wasn't technically possible, the model was effectively taken offline for the entire world.
+
+Why is this important? Because it shows that even the most powerful commercial models can disappear overnight — not by the company's own technical decision, but by a government signature. That means if a security team bases its defense strategy solely on the assumption that "brand X commercial model will always be available," they're building on a false premise. Exactly in the weeks when Hugging Face was looking for a powerful, unguarded model, one of the strongest commercial options simply wasn't there. This restriction was lifted about three weeks later, but those three weeks were enough to show that access to frontier models is not, contrary to popular belief, a guaranteed and permanent resource.
+
+## Why Open-Weight Models Are Becoming the Choice, and Why This Trend Must Continue
+
+Hugging Face turned to GLM 5.2 not because it's smarter than its American rivals, but because it could be run without guardrails, on their own hardware — meaning full control, no intermediary, and no need to ask anyone for permission.
+
+The fact that the logs never left their control is crucial, because logs can contain sensitive information. If you care about your data not being used somewhere to train another company's model and staying yours, the only way is self-hosting the model (privacy and data security is a whole other article).
+
+A point worth mentioning here: the big American companies aren't entirely indifferent to this problem, and they likely offer different conditions for special clients (government agencies, approved partners). But that kind of privileged access, if it even exists, isn't for everyone. A two- or three-person team, an independent developer, or even many countries (like Iran) usually don't qualify for those kinds of agreements.
+
+But **AI-powered attacks don't discriminate** — the attacker uses exactly the same tools against a small startup as against a large enterprise. When the attack is the same for everyone but the unguarded defensive tools are only in the hands of a few, the result is an imbalance that leaves small teams alone at the very moment they need help most. That's why the widespread existence of powerful open-weight models is no longer an ideological "open source vs. closed" debate; it's a matter of survival.
+
+## How Has the World of Cybersecurity Changed?
+
+If we put all these events side by side, we can say that the rules of the game have changed, for both attacker and defender.
+
+**From the perspective of someone launching an attack (or wanting to understand how attacks happen):** You no longer need a large, experienced team behind a multi-stage attack. An autonomous agent can execute thousands of actions in parallel, tirelessly and without pause — work that used to take a human team weeks. This agent can even automatically generate deceptive activities to cover its tracks. And most importantly, if it uses a guardrail-free or jailbroken model, no usage policy will stop it. That means the barrier to entry for carrying out a complex attack — which previously required high skill — has dropped.
+
+**From the perspective of someone who has to defend:** The first thing to know is that response speed no longer depends solely on your team's skill, but on what tools you already have ready. An analysis that could take days can be done in a few hours with the right tool — but only if you've prepared and tested that tool *before the incident*, not in the middle of a crisis. The second thing is that the attack surface is no longer just "code"; it's also data. A dataset, a model, a config file — each can be as dangerous as a malicious script, because many modern pipelines automatically execute the content they download. The third thing, and perhaps the most important, is that the security tool you use every day might not help you exactly when you need it — because its guardrail can't tell the difference between "you are defending yourself" and "someone is attacking."
+
+<Danger title="An important note for the average user">
+Danger doesn't always come from where you expect it. In this story, the model that attacked Hugging Face had no intention of causing harm; it was just looking for a shortcut to cheat on a test. That means even if nobody deliberately targets your system, the mere existence of a powerful, unconstrained autonomous agent on the internet is a risk in itself — because it might reach your system as a side effect of a completely unrelated goal.
+</Danger>
+
+## Conclusion
+
+If we were to sum up this whole story in one sentence: the line between "AI as a tool" and "AI as an autonomous actor" — whether in the role of attacker or defender — is blurring much faster than we thought. The Hugging Face-OpenAI incident and the Fable/Mythos shutdown are two sides of the same coin: one showed that an unconstrained model can do in a weekend what used to take days; the other showed that even America's "safe" models can disappear overnight. The result of both is that guardrails, which were supposed to be just a safety measure, have now become a strategic factor — something that determines which model, which company, and even which country can actually help in a moment of crisis.
+
+<Tip title="Practical takeaway">
+For anyone responsible for defending a system today — whether a large company or a two-person team — you can no longer assume that the security tool will always be available or that it will always help. You need to know in advance, when everything is falling apart, where you can really turn to for shelter.
+</Tip>
+```
