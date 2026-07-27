@@ -1,0 +1,24 @@
+---
+slug: "idor"
+term: "ارجاع مستقیم ناامن اشیاء"
+abbreviation: "IDOR"
+shortDefinition: "دسترسی غیرمجاز به داده دیگران با دستکاری یک شناسه در URL یا درخواست."
+category: "امنیت"
+tags: ["امنیت", "idor", "کنترل-دسترسی", "آسیب‌پذیری", "وب"]
+relatedTerms: ["broken-access-control", "authentication-failures", "api-security"]
+language: "fa"
+hasTranslation: true
+translationSlug: "idor"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Insecure_direct_object_reference"
+---
+
+## <span dir="ltr">IDOR</span> چیه؟
+
+خلاصه در یه جمله: <span dir="ltr">IDOR</span> عوض کردن یه شماره شناسه در <span dir="ltr">URL</span> برای دیدن داده خصوصی یه نفر دیگه‌ست.
+
+ارجاع مستقیم ناامن اشیاء (<span dir="ltr">IDOR</span>) یه آسیب‌پذیری کنترل دسترسی‌ست که مهاجم می‌تونه با تغییر ارجاع به یه شی به داده دسترسی پیدا کنه، مثلاً تغییر `user_id=123` به `user_id=124` در یه <span dir="ltr">URL</span> یا درخواست <span dir="ltr">API</span>. اگه سرور تأیید نکنه کاربر مالک اون شی هست، مهاجم داده یه کاربر دیگه رو می‌بینه.
+
+<span dir="ltr">IDOR</span> در برنامه‌های وب بسیار رایجه و یه یافته محبوب برای شکارچیان باگ بانتی هست. این نشون می‌ده چرا کنترل دسترسی باید در سمت سرور اعمال بشه، نه فقط با پنهان کردن لینک‌ها.

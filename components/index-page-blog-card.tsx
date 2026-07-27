@@ -23,6 +23,7 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
   const category = post.category ? getCategory(post.category) : null;
   const author = post.author ? getAuthor(post.author) : null;
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
+  const hasFooterTags = post.tags && post.tags.length > 0;
 
   return (
     // Fix #2: AnimatedCard is the only "use client" part
@@ -36,11 +37,19 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
           shadow-sm overflow-hidden
           transition-all duration-200
           hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background
           ${isRTL ? "sm:flex-row-reverse" : "sm:flex-row"}
         `}
       >
         {/* Thumbnail */}
-        <div className="relative w-full sm:w-44 md:w-52 flex-shrink-0 aspect-video overflow-hidden bg-muted">
+        {/* Redesign: aspect-video only governs the STACKED (mobile) layout, where
+            width is fixed by the card and height must be derived from it.
+            In the SIDE-BY-SIDE (sm+) layout the card's own height is dictated by
+            the text column, so the thumbnail drops the fixed ratio (sm:aspect-auto)
+            and instead stretches (default flex align-items: stretch) to match
+            whatever height the row ends up being — no more leftover empty band
+            under a short 16:9 image. object-cover keeps the crop clean either way. */}
+        <div className="relative w-full sm:w-44 md:w-52 flex-shrink-0 aspect-video sm:aspect-auto overflow-hidden bg-muted">
           {post.thumbnail ? (
             <Image
               src={post.thumbnail}
@@ -55,6 +64,22 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/8 via-muted to-secondary/8">
               <span className="text-3xl opacity-30 select-none">✦</span>
             </div>
+          )}
+
+          {/* Redesign: category now lives on the image as an overlay pill instead
+              of competing for space in the text meta row — frees up the content
+              column and gives the thumbnail a clearer visual job. */}
+          {category && (
+            <span
+              className={`
+                absolute top-2 ${isRTL ? "right-2" : "left-2"}
+                inline-flex items-center rounded-full backdrop-blur-sm
+                px-2 py-0.5 text-[11px] font-semibold shadow-sm
+                ${category.color.bg} ${category.color.text}
+              `}
+            >
+              {category.label[locale]}
+            </span>
           )}
 
           {isNew(post.date) && (
@@ -81,8 +106,8 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
         </div>
 
         {/* Content */}
-        <div className={`flex flex-1 flex-col p-4 sm:p-5 ${textAlign}`}>
-          {/* Meta row */}
+        <div className={`flex flex-1 flex-col min-w-0 p-4 sm:p-5 ${textAlign}`}>
+          {/* Meta row: just date + reading time now that category moved onto the image */}
           <div
             className={`
               flex flex-wrap items-center gap-x-3 gap-y-1
@@ -104,27 +129,33 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
                 </span>
               </>
             )}
+          </div>
 
-            {category && (
-              <>
-                <span className="text-border" aria-hidden>·</span>
-                <span
-                  className={`
-                    inline-flex items-center rounded-full
-                    px-2 py-0.5 text-[11px] font-semibold
-                    ${category.color.bg} ${category.color.text}
-                  `}
-                >
-                  {category.label[locale]}
-                </span>
-              </>
-            )}
+          <h3 className="line-clamp-2 text-base sm:text-lg font-semibold leading-snug tracking-tight group-hover:text-primary transition-colors duration-200 mt-2">
+            {post.title}
+          </h3>
 
-            {/* Fix #10: author computed above, no IIFE */}
-            {author && (
-              <>
-                <span className="text-border" aria-hidden>·</span>
-                <div className="flex items-center gap-1.5">
+          {post.description && (
+            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground mt-1.5">
+              {post.description}
+            </p>
+          )}
+
+          <div className="flex-1 min-h-2" />
+
+          {/* Footer: author + tags grouped on one side, read-more arrow on the other */}
+          <div
+            className={`
+              flex items-center justify-between gap-3 pt-3 mt-auto border-t
+              ${isRTL ? "flex-row-reverse" : "flex-row"}
+            `}
+          >
+            <div
+              className={`flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
+            >
+              {/* Fix #10: author computed above, no IIFE */}
+              {author && (
+                <div className="flex items-center gap-1.5 shrink-0">
                   {author.avatar && (
                     <Image
                       src={author.avatar}
@@ -135,50 +166,32 @@ export function EnhancedBlogCard({ post, locale, index = 0, priority = false }: 
                       title={author.name[locale]}
                     />
                   )}
-                  <span className="font-medium text-muted-foreground">
+                  <span className="text-xs font-medium text-muted-foreground">
                     {author.name[locale]}
                   </span>
                 </div>
-              </>
-            )}
-          </div>
-
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug tracking-tight group-hover:text-primary transition-colors duration-200 mt-2">
-            {post.title}
-          </h3>
-
-          {post.description && (
-            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground mt-2">
-              {post.description}
-            </p>
-          )}
-
-          <div className="flex-1 min-h-2" />
-
-          {/* Footer */}
-          <div
-            className={`
-              flex items-center justify-between gap-2 pt-3 mt-auto border-t
-              ${isRTL ? "flex-row-reverse" : "flex-row"}
-            `}
-          >
-            <div
-              className={`flex flex-wrap items-center gap-1 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
-            >
-              {post.tags?.slice(0, 2).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 rounded-full bg-muted/70 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
-                >
-                  <Tag className="h-2 w-2 shrink-0 opacity-60" aria-hidden />
-                  {tag}
-                </span>
-              ))}
-              {post.tags && post.tags.length > 2 && (
-                <span className="text-[11px] text-muted-foreground/60">
-                  +{post.tags.length - 2}
-                </span>
               )}
+
+              {author && hasFooterTags && (
+                <span className="text-border" aria-hidden>·</span>
+              )}
+
+              <div className={`flex flex-wrap items-center gap-1 ${isRTL ? "flex-row-reverse" : "flex-row"}`}>
+                {post.tags?.slice(0, 2).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1 rounded-full bg-muted/70 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                  >
+                    <Tag className="h-2 w-2 shrink-0 opacity-60" aria-hidden />
+                    {tag}
+                  </span>
+                ))}
+                {post.tags && post.tags.length > 2 && (
+                  <span className="text-[11px] text-muted-foreground/60">
+                    +{post.tags.length - 2}
+                  </span>
+                )}
+              </div>
             </div>
 
             <span

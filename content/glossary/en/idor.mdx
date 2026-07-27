@@ -1,0 +1,24 @@
+---
+slug: "idor"
+term: "Insecure Direct Object Reference"
+abbreviation: "IDOR"
+shortDefinition: "Unauthorized access to someone else's data by tampering with an identifier in a URL or request."
+category: "Security"
+tags: ["security", "idor", "access-control", "vulnerability", "web"]
+relatedTerms: ["broken-access-control", "authentication-failures", "api-security"]
+language: "en"
+hasTranslation: true
+translationSlug: "idor"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Insecure_direct_object_reference"
+---
+
+## What is IDOR?
+
+In one sentence: IDOR is changing an ID number in a URL to see someone else's private data.
+
+Insecure Direct Object Reference (IDOR) is an access control vulnerability where an attacker can access data by modifying a reference to an object, like changing `user_id=123` to `user_id=124` in a URL or API request. If the server doesn't verify the user owns that object, the attacker sees another user's data.
+
+IDOR is extremely common in web applications and is a favorite finding for bug bounty hunters. It highlights why access control must be enforced server-side, not just by hiding links.

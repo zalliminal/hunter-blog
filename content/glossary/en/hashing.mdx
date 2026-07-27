@@ -1,0 +1,24 @@
+---
+slug: "hashing"
+term: "Hashing"
+abbreviation: "N/A"
+shortDefinition: "One-way conversion of data into a fixed string, for verification without exposing the original."
+category: "Security"
+tags: ["security", "hashing", "cryptography", "integrity", "password"]
+relatedTerms: ["encryption", "certificate", "digital-forensics", "ioc"]
+language: "en"
+hasTranslation: true
+translationSlug: "hashing"
+difficulty: "beginner"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Hash_function"
+---
+
+## What is Hashing?
+
+In one sentence: Hashing is a one-way function that turns any data into a fixed-length fingerprint.
+
+A hash function takes input data (any size) and produces a fixed-size string of characters, called a hash or digest. It's one-way — you can't reverse it back to the original data. The same input always produces the same hash, and even tiny changes produce completely different hashes.
+
+Hashing is used for password storage (storing hashes instead of plaintext), data integrity verification, file identification (IoC hashes), and digital signatures. Common algorithms include SHA-256, bcrypt, and SHA-512.

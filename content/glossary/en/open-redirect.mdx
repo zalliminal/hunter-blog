@@ -1,0 +1,24 @@
+---
+slug: "open-redirect"
+term: "Open Redirect"
+abbreviation: "N/A"
+shortDefinition: "Abusing a legitimate redirect to send a user to a malicious site."
+category: "Security"
+tags: ["security", "redirect", "phishing", "web", "vulnerability"]
+relatedTerms: ["phishing", "bypass", "xss"]
+language: "en"
+hasTranslation: true
+translationSlug: "open-redirect"
+difficulty: "beginner"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Open_redirect"
+---
+
+## What is an Open Redirect?
+
+In one sentence: Open redirect is when a trusted site's redirect feature is abused to send people to malicious websites.
+
+An open redirect vulnerability exists when a web application accepts a user-controlled URL for redirection without proper validation. Attackers use this to create phishing links that look legitimate — the link starts with a trusted domain but ultimately leads to a malicious site.
+
+Open redirects are commonly used in phishing campaigns and as part of more complex attack chains. Proper validation should restrict redirect destinations to trusted URLs only.

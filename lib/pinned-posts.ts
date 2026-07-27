@@ -3,6 +3,6 @@
 // These are the slugs from your MDX frontmatter, per locale.
 
 export const PINNED_SLUGS: Record<"en" | "fa", [string, string]> = {
-  en: ["kavlabs-complete-guide", "what-is-ssrf"],
-  fa: ["kavlabs-complete-guide", "what-is-ssrf"],
+  en: ["kavlabs-complete-guide", "from-exam-cheating-to-cluster-takeover"],
+  fa: ["kavlabs-complete-guide", "from-exam-cheating-to-cluster-takeover"],
 };

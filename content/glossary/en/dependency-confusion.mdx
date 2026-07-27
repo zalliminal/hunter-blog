@@ -1,0 +1,24 @@
+---
+slug: "dependency-confusion"
+term: "Dependency Confusion"
+abbreviation: "N/A"
+shortDefinition: "Exploiting package naming to trick automated install systems into downloading a malicious package."
+category: "Security"
+tags: ["security", "dependency", "package", "supply-chain", "attack"]
+relatedTerms: ["package-registry", "supply-chain-attack"]
+language: "en"
+hasTranslation: true
+translationSlug: "dependency-confusion"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Dependency_confusion"
+---
+
+## What is Dependency Confusion?
+
+In one sentence: Dependency confusion tricks your package manager into downloading a malicious package instead of your internal one.
+
+Dependency confusion attacks exploit how package managers resolve package names. If a company uses an internal package with the same name as a public one, an attacker can upload a malicious version to the public registry. The package manager may prioritize the public registry and download the attacker's version instead.
+
+This attack gained widespread attention in 2021 and has led to significant breaches. Defenses include using private registries correctly and verifying package sources.

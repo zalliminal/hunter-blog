@@ -8,7 +8,6 @@ import {
   getPostBySlug,
   getAllPosts,
   getAllPostSlugs,
-  getRelatedPosts,
   getPostAuthor,
 } from "@/lib/blog";
 import { generateTocFromContent } from "@/lib/toc";

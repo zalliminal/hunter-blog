@@ -1,0 +1,24 @@
+---
+slug: "rate-limiting"
+term: "Rate Limiting"
+abbreviation: "N/A"
+shortDefinition: "Capping the number of requests a client can make to prevent abuse or DoS."
+category: "Security"
+tags: ["security", "rate-limiting", "dos", "api", "abuse"]
+relatedTerms: ["ddos", "waf", "reverse-proxy", "api-security"]
+language: "en"
+hasTranslation: true
+translationSlug: "rate-limiting"
+difficulty: "beginner"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Rate_limiting"
+---
+
+## What is Rate Limiting?
+
+In one sentence: Rate limiting stops anyone from hammering your server with too many requests too fast.
+
+Rate limiting is a technique that controls how many requests a client can make to a server within a specific time window. It prevents brute force attacks, API abuse, web scraping, and DDoS-like behavior. Common implementations include token bucket, leaky bucket, and sliding window algorithms.
+
+Rate limiting is essential for API security and is typically configured at the reverse proxy or application level.

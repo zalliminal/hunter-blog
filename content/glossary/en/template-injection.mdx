@@ -1,0 +1,28 @@
+---
+slug: "template-injection"
+term: "Template Injection"
+abbreviation: "N/A"
+shortDefinition: "A vulnerability that occurs when user input is embedded in templates without proper sanitization, allowing attackers to execute arbitrary code."
+category: "Injection Attacks"
+tags: ["injection", "template", "ssti", "server-side"]
+relatedTerms: ["injection", "remote-code-execution"]
+language: "en"
+hasTranslation: true
+translationSlug: "template-injection"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://portswigger.net/web-security/server-side-template-injection"
+---
+
+## What is Template Injection?
+
+In one sentence: When user input is placed directly into a template and the server executes it as code instead of just text.
+
+Template engines are used to generate dynamic web pages. They combine static templates with user data. But if the user input is not properly escaped and the template engine evaluates it, an attacker can inject malicious template directives.
+
+For example, if a site uses a template like `Hello {{name}}` and the `name` comes from user input without sanitization, an attacker can set `name` to `{{7*7}}` and if the output is `49`, the template engine evaluated it — meaning Server-Side Template Injection (SSTI) is possible.
+
+### Why is it important for security?
+
+SSTI can lead to Remote Code Execution (RCE), giving attackers full control over the server. It is a critical vulnerability that often appears in bug bounty programs.

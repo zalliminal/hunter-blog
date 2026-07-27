@@ -1,0 +1,24 @@
+---
+slug: "reverse-proxy"
+term: "Reverse Proxy"
+abbreviation: "N/A"
+shortDefinition: "An intermediary that handles requests before they reach the main server."
+category: "Infrastructure"
+tags: ["proxy", "reverse-proxy", "load-balancing", "security", "infrastructure"]
+relatedTerms: ["waf", "rate-limiting", "cors", "ssl"]
+language: "en"
+hasTranslation: true
+translationSlug: "reverse-proxy"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Reverse_proxy"
+---
+
+## What is a Reverse Proxy?
+
+In one sentence: A reverse proxy sits in front of your server and handles incoming requests before they reach it.
+
+A reverse proxy is a server that intercepts requests from clients before they reach backend servers. It can provide load balancing, SSL termination, caching, rate limiting, and security filtering. Clients interact with the reverse proxy and never directly connect to the backend.
+
+Reverse proxies played a central role in the OpenAI infrastructure story. They are critical for scaling, security, and performance in modern web architectures.

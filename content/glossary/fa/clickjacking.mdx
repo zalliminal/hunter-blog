@@ -1,0 +1,24 @@
+---
+slug: "clickjacking"
+term: "کلیک‌ربایی"
+abbreviation: "N/A"
+shortDefinition: "فریب کاربر برای کلیک روی یک عنصر مخفی صفحه با قرار دادن آن روی چیزی قابل مشاهده."
+category: "امنیت"
+tags: ["امنیت", "کلیک‌ربایی", "ui", "وب", "حمله"]
+relatedTerms: ["xss", "csrf", "phishing"]
+language: "fa"
+hasTranslation: true
+translationSlug: "clickjacking"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Clickjacking"
+---
+
+## کلیک‌ربایی چیه؟
+
+خلاصه در یه جمله: کلیک‌ربایی باعث می‌شه فکر کنی داری روی یه چیزی کلیک می‌کنی، اما در واقع یه چیز مخفی زیرش قرار داره و روش کلیک می‌کنی.
+
+کلیک‌ربایی حمله‌ای‌ست که یه صفحه مخرب یه سایت قانونی رو در یه <span dir="ltr">iframe</span> شفاف که روی دکمه‌های فریبنده قرار گرفته بارگذاری می‌کنه. کاربر فکر می‌کنه داره روی دکمه‌های صفحه قابل مشاهده کلیک می‌کنه، اما در واقع داره با <span dir="ltr">iframe</span> مخفی تعامل می‌کنه — potentially لایک کردن یه صفحه، ارسال یه فرم یا مجوزدهی به یه اقدام.
+
+دفاع شامل هدرهای <span dir="ltr">X-Frame-Options</span> و دستورات <span dir="ltr">CSP frame-ancestors</span> هست. کلیک‌ربایی یه حمله وب کلاسیک ولی همچنان مرتبطه.

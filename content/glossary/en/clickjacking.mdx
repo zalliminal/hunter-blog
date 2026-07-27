@@ -1,0 +1,24 @@
+---
+slug: "clickjacking"
+term: "Clickjacking"
+abbreviation: "N/A"
+shortDefinition: "Tricking a user into clicking a hidden page element by overlaying it on top of something visible."
+category: "Security"
+tags: ["security", "clickjacking", "ui", "web", "attack"]
+relatedTerms: ["xss", "csrf", "phishing"]
+language: "en"
+hasTranslation: true
+translationSlug: "clickjacking"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Clickjacking"
+---
+
+## What is Clickjacking?
+
+In one sentence: Clickjacking makes you think you're clicking one thing, but actually reveals and tricks you into clicking something else hidden underneath.
+
+Clickjacking (or UI redressing) is an attack where a malicious page loads a legitimate site in a transparent iframe overlaid on deceptive buttons. The user thinks they're clicking buttons on the visible page, but they're actually interacting with the hidden iframe — potentially liking a page, submitting a form, or authorizing an action.
+
+Defenses include X-Frame-Options headers and CSP frame-ancestors directives. Clickjacking is a classic but still relevant web attack.

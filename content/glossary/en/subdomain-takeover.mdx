@@ -1,0 +1,24 @@
+---
+slug: "subdomain-takeover"
+term: "Subdomain Takeover"
+abbreviation: "N/A"
+shortDefinition: "Seizing an abandoned subdomain that still has a DNS record pointing to a service the attacker can claim."
+category: "Security"
+tags: ["security", "subdomain", "dns", "cloud", "vulnerability"]
+relatedTerms: ["dns", "phishing", "domain"]
+language: "en"
+hasTranslation: true
+translationSlug: "subdomain-takeover"
+difficulty: "intermediate"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Subdomain_takeover"
+---
+
+## What is Subdomain Takeover?
+
+In one sentence: Subdomain takeover is grabbing an abandoned subdomain by claiming the external service it points to.
+
+When a company creates a subdomain pointing to an external service (like a cloud host, CDN, or SaaS) and then stops using the service without removing the DNS record, an attacker can claim the service and effectively take over the subdomain. This allows hosting malicious content under the company's domain.
+
+Subdomain takeovers are commonly used for phishing and credential harvesting. Regular DNS hygiene and monitoring are the best defenses.

@@ -1,0 +1,24 @@
+---
+slug: "rate-limiting"
+term: "محدودیت نرخ"
+abbreviation: "N/A"
+shortDefinition: "محدود کردن تعداد درخواست‌های یک کلاینت برای جلوگیری از سوءاستفاده یا DoS."
+category: "امنیت"
+tags: ["امنیت", "محدودیت-نرخ", "dos", "api", "سوءاستفاده"]
+relatedTerms: ["ddos", "waf", "reverse-proxy", "api-security"]
+language: "fa"
+hasTranslation: true
+translationSlug: "rate-limiting"
+difficulty: "beginner"
+lastUpdated: "2026-07-27"
+sources:
+  - "https://en.wikipedia.org/wiki/Rate_limiting"
+---
+
+## محدودیت نرخ چیه؟
+
+خلاصه در یه جمله: محدودیت نرخ جلوی کسی رو می‌گیره که با درخواست‌های زیاد و سریع به سرورت حمله کنه.
+
+محدودیت نرخ تکنیکی‌ست که کنترل می‌کنه یه کلاینت در یه بازه زمانی مشخص چقدر می‌تونه درخواست به سرور بفرسته. این از حملات brute force، سوءاستفاده از <span dir="ltr">API</span>، وب اسکرپینگ و رفتار شبه <span dir="ltr">DDoS</span> جلوگیری می‌کنه. پیاده‌سازی‌های رایج شامل الگوریتم‌های سطل توکن، سطل نشتی و پنجره لغزان هستن.
+
+محدودیت نرخ برای امنیت <span dir="ltr">API</span> ضروری هست و معمولاً در سطح پروکسی معکوس یا برنامه پیکربندی می‌شه.
