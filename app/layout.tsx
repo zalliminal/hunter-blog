@@ -5,6 +5,7 @@ import "./fonts.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getSiteUrl } from "@/lib/site";
+import Script from "next/script";
 
 
 const siteUrl = getSiteUrl();
@@ -59,6 +60,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
+        <Script
+          src="https://umami-production-f85e.up.railway.app/script.js"
+          data-website-id="3a65cca8-4044-447a-92ca-5df9da5b0742"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
