@@ -1,0 +1,47 @@
+# کاولبز / KavLabs
+
+KavLabs (کاولبز) is an open-source bilingual (Persian-primary, English-secondary) security research notebook publishing real-world writeups, bug bounty field notes, and a security glossary. Maintained by Parham Forati and Zal.
+
+Default audience: Persian-speaking security learners and practitioners. Secondary: English readers.
+
+## Site
+
+- Canonical: https://kavlabs.vercel.app/fa
+- English: https://kavlabs.vercel.app/en
+
+## Feeds
+
+- Combined: https://kavlabs.vercel.app/rss.xml
+- Persian: https://kavlabs.vercel.app/fa/rss.xml
+- English: https://kavlabs.vercel.app/en/rss.xml
+
+## Discovery files
+
+- HTML sitemap (auto): https://kavlabs.vercel.app/sitemap.xml
+- Robots: https://kavlabs.vercel.app/robots.txt
+
+## Sections
+
+- Blog posts: /fa/blog  |  /en/blog
+- Tags: /fa/tags  |  /en/tags
+- Categories: /fa/categories  |  /en/categories
+- Glossary (113 terms × 2 languages): /fa/glossary  |  /en/glossary
+- Team: /fa/authors  |  /en/authors
+- Support: /fa/support  |  /en/support
+- Changelog: /fa/changelog  |  /en/changelog
+- Search: /fa/search  |  /en/search
+
+## Authors
+
+- Parham Forati (parhamf): /fa/authors/parhamf  |  /en/authors/parhamf
+- Zal: /fa/authors/zal  |  /en/authors/zal
+
+## Elsewhere (sameAs)
+
+- GitHub: https://github.com/parhamf6/hunter-blog
+- Telegram: https://t.me/kavlabs_official
+- X / Twitter: https://x.com/kavlabs_official
+
+## Licence
+
+Open-source. Fork, customize, contribute via pull request — mention the authors.

@@ -74,7 +74,8 @@ const Heading =
 
 // --- MDX Components ---
 export const mdxComponents: MDXComponents = {
-  // Typography
+  // Typography — remap h1 from body content to h2 so article h1 stays unique
+  h1: Heading("h2"),
   h2: Heading("h2"),
   h3: Heading("h3"),
   GlossaryTerm: GlossaryTermMDX,

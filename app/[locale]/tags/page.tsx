@@ -1,3 +1,5 @@
+// app/[locale]/tags/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
@@ -6,6 +8,26 @@ import { getTagSummaries } from "@/lib/blog";
 type PageParams = {
   locale: Locale;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  return {
+    title: locale === "fa" ? "تگ‌ها" : "Tags",
+    description:
+      locale === "fa"
+        ? "همهٔ موضوعاتی که تا الان درباره‌شان نوشته‌ایم."
+        : "Topics and themes that the blog keeps circling back to.",
+    alternates: {
+      canonical: `/${locale}/tags`,
+      languages: { fa: "/fa/tags", en: "/en/tags", "x-default": "/fa/tags" },
+    },
+  };
+}
 
 export default async function TagsIndexPage({
   params,

@@ -19,7 +19,7 @@ type Props = {
 export default function HeroServer({ locale, isFa, dict }: Props) {
   const isRTL = locale === "fa";
   const headline = isFa
-    ? "یادداشت‌های تحقیقاتی امنیت"
+    ? "کاولبز — یادداشت‌های تحقیقاتی امنیت"
     : "Security research notes";
 
   return (

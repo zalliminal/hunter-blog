@@ -1,4 +1,5 @@
 // app/[locale]/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale, getDictionary } from "@/lib/i18n";
@@ -9,6 +10,25 @@ import LatestPostsClient from "@/components/hero/LatestPostClient";
 import BelowFoldSections from "@/components/hero/BelowFoldSecions";
 
 type PageParams = { locale: Locale };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const dict = await getDictionary(locale);
+  return {
+    title: dict.nav.homeIntroTitle,
+    description: dict.nav.homeIntroSubtitle,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: { fa: "/fa", en: "/en", "x-default": "/fa" },
+    },
+  };
+}
+
 
 export default async function LocaleHomePage({
   params,

@@ -1,4 +1,5 @@
 // app/[locale]/authors/page.tsx
+import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 import TeamSectionClient from "@/components/hero/TeamSectionClient";
@@ -6,6 +7,26 @@ import { GitFork, Heart, Users, MailIcon, Mail } from "lucide-react";
 import { SiGithub, SiMaildotcom } from "react-icons/si";
 
 type PageParams = { locale: Locale };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  return {
+    title: locale === "fa" ? "تیم" : "Team",
+    description:
+      locale === "fa"
+        ? "تیم تحقیقاتی کاولبز — پرهام فراتی و زال."
+        : "KavLabs research team — Parham Forati and Zal.",
+    alternates: {
+      canonical: `/${locale}/authors`,
+      languages: { fa: "/fa/authors", en: "/en/authors", "x-default": "/fa/authors" },
+    },
+  };
+}
 
 // Context section component (Server Component - no motion)
 function CollaborationInvite({ isFa }: { isFa: boolean }) {
@@ -92,9 +113,9 @@ export default async function LocaleHomePage({
       {/* Team Section */}
       <section className="space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+          <h1 className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
             {isFa ? "تیم ما" : "Our Team"}
-          </h2>
+          </h1>
         </div>
         <TeamSectionClient locale={locale} isFa={isFa} />
       </section>

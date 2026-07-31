@@ -1,4 +1,5 @@
 // app/[locale]/categories/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Grid2X2 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
@@ -7,6 +8,27 @@ import { CATEGORY_IDS, getCategory } from "@/lib/categories_and_authors";
 import { getPostsByCategory } from "@/lib/blog";
 
 type PageParams = { locale: Locale };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  return {
+    title: locale === "fa" ? "دسته‌بندی‌ها" : "Categories",
+    description:
+      locale === "fa"
+        ? "هر دسته بندی برای یک سطح مختلف از یادگیری طراحی شده."
+        : "Each category is tailored for a different learning level.",
+    alternates: {
+      canonical: `/${locale}/categories`,
+      languages: { fa: "/fa/categories", en: "/en/categories", "x-default": "/fa/categories" },
+    },
+  };
+}
+
 
 export default async function CategoriesPage({
   params,

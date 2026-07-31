@@ -21,6 +21,10 @@ export async function generateMetadata({
       locale === "fa"
         ? "جستجو در پست‌های بلاگ"
         : "Search blog posts by title, tag, category or author.",
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

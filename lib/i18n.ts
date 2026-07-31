@@ -12,6 +12,10 @@ export function getDirection(locale: Locale): "ltr" | "rtl" {
 }
 
 export type NavDictionary = {
+  brandName: string;
+  siteTagline: string;
+  siteDescription: string;
+  keywords: string[];
   homeIntroTitle: string;
   homeIntroSubtitle: string;
   homeIntroSubtitleFa: string;
@@ -44,6 +48,20 @@ export type Dictionaries = {
 
 const en: Dictionaries = {
   nav: {
+    brandName: "KavLabs",
+    siteTagline: "security research notes",
+    siteDescription:
+      "KavLabs security research team. Real-world writeups, notes and ideas in English and Farsi.",
+    keywords: [
+      "KavLabs",
+      "bug bounty",
+      "security research",
+      "writeups",
+      "penetration testing",
+      "ethical hacking",
+      "CTF",
+      "web security",
+    ],
     homeIntroTitle: "Bug bounty notes & real-world security writeups.",
     homeIntroSubtitle:
       "Minimal, practical logs from hunting, breaking and hardening systems.",
@@ -75,6 +93,20 @@ const en: Dictionaries = {
 
 const fa: Dictionaries = {
   nav: {
+    brandName: "کاولبز",
+    siteTagline: "یادداشت‌های تحقیقاتی امنیت",
+    siteDescription:
+      "تیم تحقیقات امنیتی کاولبز. رایت‌آپ‌های واقعی، یادداشت‌ها و ایده‌ها به فارسی و انگلیسی.",
+    keywords: [
+      "کاولبز",
+      "باگ باونتی",
+      "تحقیقات امنیتی",
+      "رایت‌آپ",
+      "تست نفوذ",
+      "هک اخلاقی",
+      "CTF",
+      "امنیت وب",
+    ],
     homeIntroTitle: "یادداشت‌ها و رایت‌آپ‌های یک باگ باونتی هانتر.",
     homeIntroSubtitle:
       "مینیمال، کاربردی، فقط چیزهایی که در مسیر هک و دفاع واقعاً به درد می‌خورند.",

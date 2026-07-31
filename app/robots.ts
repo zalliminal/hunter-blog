@@ -9,9 +9,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
+        disallow: ["/api/", "/[locale]/search", "/[locale]/academy"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
   };
 }
-

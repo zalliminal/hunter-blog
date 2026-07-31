@@ -1,12 +1,43 @@
-import type { Locale } from "@/lib/i18n";
-import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
-import { getPostsByTag, getTagLabelBySlug } from "@/lib/blog";
+import type { Metadata } from "next";
+import { LOCALES, type Locale, DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
+import { getPostsByTag, getTagLabelBySlug, getTagSummaries } from "@/lib/blog";
 import { BlogCard } from "@/components/blog-card";
 
 type PageParams = {
   locale: Locale;
   tagSlug: string;
 };
+
+export const dynamicParams = false;
+
+export function generateStaticParams(): PageParams[] {
+  return LOCALES.flatMap((locale) =>
+    getTagSummaries(locale).map((tag) => ({ locale, tagSlug: tag.slug })),
+  );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale, tagSlug } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const label = getTagLabelBySlug(locale, tagSlug) ?? tagSlug;
+  const title = locale === "fa" ? `پست‌ها با تگ «${label}»` : `Posts tagged “${label}”`;
+  const description =
+    locale === "fa"
+      ? "نوشته‌هایی که به این موضوع نزدیک هستند."
+      : "Posts that orbit around this topic.";
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/${locale}/tags/${tagSlug}`,
+      languages: { fa: `/fa/tags/${tagSlug}`, en: `/en/tags/${tagSlug}`, "x-default": `/fa/tags/${tagSlug}` },
+    },
+  };
+}
 
 export default async function TagDetailPage({
   params,
@@ -47,4 +78,3 @@ export default async function TagDetailPage({
     </div>
   );
 }
-

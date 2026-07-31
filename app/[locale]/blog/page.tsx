@@ -1,4 +1,5 @@
 // app/[locale]/blog/page.tsx
+import type { Metadata } from "next";
 import { BlogYearSection } from "@/components/blog-year-section";
 import { BlogCategoryFilter } from "@/components/blog-category-filter";
 import { getAllPosts, getPostsByCategory } from "@/lib/blog";
@@ -8,6 +9,25 @@ import { DEFAULT_LOCALE, isLocale, getDictionary } from "@/lib/i18n";
 import { FileText, Layers, Clock, Calendar } from "lucide-react";
 
 type PageParams = { locale: Locale };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const dict = await getDictionary(locale);
+  return {
+    title: dict.nav.blogIndexTitle,
+    description: dict.nav.blogIndexDescription,
+    alternates: {
+      canonical: `/${locale}/blog`,
+      languages: { fa: "/fa/blog", en: "/en/blog", "x-default": "/fa/blog" },
+    },
+  };
+}
+
 
 function groupPostsByYear(posts: ReturnType<typeof getAllPosts>, locale: Locale) {
   const grouped: Record<string, Record<string, typeof posts>> = {};

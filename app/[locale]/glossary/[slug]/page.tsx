@@ -17,11 +17,14 @@ import { cn } from "@/lib/utils";
 import { getSiteUrl } from "@/lib/site";
 import { PostShare } from "@/components/post-share";
 import { BackButton } from "@/components/glossary/back-button";
+import { StructuredData } from "@/components/structured-data";
 
 type PageParams = {
   locale: Locale;
   slug: string;
 };
+
+export const dynamicParams = false;
 
 export function generateStaticParams(): PageParams[] {
   return LOCALES.flatMap((locale) =>
@@ -46,12 +49,17 @@ export async function generateMetadata({
   return {
     title: term.term,
     description: term.shortDefinition,
+    alternates: {
+      canonical: `/${locale}/glossary/${slug}`,
+      languages: { fa: `/fa/glossary/${slug}`, en: `/en/glossary/${slug}`, "x-default": `/fa/glossary/${slug}` },
+    },
     openGraph: {
       title: term.term,
       description: term.shortDefinition,
       url,
       type: "article",
-      siteName: "Hunter Notes",
+      siteName: locale === "fa" ? "کاولبز" : "KavLabs",
+      locale: locale === "fa" ? "fa_IR" : "en_US",
     },
     twitter: {
       card: "summary",
@@ -82,10 +90,21 @@ export default async function GlossaryTermPage({
     fa: { beginner: "مبتدی", intermediate: "متوسط", advanced: "پیشرفته" },
   };
 
+  const termJsonLd = {
+    "@type": "DefinedTerm",
+    "@context": "https://schema.org",
+    name: term.term,
+    description: term.shortDefinition,
+    inLanguage: locale === "fa" ? "fa-IR" : "en-US",
+    termCode: term.slug,
+    url: `${getSiteUrl()}${term.url}`,
+  };
+
   
 
   return (
     <article className="relative" dir={dir}>
+      <StructuredData data={termJsonLd} />
       <div className="flex flex-col gap-10 lg:flex-row">
         <div className="min-w-0 flex-1">
           {/* Back Button - Styled like blog navigation */}
