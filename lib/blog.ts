@@ -295,7 +295,14 @@ export function slugifyTag(tag: string | null | undefined): string {
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "");
+    .replace(/[^\w\-]+/g, (ch) => {
+      const cp = ch.codePointAt(0) ?? 0;
+      const isPersian =
+        (cp >= 0x0600 && cp <= 0x06ff) ||
+        (cp >= 0xfb50 && cp <= 0xfdff) ||
+        (cp >= 0xfe70 && cp <= 0xfeff);
+      return isPersian ? ch : "";
+    });
 }
 
 export function getAllTags(locale: Locale): string[] {

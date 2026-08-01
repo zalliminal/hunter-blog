@@ -22,6 +22,10 @@ export async function generateMetadata({
       locale === "fa"
         ? "هر دسته بندی برای یک سطح مختلف از یادگیری طراحی شده."
         : "Each category is tailored for a different learning level.",
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/categories`,
       languages: { fa: "/fa/categories", en: "/en/categories", "x-default": "/fa/categories" },

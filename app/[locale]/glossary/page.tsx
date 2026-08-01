@@ -25,6 +25,10 @@ export async function generateMetadata({
       locale === "fa"
         ? "راهنمای جامع مفاهیم، اصطلاحات و تکنیک‌های امنیت سایبری"
         : "Comprehensive guide to cybersecurity concepts, terms, and techniques",
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

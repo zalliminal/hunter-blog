@@ -19,6 +19,10 @@ export async function generateMetadata({
     description: locale === "fa" 
       ? "تاریخچه به‌روزرسانی‌ها و ویژگی‌های جدید" 
       : "History of updates and new features",
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

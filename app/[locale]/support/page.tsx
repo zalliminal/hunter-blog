@@ -21,6 +21,10 @@ export async function generateMetadata({
     description: isFa
       ? "از کاولبز حمایت کنید و به ما کمک کنید تا محتوای آموزشی رایگان و باکیفیت تولید کنیم"
       : "Support KavLabs and help us create free, high-quality educational content",
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

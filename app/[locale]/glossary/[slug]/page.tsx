@@ -49,6 +49,10 @@ export async function generateMetadata({
   return {
     title: term.term,
     description: term.shortDefinition,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/glossary/${slug}`,
       languages: { fa: `/fa/glossary/${slug}`, en: `/en/glossary/${slug}`, "x-default": `/fa/glossary/${slug}` },

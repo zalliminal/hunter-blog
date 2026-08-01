@@ -32,6 +32,10 @@ export async function generateMetadata({
   return {
     title,
     description,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/tags/${tagSlug}`,
       languages: { fa: `/fa/tags/${tagSlug}`, en: `/en/tags/${tagSlug}`, "x-default": `/fa/tags/${tagSlug}` },

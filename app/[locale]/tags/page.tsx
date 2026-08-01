@@ -22,6 +22,10 @@ export async function generateMetadata({
       locale === "fa"
         ? "همهٔ موضوعاتی که تا الان درباره‌شان نوشته‌ایم."
         : "Topics and themes that the blog keeps circling back to.",
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/tags`,
       languages: { fa: "/fa/tags", en: "/en/tags", "x-default": "/fa/tags" },

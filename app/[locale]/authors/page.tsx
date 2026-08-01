@@ -21,6 +21,10 @@ export async function generateMetadata({
       locale === "fa"
         ? "تیم تحقیقاتی کاولبز — پرهام فراتی و زال."
         : "KavLabs research team — Parham Forati and Zal.",
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/authors`,
       languages: { fa: "/fa/authors", en: "/en/authors", "x-default": "/fa/authors" },

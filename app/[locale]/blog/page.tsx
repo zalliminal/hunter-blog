@@ -21,6 +21,10 @@ export async function generateMetadata({
   return {
     title: dict.nav.blogIndexTitle,
     description: dict.nav.blogIndexDescription,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/${locale}/blog`,
       languages: { fa: "/fa/blog", en: "/en/blog", "x-default": "/fa/blog" },
