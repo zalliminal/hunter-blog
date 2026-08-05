@@ -260,7 +260,7 @@ const relatedPosts = allPosts
           </header>
 
           <div className="space-y-6">
-            <div className="prose max-w-none">{content}</div>
+            <div className="prose max-w-none min-w-0 overflow-hidden">{content}</div>
 
             <div className="mt-6 flex items-center justify-between gap-3">
               <PostShare title={post.title} locale={locale} />

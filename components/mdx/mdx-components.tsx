@@ -113,7 +113,7 @@ export const mdxComponents: MDXComponents = {
   a: (props) => (
     <a
       {...props}
-      className="font-medium underline decoration-dotted underline-offset-4 transition hover:text-primary"
+      className="font-medium underline decoration-dotted underline-offset-4 transition hover:text-primary break-words [overflow-wrap:anywhere]"
     />
   ),
 
@@ -214,7 +214,7 @@ export const mdxComponents: MDXComponents = {
     return (
       <pre
         {...rest}
-        className="mt-4 overflow-x-auto rounded-2xl border border-border bg-muted p-4 text-xs"
+        className="mt-4 overflow-x-auto rounded-2xl border border-border bg-muted p-4 text-xs max-w-full"
         dir="ltr"
       >
         {children}
