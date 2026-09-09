@@ -10,9 +10,15 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+
   verification: {
     google: "DFB-Ev3KX6Ofu24zMPweEXoHSwKcw195ZJ1SCZTbKyc",
   },
+
+  other: {
+    enamad: "67547108",
+  },
+
   robots: {
     index: true,
     follow: true,
