@@ -230,7 +230,7 @@ function PrimaryNav({
         <LanguageSwitcher locale={locale} />
 
         {locale === "fa" && (
-          <Link href={`/${locale}/academy`}>
+          <a href="https://academy.kavlabs.parhamforati.com">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -239,7 +239,7 @@ function PrimaryNav({
               <GraduationCap className="h-4 w-4 transition-transform group-hover:-rotate-12" />
               <span>ورود به آکادمی</span>
             </motion.button>
-          </Link>
+          </a>
         )}
       </div>
     </nav>
@@ -352,14 +352,14 @@ function MobileMenu({
 
               {locale === "fa" && (
                 <div className="mt-4 pt-4 border-t border-border">
-                  <Link
-                    href={`/${locale}/academy`}
+                  <a
+                    href="https://academy.kavlabs.parhamforati.com"
                     onClick={() => setOpen(false)}
                     className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 font-bold text-primary-foreground shadow-lg shadow-primary/20 active:scale-95 transition-transform"
                   >
                     <GraduationCap className="h-5 w-5" />
                     ورود به آکادمی
-                  </Link>
+                  </a>
                 </div>
               )}
             </nav>
@@ -436,7 +436,7 @@ export function MobileBottomNav({
     ...(locale === "fa"
       ? [
           {
-            href: `/${locale}/academy`,
+            href: "https://academy.kavlabs.parhamforati.com",
             icon: GraduationCap,
             label: "آکادمی",
           },
