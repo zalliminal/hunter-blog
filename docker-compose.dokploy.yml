@@ -1,0 +1,40 @@
+# Dokploy compose for hunter-blog — consumed as a PRE-BUILT image.
+#
+# Why this exists: the VPS cannot finish `next build` (same reason as the
+# academy frontend). The image is built on the dev machine (./deploy.sh),
+# shipped with `docker save | scp | docker load`, and this service runs it.
+# NO build, NO registry, NO pull.
+#
+# Per deploy (dev machine):
+#   ./deploy.sh
+#   scp /tmp/blog.tar.gz <user>@<vps>:/tmp/
+#   ssh <user>@<vps> 'gunzip -c /tmp/blog.tar.gz | sudo docker load'
+#   then: Dokploy -> this service -> Deploy  (compose detects the new image ID)
+#
+# Routing/TLS: Dokploy -> Domains tab -> service `app`, port `3000` -> kavlabs.ir
+
+services:
+  app:
+    image: hunter-blog:prod
+    pull_policy: never # image ships via docker load, never from a registry
+    restart: unless-stopped
+    environment:
+      # Public value — also baked into the client bundle at build time
+      # (deploy.sh build arg). Kept here so runtime reads match.
+      NEXT_PUBLIC_SITE_URL: https://kavlabs.ir
+      # NEXT_PUBLIC_API_BASE_URL is intentionally unset (not used).
+      #
+      # Server-side secrets — set the REAL values in the Dokploy UI
+      # (service -> Environment tab), NOT here. Left commented so the
+      # UI values are not overridden by empty strings in this file.
+      # SMS_IR_API_KEY:
+      # SMS_IR_LINE_NUMBER:
+      # DARAMET_API_TOKEN:
+    expose:
+      - "3000"
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
