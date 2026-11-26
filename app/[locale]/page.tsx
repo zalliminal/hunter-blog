@@ -8,6 +8,7 @@ import { getPinnedPosts } from "@/lib/blog";
 import HeroServer from "@/components/hero/HeroServer";
 import LatestPostsClient from "@/components/hero/LatestPostClient";
 import BelowFoldSections from "@/components/hero/BelowFoldSecions";
+import AcademyCard from "@/components/hero/AcademyCard";
 
 type PageParams = { locale: Locale };
 
@@ -65,6 +66,9 @@ export default async function LocaleHomePage({
         </div>
         <LatestPostsClient posts={pinnedPosts} locale={locale} />
       </section>
+
+      {/* Academy promo — Farsi-only, server-rendered, zero JS */}
+      <AcademyCard />
 
       {/* All below-fold heavy sections — lazy loaded, separate JS chunks */}
       <BelowFoldSections locale={locale} isFa={isFa} />

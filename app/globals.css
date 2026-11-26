@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* Academy promo — matrix rain (CSS-only, transform-only, reduced-motion safe) */
+@keyframes academy-rain {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.academy-rain {
+  animation: academy-rain linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .academy-rain {
+    animation: none;
+  }
+}
+
 
 :root {
   --background: oklch(1.0000 0 0);

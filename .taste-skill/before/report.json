@@ -1,0 +1,1569 @@
+{
+ "url": "http://localhost:3001/fa",
+ "at": "2026-11-26T15:58:52.296Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.53,
+    0.61,
+    0.6,
+    0.34
+   ],
+   "motion": {
+    "elements": 66,
+    "css": 26,
+    "transitions": 0,
+    "scripted": 40,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 3238,
+     "screens": 3.6,
+     "words": 763,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 43,
+     "sections": 7,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "🐛",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "کنجکاوی کافیست",
+     "words": 2,
+     "chars": 14,
+     "lines": 1,
+     "size": 48,
+     "vw": 3.3,
+     "font": "Vazirmatn",
+     "weight": 900,
+     "tracking": -0.035,
+     "leading": 1.11,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "right",
+     "widthRatio": 0.31,
+     "top": 773,
+     "tag": "h2",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+     "words": 5,
+     "lines": 2,
+     "size": 32,
+     "font": "Vazirmatn"
+    },
+    "headings": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "words": 5,
+      "chars": 35,
+      "lines": 2,
+      "size": 32,
+      "vw": 2.2,
+      "font": "Vazirmatn",
+      "weight": 600,
+      "tracking": -0.035,
+      "leading": 1.33,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.31,
+      "top": 118,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "کنجکاوی کافیست",
+      "words": 2,
+      "chars": 14,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.035,
+      "leading": 1.11,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.31,
+      "top": 773,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "رایگان",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 144,
+      "vw": 10,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.001,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "left",
+      "widthRatio": 0.24,
+      "top": 1133,
+      "tag": "span",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 3,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 5,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Vazirmatn",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      26,
+      32,
+      48,
+      144
+     ],
+     "sizeCount": 13,
+     "notLoaded": [],
+     "body": {
+      "font": "Vazirmatn",
+      "size": 16,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": -0.012,
+      "contrast": null
+     },
+     "measureChars": 56,
+     "max": {
+      "size": 144,
+      "vw": 10,
+      "font": "Vazirmatn",
+      "text": "رایگان"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 2,
+     "microLabelShare": 0.011,
+     "microSamples": [
+      "پشت پرده کاولبز",
+      "چیزهایی که روشون حساب می‌کنیم"
+     ],
+     "upperShare": 0.04,
+     "centerShare": 0.04,
+     "smallText": 31
+    },
+    "eyebrows": [
+     {
+      "text": "// آکادمی کاولبز",
+      "above": "کنجکاوی کافیست",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 742
+     },
+     {
+      "text": "امتیاز، سطح و بتل پس: فعال",
+      "above": "رایگان",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 16,
+      "top": 1015
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#737373",
+       "share": 0.74
+      },
+      {
+       "color": "#0f0f0f",
+       "share": 0.11
+      },
+      {
+       "color": "#008f11",
+       "share": 0.04
+      },
+      {
+       "color": "#747474",
+       "share": 0.04
+      },
+      {
+       "color": "#d4d4d8",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#008f11",
+      "hsl": {
+       "h": 127,
+       "s": 1,
+       "l": 0.28
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "ورود به آکادمی",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#ffffff",
+       "bg": "#008f11"
+      },
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 15,
+     "inHero": 3,
+     "radius": 6,
+     "height": 45,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "ورود به آکادمی",
+      "همه مطالب",
+      "ارتباط با ما"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 24,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "button.group.relative → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "section.relative.overflow-hidden → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, lab(100 0 0)"
+     ],
+     "gradients": 7,
+     "scrims": 1,
+     "gradientSamples": [
+      "section.relative.overflow-hidden → linear-gradient(to right bottom, oklab(0.999998 -0.00000980496 0.0000234246 / 0.6) 0%, oklab(0.999998 -0.00000",
+      "div.pointer-events-none.absolute → linear-gradient(to right top, oklab(0.563798 -0.149976 0.112022 / 0.3) 0%, rgba(0, 0, 0, 0) 100%)",
+      "div.relative.overflow-hidden → linear-gradient(to left bottom, oklab(0.563798 -0.149976 0.112022 / 0.05) 0%, oklab(0.976098 -0.00000986457 0.",
+      "div.pointer-events-none.absolute → repeating-linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 3px, lab(4.31377 0 0) 3px, lab(4.31377 0 0) 4"
+     ],
+     "gradientText": 0,
+     "hairlines": 7,
+     "hairlineSamples": [
+      "header.sticky.top-0 1440px",
+      "div.flex.items-center 405px",
+      "div.relative.z-20 974px",
+      "div.jsx-1853591817.jsx-3807659945 426px",
+      "div.jsx-1455936118.jsx-744712000 426px"
+     ],
+     "outlinedBoxes": 16,
+     "dashed": 0,
+     "blurred": 14,
+     "roundedBoxes": 22,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 2195
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 61,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "vazirmatn",
+     "geist",
+     "geistmono",
+     "__nextjs-geist"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 3238,
+    "margins": {
+     "left": 232,
+     "right": 232
+    },
+    "sections": [
+     {
+      "sel": "div",
+      "tag": "div",
+      "top": 61,
+      "height": 2871,
+      "words": 650,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "رایگان",
+       "size": 144,
+       "tag": "span"
+      },
+      "left": 232,
+      "right": 232,
+      "textLeft": 232,
+      "textRight": 232,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.border-t",
+      "tag": "footer",
+      "top": 2932,
+      "height": 307,
+      "words": 66,
+      "media": 0,
+      "middle": 71,
+      "heading": null,
+      "left": 232,
+      "right": 232,
+      "textLeft": 232,
+      "textRight": 232,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "size": 32,
+      "top": 118,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 16,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.11,
+    "voidBox": {
+     "x": 0,
+     "y": 120,
+     "w": 180,
+     "h": 780
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.84,
+    0.85,
+    0.86,
+    0.6
+   ],
+   "motion": {
+    "elements": 66,
+    "css": 26,
+    "transitions": 0,
+    "scripted": 40,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 3554,
+     "screens": 3.5,
+     "words": 763,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 43,
+     "sections": 7,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "🐛",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "کنجکاوی کافیست",
+     "words": 2,
+     "chars": 14,
+     "lines": 2,
+     "size": 48,
+     "vw": 6.3,
+     "font": "Vazirmatn",
+     "weight": 900,
+     "tracking": -0.035,
+     "leading": 1.11,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "right",
+     "widthRatio": 0.41,
+     "top": 799,
+     "tag": "h2",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+     "words": 5,
+     "lines": 2,
+     "size": 32,
+     "font": "Vazirmatn"
+    },
+    "headings": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "words": 5,
+      "chars": 35,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Vazirmatn",
+      "weight": 600,
+      "tracking": -0.035,
+      "leading": 1.33,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.42,
+      "top": 118,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "کنجکاوی کافیست",
+      "words": 2,
+      "chars": 14,
+      "lines": 2,
+      "size": 48,
+      "vw": 6.3,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.035,
+      "leading": 1.11,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.41,
+      "top": 799,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "رایگان",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 144,
+      "vw": 18.8,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.001,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "left",
+      "widthRatio": 0.45,
+      "top": 1313,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "جایی که کنجکاوی کافیه",
+      "words": 4,
+      "chars": 21,
+      "lines": 1,
+      "size": 26,
+      "vw": 3.4,
+      "font": "Vazirmatn",
+      "weight": 600,
+      "tracking": -0.035,
+      "leading": 1.4,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.47,
+      "top": 2194,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 4,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Vazirmatn",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      16,
+      18,
+      19,
+      22,
+      26,
+      32,
+      48,
+      144
+     ],
+     "sizeCount": 13,
+     "notLoaded": [],
+     "body": {
+      "font": "Vazirmatn",
+      "size": 16,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": -0.012,
+      "contrast": null
+     },
+     "measureChars": 40,
+     "max": {
+      "size": 144,
+      "vw": 18.8,
+      "font": "Vazirmatn",
+      "text": "رایگان"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 2,
+     "microLabelShare": 0.011,
+     "microSamples": [
+      "پشت پرده کاولبز",
+      "چیزهایی که روشون حساب می‌کنیم"
+     ],
+     "upperShare": 0.04,
+     "centerShare": 0.04,
+     "smallText": 31
+    },
+    "eyebrows": [
+     {
+      "text": "// آکادمی کاولبز",
+      "above": "کنجکاوی کافیست",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 768
+     },
+     {
+      "text": "پشت پرده کاولبز",
+      "above": "جایی که کنجکاوی کافیه",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 11,
+      "top": 2158
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#737373",
+       "share": 0.74
+      },
+      {
+       "color": "#0f0f0f",
+       "share": 0.11
+      },
+      {
+       "color": "#008f11",
+       "share": 0.04
+      },
+      {
+       "color": "#747474",
+       "share": 0.04
+      },
+      {
+       "color": "#d4d4d8",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#008f11",
+      "hsl": {
+       "h": 127,
+       "s": 1,
+       "l": 0.28
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "ورود به آکادمی",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#ffffff",
+       "bg": "#008f11"
+      },
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 15,
+     "inHero": 3,
+     "radius": 6,
+     "height": 43,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "ورود به آکادمی",
+      "همه مطالب",
+      "ارتباط با ما"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 24,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "button.group.relative → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "section.relative.overflow-hidden → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, lab(100 0 0)"
+     ],
+     "gradients": 7,
+     "scrims": 1,
+     "gradientSamples": [
+      "section.relative.overflow-hidden → linear-gradient(to right bottom, oklab(0.999998 -0.00000980496 0.0000234246 / 0.6) 0%, oklab(0.999998 -0.00000",
+      "div.pointer-events-none.absolute → linear-gradient(to right top, oklab(0.563798 -0.149976 0.112022 / 0.3) 0%, rgba(0, 0, 0, 0) 100%)",
+      "div.relative.overflow-hidden → linear-gradient(to left bottom, oklab(0.563798 -0.149976 0.112022 / 0.05) 0%, oklab(0.976098 -0.00000986457 0.",
+      "div.pointer-events-none.absolute → repeating-linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 3px, lab(4.31377 0 0) 3px, lab(4.31377 0 0) 4"
+     ],
+     "gradientText": 0,
+     "hairlines": 7,
+     "hairlineSamples": [
+      "header.sticky.top-0 768px",
+      "div.flex.items-center 283px",
+      "div.relative.z-20 718px",
+      "div.jsx-1853591817.jsx-3807659945 298px",
+      "div.jsx-1455936118.jsx-744712000 298px"
+     ],
+     "outlinedBoxes": 13,
+     "dashed": 0,
+     "blurred": 14,
+     "roundedBoxes": 19,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 61,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "vazirmatn",
+     "geist",
+     "geistmono",
+     "__nextjs-geist"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 3554,
+    "margins": {
+     "left": 24,
+     "right": 24
+    },
+    "sections": [
+     {
+      "sel": "div",
+      "tag": "div",
+      "top": 61,
+      "height": 3187,
+      "words": 650,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "رایگان",
+       "size": 144,
+       "tag": "span"
+      },
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.border-t",
+      "tag": "footer",
+      "top": 3248,
+      "height": 307,
+      "words": 66,
+      "media": 0,
+      "middle": 9,
+      "heading": null,
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "size": 32,
+      "top": 118,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 16,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 7,
+   "filled": [
+    0.74,
+    0.89,
+    0.89,
+    0.84,
+    0.79,
+    0.57,
+    0.4
+   ],
+   "motion": {
+    "elements": 68,
+    "css": 27,
+    "transitions": 0,
+    "scripted": 41,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 5229,
+     "screens": 6.2,
+     "words": 810,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 43,
+     "sections": 7,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "🐛",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+     "words": 5,
+     "chars": 35,
+     "lines": 2,
+     "size": 22,
+     "vw": 5.6,
+     "font": "Vazirmatn",
+     "weight": 600,
+     "tracking": -0.035,
+     "leading": 1.56,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "center",
+     "widthRatio": 0.79,
+     "top": 115,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+     "words": 5,
+     "lines": 2,
+     "size": 22,
+     "font": "Vazirmatn"
+    },
+    "headings": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "words": 5,
+      "chars": 35,
+      "lines": 2,
+      "size": 22,
+      "vw": 5.6,
+      "font": "Vazirmatn",
+      "weight": 600,
+      "tracking": -0.035,
+      "leading": 1.56,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "center",
+      "widthRatio": 0.79,
+      "top": 115,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "کنجکاوی کافیست",
+      "words": 2,
+      "chars": 14,
+      "lines": 1,
+      "size": 40,
+      "vw": 10.3,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.035,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "center",
+      "widthRatio": 0.79,
+      "top": 1194,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "رایگان",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 112,
+      "vw": 28.7,
+      "font": "Vazirmatn",
+      "weight": 900,
+      "tracking": -0.002,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "left",
+      "widthRatio": 0.69,
+      "top": 1996,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "جایی که کنجکاوی کافیه",
+      "words": 4,
+      "chars": 21,
+      "lines": 1,
+      "size": 22,
+      "vw": 5.6,
+      "font": "Vazirmatn",
+      "weight": 600,
+      "tracking": -0.035,
+      "leading": 1.56,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "center",
+      "widthRatio": 0.68,
+      "top": 2863,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 4,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Vazirmatn",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      9,
+      10,
+      11,
+      14,
+      16,
+      17,
+      18,
+      22,
+      40,
+      112
+     ],
+     "sizeCount": 10,
+     "notLoaded": [],
+     "body": {
+      "font": "Vazirmatn",
+      "size": 16,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": -0.011,
+      "contrast": null
+     },
+     "measureChars": 41,
+     "max": {
+      "size": 112,
+      "vw": 28.7,
+      "font": "Vazirmatn",
+      "text": "رایگان"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 2,
+     "microLabelShare": 0.01,
+     "microSamples": [
+      "پشت پرده کاولبز",
+      "چیزهایی که روشون حساب می‌کنیم"
+     ],
+     "upperShare": 0.04,
+     "centerShare": 0.03,
+     "smallText": 33
+    },
+    "eyebrows": [
+     {
+      "text": "// آکادمی کاولبز",
+      "above": "کنجکاوی کافیست",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 1164
+     },
+     {
+      "text": "امتیاز، سطح و بتل پس: فعال",
+      "above": "رایگان",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 1922
+     },
+     {
+      "text": "پشت پرده کاولبز",
+      "above": "جایی که کنجکاوی کافیه",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 11,
+      "top": 2827
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#737373",
+       "share": 0.74
+      },
+      {
+       "color": "#0f0f0f",
+       "share": 0.1
+      },
+      {
+       "color": "#008f11",
+       "share": 0.04
+      },
+      {
+       "color": "#747474",
+       "share": 0.03
+      },
+      {
+       "color": "#d4d4d8",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#ffffff",
+      "hsl": {
+       "h": 0,
+       "s": 0,
+       "l": 1
+      },
+      "fg": "#0f0f0f"
+     },
+     "lowContrast": [
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "ادامه مطلب →",
+       "ratio": 4.3,
+       "need": 4.5,
+       "size": 14,
+       "fg": "#008f11",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 16,
+     "inHero": 2,
+     "radius": 6,
+     "height": 40,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "همه مطالب",
+      "ارتباط با ما"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 23,
+     "shadowOverlay": 1,
+     "shadowSamples": [
+      "section.relative.overflow-hidden → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, lab(100 0 0)",
+      "a.group.flex → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 11,
+     "scrims": 1,
+     "gradientSamples": [
+      "section.relative.overflow-hidden → linear-gradient(to right bottom, oklab(0.999998 -0.00000980496 0.0000234246 / 0.6) 0%, oklab(0.999998 -0.00000",
+      "div.pointer-events-none.absolute → linear-gradient(to right top, oklab(0.563798 -0.149976 0.112022 / 0.3) 0%, rgba(0, 0, 0, 0) 100%)",
+      "div.relative.overflow-hidden → linear-gradient(to left bottom, oklab(0.563798 -0.149976 0.112022 / 0.05) 0%, oklab(0.976098 -0.00000986457 0.",
+      "div.pointer-events-none.absolute → repeating-linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 3px, lab(4.31377 0 0) 3px, lab(4.31377 0 0) 4"
+     ],
+     "gradientText": 0,
+     "hairlines": 7,
+     "hairlineSamples": [
+      "header.sticky.top-0 390px",
+      "div.flex.items-center 306px",
+      "div.relative.z-20 356px",
+      "div.jsx-1853591817.jsx-3807659945 316px",
+      "div.jsx-1455936118.jsx-744712000 316px"
+     ],
+     "outlinedBoxes": 14,
+     "dashed": 0,
+     "blurred": 15,
+     "roundedBoxes": 20,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "vazirmatn",
+     "geist",
+     "geistmono",
+     "__nextjs-geist"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 5229,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "div",
+      "tag": "div",
+      "top": 58,
+      "height": 4751,
+      "words": 695,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "رایگان",
+       "size": 112,
+       "tag": "span"
+      },
+      "left": 16,
+      "right": 16,
+      "textLeft": 16,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.border-t",
+      "tag": "footer",
+      "top": 4809,
+      "height": 420,
+      "words": 66,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 16,
+      "textLeft": 16,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "کاولبز — یادداشت‌های تحقیقاتی امنیت",
+      "size": 22,
+      "top": 115,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 16,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "eyebrow",
+   "width": 1440,
+   "message": "2 eyebrow/kicker label(s) above headings: \"// آکادمی کاولبز\" above \"کنجکاوی کافیست\"; \"امتیاز، سطح و بتل پس: فعال\" above \"رایگان\"",
+   "fix": "Delete them. If the label carried real information, fold it into the headline or the supporting sentence.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "2 tiny uppercase letter-spaced label(s): \"پشت پرده کاولبز\", \"چیزهایی که روشون حساب می‌کنیم\"",
+   "fix": "Prefer sentence case at body size.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "emoji",
+   "width": 1440,
+   "message": "Emoji in the page: 🐛 ✓",
+   "fix": "Remove. Use words or real imagery.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 1440,
+   "message": "7 gradient fill(s): section.relative.overflow-hidden → linear-gradient(to right bottom, oklab(0.999998 -0.00000980496 0.0000234246 / 0.6) 0%, oklab(0.999998 -0.00000 | div.pointer-events-none.absolute → linear-gradient(to right top, oklab(0.563798 -0.149976 0.112022 / 0.3) 0%, rgba(0, 0, 0, 0) 100%) | div.relative.overflow-hidden → linear-gradient(to left bottom, oklab(0.563798 -0.149976 0.112022 / 0.05) 0%, oklab(0.976098 -0.00000986457 0.",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "24 box-shadow(s) on elements at rest: button.group.relative → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0 | section.relative.overflow-hidden → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0 | a.inline-flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "7 thin rule(s)/divider line(s): header.sticky.top-0 1440px | div.flex.items-center 405px | div.relative.z-20 974px | div.jsx-1853591817.jsx-3807659945 426px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "16 boxes drawn with a 1px outline.",
+   "fix": "Define a surface by its fill (one tone step from the page) or leave the content unboxed.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "width": 1440,
+   "message": "14 backdrop-blur surfaces.",
+   "fix": "One blurred sticky bar at most; glass cards are a tell.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Low-contrast text: \"ورود به آکادمی\" 4.3:1 needs 4.5:1; \"ادامه مطلب →\" 4.3:1 needs 4.5:1; \"ادامه مطلب →\" 4.3:1 needs 4.5:1",
+   "fix": "Darken or lighten the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "13 different font sizes (9, 10, 11, 12, 14, 16, 18, 20, 22, 26, 32, 48, 144).",
+   "fix": "A page needs about five: display, heading, lead, body, small.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "FAIL",
+   "id": "small-text",
+   "width": 1440,
+   "message": "31 text blocks under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "focal-point",
+   "width": 1440,
+   "message": "The first screen has no dominant element: the largest type is 48px (3.3vw) and no single picture holds a third of the viewport.",
+   "fix": "Make one thing lead: the headline at display size, or one large picture. A grid of many small pictures is not one thing; in blind tests jurors marked a first screen without a headline down every time. On the strongest studied sites the largest type has a median of 8.4vw."
+  },
+  {
+   "level": "WARN",
+   "id": "small-title",
+   "width": 390,
+   "message": "The h1 is 22px (\"کاولبز — یادداشت‌های تحقیقاتی امنیت\").",
+   "fix": "Set the title at display size, or make the large text of the first screen the h1."
+  },
+  {
+   "level": "FAIL",
+   "id": "reduced-hidden",
+   "width": 1440,
+   "message": "With reduced motion requested, 12 text block(s) on the first screen stay invisible: \"۵ اسفند ۱۴۰۴\", \"سواد دیجیتال\", \"معرفی و راهنمای کامل کاولبز\", \"همه‌چیز درباره کاولبز: چرا ساخته شد، چه \"",
+   "fix": "Put every hidden starting state inside @media (prefers-reduced-motion: no-preference); the reduced page is the finished page (references/motion.md §8)."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/desktop-fold.jpg",
+   "pages": [
+    "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/tablet-fold.jpg",
+   "pages": [
+    "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/mobile-fold.jpg",
+   "pages": [
+    "/media/parhamf/linux-format/codes/hunter-blog/.taste-skill/before/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}
