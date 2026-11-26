@@ -67,8 +67,8 @@ export default async function LocaleHomePage({
         <LatestPostsClient posts={pinnedPosts} locale={locale} />
       </section>
 
-      {/* Academy promo — Farsi-only, server-rendered, zero JS */}
-      <AcademyCard />
+      {/* Academy promo — Farsi-only (shown on /fa only), server-rendered, zero JS */}
+      {isFa && <AcademyCard />}
 
       {/* All below-fold heavy sections — lazy loaded, separate JS chunks */}
       <BelowFoldSections locale={locale} isFa={isFa} />
