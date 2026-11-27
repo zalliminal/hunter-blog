@@ -15,7 +15,6 @@ import "../globals.css";
 import { SiteFooter } from "@/components/footer";
 import { BackToTop } from "@/components/back-to-top";
 import { NavigationProgress } from "@/components/NavigationProgress";
-import { ThemeProvider } from "@/components/theme-provider";
 import { getSiteUrl } from "@/lib/site";
 import { StructuredData } from "@/components/structured-data";
 
@@ -112,22 +111,20 @@ export default async function LocaleLayout(props: {
         <StructuredData data={[websiteJsonLd, orgJsonLd]} />
       </head>
       <body className="bg-background text-foreground antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div data-locale={locale} className="flex min-h-screen flex-col">
-            <SiteHeader locale={locale} dict={dict.nav} />
-            <Suspense fallback={null}>
-              <NavigationProgress />
-            </Suspense>
-            <LocaleTransition locale={locale}>
-              <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
-                {children}
-                <BackToTop />
-              </main>
-            </LocaleTransition>
-            <MobileBottomNav locale={locale} dict={dict.nav} />
-            <SiteFooter locale={locale} />
-          </div>
-        </ThemeProvider>
+        <div data-locale={locale} className="flex min-h-screen flex-col">
+          <SiteHeader locale={locale} dict={dict.nav} />
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
+          <LocaleTransition locale={locale}>
+            <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
+              {children}
+              <BackToTop />
+            </main>
+          </LocaleTransition>
+          <MobileBottomNav locale={locale} dict={dict.nav} />
+          <SiteFooter locale={locale} />
+        </div>
       </body>
     </html>
   );
